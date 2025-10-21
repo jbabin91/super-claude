@@ -2,7 +2,7 @@
 
 > Claude Code, supercharged. 🚀
 
-A comprehensive collection of skills, agents, hooks, and utilities to enhance your Claude Code workflow. Inspired by [obra/superpowers](https://github.com/obra/superpowers) and battle-tested across TypeScript, React, and Node.js projects.
+A comprehensive collection of skills, agents, hooks, and utilities to enhance your Claude Code workflow. Battle-tested across TypeScript, React, and Node.js projects.
 
 ## ✨ What's Inside
 
