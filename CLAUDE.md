@@ -132,6 +132,105 @@ export async function execute(code, context) {
 
 See `RESEARCH_FINDINGS.md` → "playwright-skill" section for complete pattern.
 
+### Markdown Formatting Standards
+
+**ALWAYS follow these markdownlint rules to avoid warnings:**
+
+#### 1. Code Fences Must Have Language Identifiers (MD040)
+
+**Wrong:**
+
+````markdown
+```
+code here
+```
+````
+
+**Right:**
+
+````markdown
+```sh
+code here
+```
+
+```txt
+text content
+```
+
+```yaml
+yaml: content
+```
+````
+
+#### 2. Blank Line Required Before Lists (MD032)
+
+**Wrong:**
+
+```markdown
+Ask the user:
+- **Purpose**: What does this do?
+```
+
+**Right:**
+
+```markdown
+Ask the user:
+
+- **Purpose**: What does this do?
+```
+
+#### 3. Blank Line After Headings Before Content (MD022/MD023)
+
+**Wrong:**
+
+```markdown
+### Model Selection Guide
+### Haiku (Fast & Cheap)
+- Simple tasks
+```
+
+**Right:**
+
+```markdown
+### Model Selection Guide
+
+### Haiku (Fast & Cheap)
+
+- Simple tasks
+```
+
+#### 4. Blank Line Before Nested Content
+
+**Wrong:**
+
+```markdown
+**Solution**:
+- Check syntax
+```
+
+**Right:**
+
+```markdown
+**Solution**:
+
+- Check syntax
+```
+
+#### Common Language Identifiers
+
+**Preferred Usage:**
+
+- `sh` - Terminal/CLI examples, folder structures, shell commands
+- `txt` - Default fallback when unsure what category it falls under
+- `yaml` - YAML configuration
+- `json` - JSON data
+- `markdown` - Markdown examples
+- `typescript` or `ts` - TypeScript code
+- `javascript` or `js` - JavaScript code
+- `jsx` or `tsx` - React components
+
+**Rule of Thumb:** Use `sh` for terminal/CLI and folder structures, use `txt` when unsure.
+
 ## 📚 Key Resources
 
 ### Before Starting Work

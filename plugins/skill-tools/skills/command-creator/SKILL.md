@@ -51,6 +51,7 @@ Example usage and expected outcomes.
 ### 1. Gather Requirements
 
 Ask the user:
+
 - **Command name**: `/command-name` (what should user type?)
 - **Purpose**: What does this command do?
 - **Parameters**: Does it need arguments?
@@ -60,10 +61,12 @@ Ask the user:
 ### 2. Generate Command File
 
 **Location:**
+
 - Global: `~/.claude/skills/super-claude/plugins/[plugin]/commands/command-name.md`
 - Project: `/path/to/project/.claude/commands/command-name.md`
 
 **Format:**
+
 ```markdown
 ---
 description: One-line description (required)
@@ -115,6 +118,7 @@ Expected outcome: [description]
 ### 3. Validate Command
 
 Ensure:
+
 - ✅ Description is clear and concise
 - ✅ Instructions are actionable
 - ✅ Examples are realistic
@@ -266,27 +270,33 @@ Deploy current project to Cloudflare Pages with safety checks.
 ## Command Categories
 
 ### Project Setup
+
 - `/setup-*`: Initialize new projects
 - `/scaffold-*`: Create project structure
 
 ### Code Generation
+
 - `/generate-*`: Create code/files
 - `/create-*`: Create components/modules
 
 ### Code Quality
+
 - `/review-*`: Code review commands
 - `/fix-*`: Auto-fix issues
 - `/lint-*`: Linting operations
 
 ### Testing
+
 - `/test-*`: Run tests
 - `/coverage-*`: Coverage analysis
 
 ### Deployment
+
 - `/deploy-*`: Deployment operations
 - `/release-*`: Release management
 
 ### Documentation
+
 - `/docs-*`: Generate documentation
 - `/explain-*`: Explain code/concepts
 
@@ -309,9 +319,11 @@ Deploy current project to Cloudflare Pages with safety checks.
 ## Troubleshooting
 
 ### Command Not Found
+
 **Solution**: Ensure file is in `commands/` directory and Claude Code has been restarted
 
 ### Command Parameters Not Working
+
 **Solution**: Check parameter format in examples, ensure clear documentation
 
 ## References

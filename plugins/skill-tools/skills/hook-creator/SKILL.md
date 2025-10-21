@@ -30,6 +30,7 @@ Generate event-driven hooks for Claude Code with proper configuration.
 Hooks allow you to run shell commands or scripts in response to Claude Code events:
 
 **Event Types:**
+
 - `user-prompt-submit` - Before Claude processes user input
 - `tool-call` - Before/after tool execution
 - `session-start` - When Claude Code session begins
@@ -40,6 +41,7 @@ Hooks allow you to run shell commands or scripts in response to Claude Code even
 ### 1. Gather Requirements
 
 Ask the user:
+
 - **Event type**: Which event should trigger this hook?
 - **When**: Before or after the event?
 - **Action**: What command/script to run?
@@ -49,10 +51,12 @@ Ask the user:
 ### 2. Generate Hook Configuration
 
 **Location:**
+
 - Global: `~/.claude/skills/super-claude/plugins/[plugin]/hooks/hooks.json`
 - Project: `/path/to/project/.claude/hooks/hooks.json`
 
 **Format:**
+
 ```json
 {
   "hooks": [
@@ -74,6 +78,7 @@ Ask the user:
 ### 3. Validate Hook
 
 Ensure:
+
 - ✅ Event type is valid
 - ✅ Command is executable
 - ✅ Filter criteria are specific
@@ -202,20 +207,24 @@ Ensure:
 ### Event Types
 
 **user-prompt-submit**
+
 - Triggers when user submits a prompt
 - Use `when: "before"` to validate/modify input
 - Use `when: "after"` to log/process completed requests
 
 **tool-call**
+
 - Triggers on tool execution (Read, Write, Edit, Bash, etc.)
 - Use `filter.tool` to specify which tool
 - Access file path via `$FILE` variable
 
 **session-start**
+
 - Triggers when Claude Code session begins
 - Good for environment checks, setup tasks
 
 **session-end**
+
 - Triggers when session ends
 - Good for cleanup, logging, backups
 
@@ -235,6 +244,7 @@ Ensure:
 ### Variables
 
 Available in commands:
+
 - `$FILE` - File path being operated on
 - `$TOOL` - Tool name being used
 - `$PROJECT` - Project root directory
@@ -243,26 +253,31 @@ Available in commands:
 ## Hook Categories
 
 ### Code Quality
+
 - Format on save (Prettier, ESLint --fix)
 - Lint before commit
 - Type check before operations
 
 ### Testing
+
 - Run tests after edits
 - Update snapshots
 - Coverage checks
 
 ### Validation
+
 - Schema validation
 - API contract checking
 - Accessibility testing
 
 ### Git Operations
+
 - Pre-commit checks
 - Commit message validation
 - Branch protection
 
 ### Environment
+
 - Dependency checks
 - Environment variable validation
 - Configuration verification
@@ -298,21 +313,27 @@ Available in commands:
 ## Troubleshooting
 
 ### Hook Not Firing
+
 **Solution**:
+
 - Check hooks.json syntax is valid
 - Verify event type is correct
 - Check filter criteria match your use case
 - Restart Claude Code
 
 ### Hook Command Fails
+
 **Solution**:
+
 - Test command in terminal first
 - Check file paths are correct
 - Verify required tools are installed
 - Check command output/errors
 
 ### Hook Slows Down Workflow
+
 **Solution**:
+
 - Add more specific filters
 - Optimize command execution
 - Consider running async if possible

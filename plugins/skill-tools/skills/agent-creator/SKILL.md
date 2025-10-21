@@ -28,6 +28,7 @@ Generate specialized agents for autonomous task handling in Claude Code.
 ## Agent System Overview
 
 Agents are specialized Claude instances with:
+
 - **Focused purpose**: Specific task or domain
 - **Autonomy**: Can make decisions and use tools
 - **Context**: Loaded with relevant skills and knowledge
@@ -38,6 +39,7 @@ Agents are specialized Claude instances with:
 ### 1. Gather Requirements
 
 Ask the user:
+
 - **Purpose**: What specific task does this agent handle?
 - **Model**: Which model? (haiku=fast/cheap, sonnet=balanced, opus=complex)
 - **Skills**: Which skills should the agent have access to?
@@ -48,10 +50,12 @@ Ask the user:
 ### 2. Generate Agent Definition
 
 **Location:**
+
 - Global: `~/.claude/skills/super-claude/plugins/[plugin]/agents/agent-name.md`
 - Project: `/path/to/project/.claude/agents/agent-name.md`
 
 **Format:**
+
 ```markdown
 ---
 name: agent-name
@@ -121,6 +125,7 @@ Output: [what agent produces]
 ### 3. Validate Agent
 
 Ensure:
+
 - ✅ Purpose is clear and focused
 - ✅ Model choice is appropriate
 - ✅ Skills and tools are relevant
@@ -424,26 +429,31 @@ Output: Architecture documentation with diagrams
 ## Agent Categories
 
 ### Code Quality
+
 - code-reviewer
 - refactoring-assistant
 - documentation-generator
 
 ### Testing
+
 - test-generator
 - coverage-analyzer
 - e2e-test-creator
 
 ### Development
+
 - feature-implementer
 - bug-fixer
 - api-designer
 
 ### Research
+
 - researcher
 - technology-evaluator
 - pattern-analyzer
 
 ### Operations
+
 - deployment-manager
 - dependency-updater
 - performance-optimizer
@@ -451,12 +461,14 @@ Output: Architecture documentation with diagrams
 ## Model Selection Guide
 
 ### Haiku (Fast & Cheap)
+
 - Simple, repetitive tasks
 - Quick analysis
 - High-volume operations
 - Examples: formatter, simple validators
 
 ### Sonnet (Balanced)
+
 - Most common choice
 - Code review
 - Test generation
@@ -464,6 +476,7 @@ Output: Architecture documentation with diagrams
 - Examples: code-reviewer, test-generator
 
 ### Opus (Complex Reasoning)
+
 - Deep analysis
 - Research tasks
 - Architecture decisions
@@ -489,14 +502,18 @@ Output: Architecture documentation with diagrams
 ## Troubleshooting
 
 ### Agent Not Performing Well
+
 **Solution**:
+
 - Check model selection (may need upgrade/downgrade)
 - Refine operational principles
 - Add more specific skills
 - Clarify success criteria
 
 ### Agent Taking Too Long
+
 **Solution**:
+
 - Use faster model (sonnet → haiku)
 - Narrow scope
 - Add time constraints

@@ -8,6 +8,9 @@ configs/projects/*.json
 !configs/projects/*.example
 !configs/projects/README.md
 
+# Local Claude Code settings
+.claude/settings.local.json
+
 # Script logs and temp files
 *.log
 .DS_Store

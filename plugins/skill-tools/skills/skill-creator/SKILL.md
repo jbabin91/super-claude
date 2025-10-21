@@ -31,6 +31,7 @@ A meta-skill for generating new Claude Code skills with proper structure and val
 ### 1. Gather Requirements
 
 Ask the user:
+
 - **Purpose**: What problem does this skill solve?
 - **Triggers**: What keywords/phrases should activate it?
 - **Context**: When should it be used (file types, project types)?
@@ -117,6 +118,7 @@ Solution: [fix]
 Ensure the skill follows:
 
 **Anthropic Best Practices:**
+
 - ✅ Clear, actionable instructions
 - ✅ Specific triggers (not generic)
 - ✅ Real examples (not placeholders)
@@ -124,11 +126,13 @@ Ensure the skill follows:
 - ✅ Progressive disclosure (link to API_REFERENCE.md if needed)
 
 **RED-GREEN-REFACTOR Ready:**
+
 - ✅ Can be tested without the skill (RED phase)
 - ✅ Verifiable compliance (GREEN phase)
 - ✅ Hardened against rationalizations (REFACTOR phase)
 
 **Community Patterns:**
+
 - ✅ No TODOs or placeholders in production
 - ✅ No "YOUR_KEY_HERE" style configs
 - ✅ Specific, not generic labels
@@ -137,12 +141,14 @@ Ensure the skill follows:
 ### 4. Save to Appropriate Location
 
 **Global Skills** (general use across all projects):
-```
+
+```txt
 ~/.claude/skills/super-claude/plugins/[category]/skills/skill-name.md
 ```
 
 **Project-Local Skills** (specific to one project):
-```
+
+```txt
 /path/to/project/.claude/skills/skill-name.md
 ```
 
@@ -151,6 +157,7 @@ Ensure the skill follows:
 ### 5. Test the Skill
 
 Provide testing guidance:
+
 - RED: Try the workflow WITHOUT the skill, note failures
 - GREEN: Enable the skill, verify it works
 - REFACTOR: Identify edge cases, harden the skill
@@ -158,18 +165,23 @@ Provide testing guidance:
 ## Skill Types
 
 ### Standard Skill (Most Common)
+
 General-purpose automation or guidance for specific tasks.
 
 ### Component Generator
+
 Creates code/files following specific patterns.
 
 ### Workflow Orchestrator
+
 Coordinates multiple steps or tools.
 
 ### Validation/Checker
+
 Ensures code/config meets standards.
 
 ### Migration Helper
+
 Assists in moving between technologies.
 
 ## Advanced Features
@@ -177,10 +189,12 @@ Assists in moving between technologies.
 ### Progressive Disclosure
 
 If skill exceeds 500 lines, split into:
+
 - **SKILL.md**: Core instructions (< 500 lines)
 - **API_REFERENCE.md**: Advanced topics (loaded on-demand)
 
 Link from SKILL.md:
+
 ```markdown
 For advanced usage, see [API_REFERENCE.md](./API_REFERENCE.md)
 ```
@@ -188,6 +202,7 @@ For advanced usage, see [API_REFERENCE.md](./API_REFERENCE.md)
 ### Context-Aware Activation
 
 Make skills activate automatically:
+
 ```yaml
 triggers:
   keywords: [specific, technical, terms]
@@ -198,6 +213,7 @@ triggers:
 ### Dependencies
 
 Declare requirements:
+
 ```yaml
 requires:
   tools: [git, npm, docker]
@@ -285,6 +301,7 @@ All components must:
 ## Common Skill Patterns
 
 ### API Client Generator
+
 ```yaml
 name: project-api-client
 purpose: Generate type-safe API clients from OpenAPI schemas
@@ -293,6 +310,7 @@ location: project-local (for proprietary APIs)
 ```
 
 ### Component Library Helper
+
 ```yaml
 name: design-system-components
 purpose: Generate components following project design system
@@ -301,6 +319,7 @@ location: project-local (for proprietary design systems)
 ```
 
 ### Database Schema Generator
+
 ```yaml
 name: drizzle-schema-from-db
 purpose: Generate Drizzle schemas from existing Postgres database
@@ -309,6 +328,7 @@ location: global (reusable across projects)
 ```
 
 ### Deployment Automation
+
 ```yaml
 name: coolify-deployment
 purpose: Automate deployment to Coolify platform
@@ -338,6 +358,7 @@ location: global (reusable deployment pattern)
 ## Integration with Other Tools
 
 ### shadcn CLI Integration
+
 ```bash
 # Generate skill that wraps shadcn commands
 pnpm dlx shadcn@latest add [component]
@@ -345,7 +366,9 @@ pnpm dlx shadcn@latest add @coss/[component]
 ```
 
 ### Registry Support
+
 Skills can integrate with component registries:
+
 - shadcn/ui registry
 - coss.com/ui registry
 - Custom private registries
@@ -353,23 +376,29 @@ Skills can integrate with component registries:
 ## Troubleshooting
 
 ### Skill Not Activating
+
 **Symptom**: Skill exists but doesn't trigger
 **Solution**:
+
 - Check triggers section in YAML frontmatter
 - Ensure keywords are specific enough
 - Verify file is in correct location
 - Check Claude Code loaded the skill (restart if needed)
 
 ### Skill Too Generic
+
 **Symptom**: Skill triggers too often or in wrong contexts
 **Solution**:
+
 - Make keywords more specific
 - Add context restrictions
 - Use regex patterns to narrow activation
 
 ### Skill Too Large
+
 **Symptom**: Skill exceeds 500 lines
 **Solution**:
+
 - Implement progressive disclosure
 - Move advanced content to API_REFERENCE.md
 - Keep core workflow in SKILL.md

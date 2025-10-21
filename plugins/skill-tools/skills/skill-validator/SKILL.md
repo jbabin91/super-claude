@@ -30,6 +30,7 @@ Validate Claude Code components against specifications and best practices.
 ### Skills (SKILL.md)
 
 #### Structure Checks
+
 - ✅ YAML frontmatter present and valid
 - ✅ Required fields: name, version, description
 - ✅ Name is kebab-case
@@ -37,6 +38,7 @@ Validate Claude Code components against specifications and best practices.
 - ✅ Description is clear and includes triggers
 
 #### Content Checks
+
 - ✅ Has "When to Use" section
 - ✅ Has workflow or instructions
 - ✅ Includes examples
@@ -45,6 +47,7 @@ Validate Claude Code components against specifications and best practices.
 - ✅ No generic labels (helper, util, tool)
 
 #### Best Practices
+
 - ✅ Specific triggers (not too generic)
 - ✅ Real examples (not placeholders)
 - ✅ Clear, actionable instructions
@@ -54,12 +57,14 @@ Validate Claude Code components against specifications and best practices.
 ### Commands
 
 #### Structure Checks
+
 - ✅ YAML frontmatter with description
 - ✅ Clear command name
 - ✅ Usage examples provided
 - ✅ Parameters documented
 
 #### Content Checks
+
 - ✅ Purpose is clear
 - ✅ Instructions are actionable
 - ✅ Examples show real usage
@@ -68,12 +73,14 @@ Validate Claude Code components against specifications and best practices.
 ### Agents
 
 #### Structure Checks
+
 - ✅ YAML frontmatter present
 - ✅ Model specified (haiku/sonnet/opus)
 - ✅ Purpose is clear
 - ✅ Workflow defined
 
 #### Content Checks
+
 - ✅ Single responsibility
 - ✅ Operational principles defined
 - ✅ Quality standards specified
@@ -83,12 +90,14 @@ Validate Claude Code components against specifications and best practices.
 ### Hooks
 
 #### Structure Checks
+
 - ✅ Valid JSON format
 - ✅ Event type is valid
 - ✅ Command is specified
 - ✅ Description provided
 
 #### Safety Checks
+
 - ✅ No arbitrary code execution
 - ✅ File paths are validated
 - ✅ Commands are safe
@@ -97,6 +106,7 @@ Validate Claude Code components against specifications and best practices.
 ### Plugins
 
 #### Structure Checks
+
 - ✅ `.claude-plugin/plugin.json` exists
 - ✅ Valid JSON format
 - ✅ Required fields present
@@ -104,6 +114,7 @@ Validate Claude Code components against specifications and best practices.
 - ✅ Directory structure correct
 
 #### Manifest Checks
+
 - ✅ Name is kebab-case
 - ✅ Version follows semver
 - ✅ Description is clear
@@ -115,6 +126,7 @@ Validate Claude Code components against specifications and best practices.
 ### 1. Identify Component Type
 
 Determine what to validate:
+
 - Skill (SKILL.md)
 - Command (.md in commands/)
 - Agent (.md in agents/)
@@ -128,6 +140,7 @@ Execute appropriate checks based on component type.
 ### 3. Report Issues
 
 Categorize by severity:
+
 - **Error**: Must fix (prevents functionality)
 - **Warning**: Should fix (best practice violation)
 - **Info**: Consider fixing (minor improvement)
@@ -135,6 +148,7 @@ Categorize by severity:
 ### 4. Provide Fixes
 
 For each issue, provide:
+
 - Description of problem
 - Why it's an issue
 - How to fix it
@@ -147,7 +161,8 @@ For each issue, provide:
 **Input:** `skills/my-skill.md`
 
 **Checks:**
-```
+
+```txt
 ✅ YAML frontmatter valid
 ✅ Name: my-skill (kebab-case)
 ✅ Version: 1.0.0 (semver)
@@ -161,7 +176,8 @@ For each issue, provide:
 ```
 
 **Report:**
-```
+
+```txt
 Errors (2):
   1. Line 45: TODO found - remove before publishing
   2. Line 12: Generic label "helper" - be more specific
@@ -181,7 +197,8 @@ Score: 6/10 - Fix errors before publishing
 **Input:** `my-plugin/`
 
 **Checks:**
-```
+
+```txt
 ✅ plugin.json exists
 ✅ Valid JSON
 ✅ Name: my-plugin
@@ -194,7 +211,8 @@ Score: 6/10 - Fix errors before publishing
 ```
 
 **Report:**
-```
+
+```txt
 Errors (1):
   1. plugin.json references "skill-1" but skills/skill-1.md doesn't exist
 
@@ -214,6 +232,7 @@ Score: 5/10 - Fix errors, address warnings
 ### Severity Levels
 
 **Error (Must Fix):**
+
 - Invalid YAML/JSON syntax
 - Missing required fields
 - Referenced files don't exist
@@ -222,6 +241,7 @@ Score: 5/10 - Fix errors, address warnings
 - Invalid semantic version
 
 **Warning (Should Fix):**
+
 - Missing recommended fields
 - No triggers (skill won't auto-activate)
 - Missing documentation sections
@@ -230,6 +250,7 @@ Score: 5/10 - Fix errors, address warnings
 - No license (public distribution)
 
 **Info (Consider):**
+
 - Could improve clarity
 - Additional documentation helpful
 - Consider progressive disclosure (long skills)
@@ -237,7 +258,8 @@ Score: 5/10 - Fix errors, address warnings
 ### Common Issues
 
 #### Generic Naming
-```
+
+```txt
 ❌ my-helper
 ❌ utils-tool
 ❌ component-stuff
@@ -248,6 +270,7 @@ Score: 5/10 - Fix errors, address warnings
 ```
 
 #### Missing Triggers
+
 ```yaml
 ❌ Missing entirely
 
@@ -257,6 +280,7 @@ Score: 5/10 - Fix errors, address warnings
 ```
 
 #### TODOs in Production
+
 ```markdown
 ❌ ## Feature X
    TODO: Implement this later
@@ -266,7 +290,8 @@ Score: 5/10 - Fix errors, address warnings
 ```
 
 #### Vague Descriptions
-```
+
+```txt
 ❌ "Helps with things"
 ❌ "Utility for stuff"
 
@@ -276,7 +301,7 @@ Score: 5/10 - Fix errors, address warnings
 
 ## Validation Output Format
 
-```
+```txt
 Component: [name]
 Type: [skill|command|agent|hook|plugin]
 Location: [file path]
@@ -317,6 +342,7 @@ Recommendations:
 ### With Hooks
 
 Auto-validate before commits:
+
 ```json
 {
   "name": "validate-before-commit",
@@ -332,6 +358,7 @@ Auto-validate before commits:
 ### With Commands
 
 Create validation command:
+
 ```markdown
 ---
 description: Validate all skills in current plugin
@@ -350,6 +377,7 @@ Run skill-validator on all SKILL.md files in current plugin.
 ### With CI/CD
 
 Add to GitHub Actions:
+
 ```yaml
 - name: Validate Skills
   run: claude-validate --all --strict

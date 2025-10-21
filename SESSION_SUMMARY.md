@@ -90,7 +90,7 @@
 
 ## 📊 Repository Overview
 
-```
+```sh
 super-claude/
 ├── README.md                       # Project overview
 ├── LICENSE (MIT)                   # Open source license
