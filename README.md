@@ -34,41 +34,30 @@ cd super-claude
 # Plugins auto-load from your local directory
 ```
 
-## 📦 Available Skills
+## 📦 Available Plugins
 
-### TypeScript
+### skill-tools (Meta-Tools) ✅
 
-- **tsc-files-validation** - CLI testing across scenarios (monorepo, package managers, cross-platform)
-- **refactor-imports** - Path alias management and import organization
-- **generate-tests** - Vitest test generation with proper mocking
-- **fix-types** - Auto-fix common TypeScript errors
+Create and manage Claude Code enhancements:
 
-### Testing
+- **skill-creator** - Generate new skills with proper structure and validation
+- **command-creator** - Create custom slash commands
+- **hook-creator** - Build event-driven hooks for automation
+- **agent-creator** - Create specialized autonomous agents
+- **plugin-creator** - Generate complete plugin packages
+- **skill-validator** - Validate skills against Anthropic specifications
 
-- **vitest-integration** - Advanced Vitest workflows with dynamic test generation
-- **playwright-e2e** - End-to-end testing with Playwright
-- **coverage-improve** - Identify and cover untested code paths
-- **monorepo-testing** - Multi-package testing strategies
+### Coming Soon 🚧
 
-### Git
+The following plugins are planned and ready for development:
 
-- **smart-commit** - Conventional commits with gitmoji
-- **pr-description** - Auto-generate PR descriptions from commits
-- **changelog** - Automated changelog generation
-- **worktree-helper** - Parallel development branch management
+- **typescript-tools** - Type checking, refactoring, import management, test generation
+- **testing-tools** - Vitest integration, Playwright E2E, coverage analysis, monorepo testing
+- **git-tools** - Smart commits, PR descriptions, changelogs, worktree management
+- **frontend-tools** - React components, Tailwind utilities, design patterns, Storybook
+- **devops-tools** - Docker Compose, environment management, GitHub Actions
 
-### Frontend
-
-- **component-generator** - React functional component scaffolding
-- **tailwind-helper** - Utility class optimization
-- **react-patterns** - Best practices enforcement
-- **storybook-story** - Component story generation
-
-### DevOps
-
-- **docker-compose** - Container orchestration helpers
-- **env-manager** - Environment variable management
-- **github-actions** - CI/CD workflow generation
+See [ROADMAP.md](ROADMAP.md) for detailed implementation plans.
 
 ## 🏗️ Project Structure
 
