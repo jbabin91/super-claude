@@ -125,7 +125,7 @@ Use the skill-tools plugin to generate new skills:
 # Skills auto-activate based on conversation context
 ```
 
-See [docs/CREATING_SKILLS.md](docs/CREATING_SKILLS.md) for details.
+See [Creating Skills](docs/CREATING_SKILLS.md) for details.
 
 ## 🤝 Contributing
 
@@ -147,11 +147,6 @@ Heavily inspired by:
 - [obra/superpowers](https://github.com/obra/superpowers) - Battle-tested TDD and debugging workflows
 - [anthropics/skills](https://github.com/anthropics/skills) - Official skill examples
 - [lackeyjb/playwright-skill](https://github.com/lackeyjb/playwright-skill) - Universal executor pattern
-
-## 🔗 Related Projects
-
-- [tsc-files](https://github.com/jbabin91/tsc-files) - TypeScript file checking for git hooks
-- [Claude Code](https://claude.ai/code) - Official Claude CLI
 
 ---
 
