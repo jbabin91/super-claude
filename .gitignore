@@ -1,0 +1,25 @@
+# Downloaded marketplace skills (can reinstall)
+marketplace/*
+!marketplace/.gitkeep
+
+# Personal configs
+configs/global.json
+configs/projects/*.json
+!configs/projects/*.example
+!configs/projects/README.md
+
+# Script logs and temp files
+*.log
+.DS_Store
+node_modules/
+.claude-cache/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db

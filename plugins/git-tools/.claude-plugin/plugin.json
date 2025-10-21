@@ -1,0 +1,14 @@
+{
+  "name": "git-tools",
+  "version": "0.1.0",
+  "description": "Git workflow automation including smart commits with gitmoji, PR descriptions, changelog generation, and worktree management",
+  "author": {
+    "name": "Jace Babin",
+    "email": "jbabin91@gmail.com",
+    "github": "jbabin91"
+  },
+  "license": "MIT",
+  "category": "git",
+  "keywords": ["git", "commits", "gitmoji", "pr", "changelog", "workflow", "worktree"],
+  "skills": ["smart-commit", "pr-description", "changelog", "worktree-helper"]
+}

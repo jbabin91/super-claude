@@ -1,0 +1,14 @@
+{
+  "name": "devops-tools",
+  "version": "0.1.0",
+  "description": "DevOps automation including Docker Compose helpers, environment variable management, and GitHub Actions workflow generation",
+  "author": {
+    "name": "Jace Babin",
+    "email": "jbabin91@gmail.com",
+    "github": "jbabin91"
+  },
+  "license": "MIT",
+  "category": "devops",
+  "keywords": ["devops", "docker", "ci-cd", "github-actions", "environment", "automation"],
+  "skills": ["docker-compose", "env-manager", "github-actions"]
+}
