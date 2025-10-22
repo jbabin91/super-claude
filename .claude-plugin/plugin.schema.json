@@ -68,31 +68,31 @@
       "oneOf": [
         {
           "type": "string",
-          "description": "Path to a single command file",
-          "pattern": "^\\./.*\\.md$"
+          "description": "Path to a single command file or directory",
+          "pattern": "^\\./.*"
         },
         {
           "type": "array",
-          "description": "Array of command file paths",
+          "description": "Array of command file or directory paths",
           "items": {
             "type": "string",
-            "pattern": "^\\./.*\\.md$"
+            "pattern": "^\\./.*"
           },
           "uniqueItems": true
         }
       ]
     },
     "agents": {
-      "description": "Custom agent directory paths (relative, starting with ./) - supplements default agents/ directory",
+      "description": "Custom agent file paths (relative, starting with ./) - supplements default agents/ directory",
       "oneOf": [
         {
           "type": "string",
-          "description": "Path to an agent directory",
+          "description": "Path to an agent file",
           "pattern": "^\\./.*"
         },
         {
           "type": "array",
-          "description": "Array of agent directory paths",
+          "description": "Array of agent file paths",
           "items": {
             "type": "string",
             "pattern": "^\\./.*"
@@ -102,69 +102,41 @@
       ]
     },
     "hooks": {
-      "description": "Event handler configuration - path to hooks.json or inline config",
+      "description": "Event handler configuration - path to hooks file or inline config",
       "oneOf": [
         {
           "type": "string",
-          "description": "Path to hooks.json file",
-          "pattern": "^\\./.*\\.json$"
+          "description": "Path to hooks configuration file (e.g., './hooks/hooks.json')",
+          "pattern": "^\\./.*"
         },
         {
           "type": "object",
           "description": "Inline hooks configuration",
-          "properties": {
-            "hooks": {
-              "type": "array",
-              "description": "Array of hook definitions",
-              "items": {
-                "type": "object",
-                "required": ["name", "event", "command"],
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "Hook identifier"
-                  },
-                  "event": {
-                    "type": "string",
-                    "enum": [
-                      "PreToolUse",
-                      "PostToolUse",
-                      "UserPromptSubmit",
-                      "SessionStart",
-                      "SessionEnd"
-                    ],
-                    "description": "Event type to trigger the hook"
-                  },
-                  "when": {
-                    "type": "string",
-                    "enum": ["before", "after"],
-                    "description": "When to execute relative to the event"
-                  },
-                  "command": {
-                    "type": "string",
-                    "description": "Shell command to execute"
-                  },
-                  "filter": {
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "matcher": {
+                  "type": "string",
+                  "description": "Pattern to match tool names or events"
+                },
+                "hooks": {
+                  "type": "array",
+                  "items": {
                     "type": "object",
-                    "description": "Conditions for hook execution",
+                    "required": ["type"],
                     "properties": {
-                      "tool": {
+                      "type": {
                         "type": "string",
-                        "description": "Tool name to filter on"
+                        "enum": ["command", "validation", "notification"],
+                        "description": "Type of hook action"
                       },
-                      "filePattern": {
+                      "command": {
                         "type": "string",
-                        "description": "Glob pattern for file matching"
-                      },
-                      "promptPattern": {
-                        "type": "string",
-                        "description": "Regex pattern for prompt matching"
+                        "description": "Command to execute (can use ${CLAUDE_PLUGIN_ROOT})"
                       }
                     }
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Human-readable description of the hook"
                   }
                 }
               }
@@ -178,32 +150,37 @@
       "oneOf": [
         {
           "type": "string",
-          "description": "Path to MCP configuration file",
-          "pattern": "^\\./.*\\.json$"
+          "description": "Path to MCP configuration file (e.g., './.mcp.json')",
+          "pattern": "^\\./.*"
         },
         {
           "type": "object",
-          "description": "Inline MCP server configuration",
+          "description": "Inline MCP server configurations",
           "additionalProperties": {
             "type": "object",
+            "required": ["command"],
             "properties": {
               "command": {
                 "type": "string",
-                "description": "Command to start the MCP server"
+                "description": "Path to server executable (can use ${CLAUDE_PLUGIN_ROOT})"
               },
               "args": {
                 "type": "array",
-                "description": "Command arguments",
+                "description": "Command line arguments for the server",
                 "items": {
                   "type": "string"
                 }
               },
               "env": {
                 "type": "object",
-                "description": "Environment variables",
+                "description": "Environment variables for the server",
                 "additionalProperties": {
                   "type": "string"
                 }
+              },
+              "cwd": {
+                "type": "string",
+                "description": "Working directory for the server"
               }
             }
           }

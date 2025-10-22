@@ -8,7 +8,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Marketplace identifier in kebab-case",
+      "description": "Marketplace identifier in kebab-case (no spaces)",
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
     },
     "owner": {
@@ -22,13 +22,11 @@
         },
         "email": {
           "type": "string",
-          "description": "Contact email address",
-          "format": "email"
+          "description": "Contact email address"
         },
         "url": {
           "type": "string",
-          "description": "Owner's website or GitHub profile URL",
-          "format": "uri"
+          "description": "Owner's website or GitHub profile URL"
         }
       }
     },
@@ -56,15 +54,13 @@
             },
             "url": {
               "type": "string",
-              "description": "Repository URL",
-              "format": "uri"
+              "description": "Repository URL"
             }
           }
         },
         "homepage": {
           "type": "string",
-          "description": "Marketplace homepage URL",
-          "format": "uri"
+          "description": "Marketplace homepage URL"
         },
         "license": {
           "type": "string",
@@ -89,7 +85,7 @@
             "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
           },
           "source": {
-            "description": "Where to fetch the plugin",
+            "description": "Where to fetch the plugin (required)",
             "oneOf": [
               {
                 "type": "string",
@@ -122,12 +118,27 @@
                   },
                   "url": {
                     "type": "string",
-                    "description": "Git repository URL",
-                    "format": "uri"
+                    "description": "Git repository URL"
                   }
                 }
               }
             ]
+          },
+          "strict": {
+            "type": "boolean",
+            "description": "Require plugin.json in plugin folder (default: true). When false, marketplace entry serves as complete plugin manifest.",
+            "default": true
+          },
+          "category": {
+            "type": "string",
+            "description": "Plugin category for organization (marketplace-specific field)"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags for searchability (marketplace-specific field, use 'keywords' for standard field)",
+            "items": {
+              "type": "string"
+            }
           },
           "version": {
             "type": "string",
@@ -148,25 +159,21 @@
               },
               "email": {
                 "type": "string",
-                "description": "Author's email",
-                "format": "email"
+                "description": "Author's email"
               },
               "url": {
                 "type": "string",
-                "description": "Author's website or GitHub profile",
-                "format": "uri"
+                "description": "Author's website or GitHub profile"
               }
             }
           },
           "homepage": {
             "type": "string",
-            "description": "Plugin documentation URL",
-            "format": "uri"
+            "description": "Plugin documentation URL"
           },
           "repository": {
             "type": "string",
-            "description": "Plugin source code URL",
-            "format": "uri"
+            "description": "Plugin source code URL"
           },
           "license": {
             "type": "string",
@@ -179,32 +186,16 @@
               "type": "string"
             }
           },
-          "category": {
-            "type": "string",
-            "description": "Plugin category for organization"
-          },
-          "tags": {
-            "type": "array",
-            "description": "Alternative to keywords for searchability",
-            "items": {
-              "type": "string"
-            }
-          },
-          "strict": {
-            "type": "boolean",
-            "description": "Require plugin.json in plugin folder (default: true)",
-            "default": true
-          },
           "commands": {
-            "description": "Custom command file paths (supplement default commands/ directory)",
+            "description": "Custom command file/directory paths (supplement default commands/ directory)",
             "oneOf": [
               {
                 "type": "string",
-                "description": "Single command file path"
+                "description": "Single command file or directory path"
               },
               {
                 "type": "array",
-                "description": "Array of command file paths",
+                "description": "Array of command file or directory paths",
                 "items": {
                   "type": "string"
                 }
@@ -212,15 +203,15 @@
             ]
           },
           "agents": {
-            "description": "Custom agent directory paths (supplement default agents/ directory)",
+            "description": "Custom agent file paths (supplement default agents/ directory)",
             "oneOf": [
               {
                 "type": "string",
-                "description": "Single agent directory path"
+                "description": "Single agent file path"
               },
               {
                 "type": "array",
-                "description": "Array of agent directory paths",
+                "description": "Array of agent file paths",
                 "items": {
                   "type": "string"
                 }
@@ -228,20 +219,50 @@
             ]
           },
           "hooks": {
-            "description": "Hooks configuration",
+            "description": "Hooks configuration - path to hooks file or inline config",
             "oneOf": [
               {
                 "type": "string",
-                "description": "Path to hooks.json file"
+                "description": "Path to hooks configuration file"
               },
               {
                 "type": "object",
-                "description": "Inline hooks configuration"
+                "description": "Inline hooks configuration",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "matcher": {
+                        "type": "string",
+                        "description": "Pattern to match tool names or events"
+                      },
+                      "hooks": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": ["type"],
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": ["command", "validation", "notification"],
+                              "description": "Type of hook action"
+                            },
+                            "command": {
+                              "type": "string",
+                              "description": "Command to execute (can use ${CLAUDE_PLUGIN_ROOT})"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             ]
           },
           "mcpServers": {
-            "description": "MCP server configuration",
+            "description": "MCP server configuration - path to config or inline definition",
             "oneOf": [
               {
                 "type": "string",
@@ -249,7 +270,35 @@
               },
               {
                 "type": "object",
-                "description": "Inline MCP server configuration"
+                "description": "Inline MCP server configurations",
+                "additionalProperties": {
+                  "type": "object",
+                  "required": ["command"],
+                  "properties": {
+                    "command": {
+                      "type": "string",
+                      "description": "Path to server executable (can use ${CLAUDE_PLUGIN_ROOT})"
+                    },
+                    "args": {
+                      "type": "array",
+                      "description": "Command line arguments for the server",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "env": {
+                      "type": "object",
+                      "description": "Environment variables for the server",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "cwd": {
+                      "type": "string",
+                      "description": "Working directory for the server"
+                    }
+                  }
+                }
               }
             ]
           }
