@@ -9,10 +9,7 @@
   "metadata": {
     "version": "0.1.0",
     "description": "A comprehensive marketplace of Claude Code plugins for TypeScript, React, and Node.js development. Install individual category plugins or mix and match based on your project needs.",
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/jbabin91/super-claude"
-    },
+    "repository": "https://github.com/jbabin91/super-claude",
     "homepage": "https://github.com/jbabin91/super-claude",
     "license": "MIT"
   },

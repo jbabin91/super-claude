@@ -129,8 +129,8 @@
                     "properties": {
                       "type": {
                         "type": "string",
-                        "enum": ["command", "validation", "notification"],
-                        "description": "Type of hook action"
+                        "enum": ["command"],
+                        "description": "Type of hook action (currently only 'command' is supported)"
                       },
                       "command": {
                         "type": "string",

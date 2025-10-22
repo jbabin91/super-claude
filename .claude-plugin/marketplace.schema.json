@@ -44,19 +44,8 @@
           "description": "Brief marketplace description"
         },
         "repository": {
-          "type": "object",
-          "description": "Source code repository",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["git"],
-              "description": "Repository type"
-            },
-            "url": {
-              "type": "string",
-              "description": "Repository URL"
-            }
-          }
+          "type": "string",
+          "description": "Source code repository URL"
         },
         "homepage": {
           "type": "string",
@@ -131,11 +120,11 @@
           },
           "category": {
             "type": "string",
-            "description": "Plugin category for organization (marketplace-specific field)"
+            "description": "Plugin category for organization (e.g., 'development', 'productivity', 'security')"
           },
           "tags": {
             "type": "array",
-            "description": "Tags for searchability (marketplace-specific field, use 'keywords' for standard field)",
+            "description": "Optional tags for searchability (community extension - use 'keywords' for standard plugin field)",
             "items": {
               "type": "string"
             }
@@ -245,8 +234,8 @@
                           "properties": {
                             "type": {
                               "type": "string",
-                              "enum": ["command", "validation", "notification"],
-                              "description": "Type of hook action"
+                              "enum": ["command"],
+                              "description": "Type of hook action (currently only 'command' is supported)"
                             },
                             "command": {
                               "type": "string",
