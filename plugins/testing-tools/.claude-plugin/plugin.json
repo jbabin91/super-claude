@@ -9,12 +9,5 @@
     "url": "https://github.com/jbabin91"
   },
   "license": "MIT",
-  "keywords": [
-    "testing",
-    "vitest",
-    "playwright",
-    "coverage",
-    "e2e",
-    "monorepo"
-  ]
+  "keywords": ["testing", "vitest", "playwright", "coverage", "e2e", "monorepo"]
 }

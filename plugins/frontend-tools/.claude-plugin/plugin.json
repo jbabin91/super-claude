@@ -9,11 +9,5 @@
     "url": "https://github.com/jbabin91"
   },
   "license": "MIT",
-  "keywords": [
-    "react",
-    "frontend",
-    "tailwind",
-    "components",
-    "design-patterns"
-  ]
+  "keywords": ["react", "frontend", "tailwind", "components", "design-patterns"]
 }

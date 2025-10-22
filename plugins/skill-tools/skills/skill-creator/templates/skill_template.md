@@ -174,7 +174,7 @@ description: |
 **Good description examples:**
 
 > "Analyze Excel spreadsheets, generate pivot tables, create charts. Use when working with .xlsx files or data analysis requests."
-
+>
 > "Refactor TypeScript imports, organize import statements, remove unused imports. Use when cleaning up imports or seeing import-related errors."
 
 **Bad description (too vague):**

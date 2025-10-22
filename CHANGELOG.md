@@ -91,12 +91,15 @@ When archiving OpenSpec proposals, add entries in this format:
 ## [X.Y.Z] - YYYY-MM-DD
 
 ### Added
+
 - **skill-name** - Brief description of what it does
 
 ### Changed
+
 - **modified-skill** - What changed and why
 
 ### Fixed
+
 - **bugfix-skill** - What issue was resolved
 ```
 

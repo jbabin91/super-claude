@@ -85,9 +85,11 @@ After deployment, create separate PR to:
 ## [Unreleased]
 
 ### Added
+
 - **smart-commit-skill** - Conventional commits with gitmoji automation for git-tools plugin
 
 ### Changed
+
 - **skill-creator** - Updated to include official Claude Code field documentation
 ```
 
