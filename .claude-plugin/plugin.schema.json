@@ -1,0 +1,214 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/jbabin91/super-claude/plugin.schema.json",
+  "title": "Claude Code Plugin Manifest Schema",
+  "description": "Schema for Claude Code plugin.json manifest files",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique plugin identifier in kebab-case (no spaces)",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Plugin version using semantic versioning (e.g., '2.1.0')",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.-]+)?(\\+[a-zA-Z0-9.-]+)?$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the plugin's purpose"
+    },
+    "author": {
+      "type": "object",
+      "description": "Plugin author information",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Author's full name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Author's email address",
+          "format": "email"
+        },
+        "url": {
+          "type": "string",
+          "description": "Author's website or GitHub profile URL",
+          "format": "uri"
+        }
+      }
+    },
+    "homepage": {
+      "type": "string",
+      "description": "URL to plugin documentation or homepage",
+      "format": "uri"
+    },
+    "repository": {
+      "type": "string",
+      "description": "URL to plugin source code repository",
+      "format": "uri"
+    },
+    "license": {
+      "type": "string",
+      "description": "License identifier (e.g., 'MIT', 'Apache-2.0', 'GPL-3.0')"
+    },
+    "keywords": {
+      "type": "array",
+      "description": "Keywords for plugin discovery and searchability",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "commands": {
+      "description": "Custom slash command file paths (relative, starting with ./) - supplements default commands/ directory",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Path to a single command file",
+          "pattern": "^\\./.*\\.md$"
+        },
+        {
+          "type": "array",
+          "description": "Array of command file paths",
+          "items": {
+            "type": "string",
+            "pattern": "^\\./.*\\.md$"
+          },
+          "uniqueItems": true
+        }
+      ]
+    },
+    "agents": {
+      "description": "Custom agent directory paths (relative, starting with ./) - supplements default agents/ directory",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Path to an agent directory",
+          "pattern": "^\\./.*"
+        },
+        {
+          "type": "array",
+          "description": "Array of agent directory paths",
+          "items": {
+            "type": "string",
+            "pattern": "^\\./.*"
+          },
+          "uniqueItems": true
+        }
+      ]
+    },
+    "hooks": {
+      "description": "Event handler configuration - path to hooks.json or inline config",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Path to hooks.json file",
+          "pattern": "^\\./.*\\.json$"
+        },
+        {
+          "type": "object",
+          "description": "Inline hooks configuration",
+          "properties": {
+            "hooks": {
+              "type": "array",
+              "description": "Array of hook definitions",
+              "items": {
+                "type": "object",
+                "required": ["name", "event", "command"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Hook identifier"
+                  },
+                  "event": {
+                    "type": "string",
+                    "enum": [
+                      "PreToolUse",
+                      "PostToolUse",
+                      "UserPromptSubmit",
+                      "SessionStart",
+                      "SessionEnd"
+                    ],
+                    "description": "Event type to trigger the hook"
+                  },
+                  "when": {
+                    "type": "string",
+                    "enum": ["before", "after"],
+                    "description": "When to execute relative to the event"
+                  },
+                  "command": {
+                    "type": "string",
+                    "description": "Shell command to execute"
+                  },
+                  "filter": {
+                    "type": "object",
+                    "description": "Conditions for hook execution",
+                    "properties": {
+                      "tool": {
+                        "type": "string",
+                        "description": "Tool name to filter on"
+                      },
+                      "filePattern": {
+                        "type": "string",
+                        "description": "Glob pattern for file matching"
+                      },
+                      "promptPattern": {
+                        "type": "string",
+                        "description": "Regex pattern for prompt matching"
+                      }
+                    }
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Human-readable description of the hook"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "mcpServers": {
+      "description": "Model Context Protocol server configuration - path to config or inline definition",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Path to MCP configuration file",
+          "pattern": "^\\./.*\\.json$"
+        },
+        {
+          "type": "object",
+          "description": "Inline MCP server configuration",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string",
+                "description": "Command to start the MCP server"
+              },
+              "args": {
+                "type": "array",
+                "description": "Command arguments",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "env": {
+                "type": "object",
+                "description": "Environment variables",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,25 +1,19 @@
 {
+  "$schema": "https://raw.githubusercontent.com/jbabin91/super-claude/main/.claude-plugin/plugin.schema.json",
   "name": "frontend-tools",
   "version": "0.1.0",
   "description": "Frontend development accelerators for React component generation, Tailwind utilities, and design pattern enforcement",
   "author": {
     "name": "Jace Babin",
     "email": "jbabin91@gmail.com",
-    "github": "jbabin91"
+    "url": "https://github.com/jbabin91"
   },
   "license": "MIT",
-  "category": "frontend",
   "keywords": [
     "react",
     "frontend",
     "tailwind",
     "components",
     "design-patterns"
-  ],
-  "skills": [
-    "component-generator",
-    "tailwind-helper",
-    "react-patterns",
-    "storybook-story"
   ]
 }

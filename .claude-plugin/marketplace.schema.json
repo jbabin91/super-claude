@@ -1,0 +1,260 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/jbabin91/super-claude/marketplace.schema.json",
+  "title": "Claude Code Marketplace Schema",
+  "description": "Schema for Claude Code marketplace.json files that define plugin collections",
+  "type": "object",
+  "required": ["name", "owner", "plugins"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Marketplace identifier in kebab-case",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "owner": {
+      "type": "object",
+      "description": "Marketplace maintainer information",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Owner's full name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Contact email address",
+          "format": "email"
+        },
+        "url": {
+          "type": "string",
+          "description": "Owner's website or GitHub profile URL",
+          "format": "uri"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional marketplace metadata",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Marketplace version (semantic versioning)",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.-]+)?(\\+[a-zA-Z0-9.-]+)?$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief marketplace description"
+        },
+        "repository": {
+          "type": "object",
+          "description": "Source code repository",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["git"],
+              "description": "Repository type"
+            },
+            "url": {
+              "type": "string",
+              "description": "Repository URL",
+              "format": "uri"
+            }
+          }
+        },
+        "homepage": {
+          "type": "string",
+          "description": "Marketplace homepage URL",
+          "format": "uri"
+        },
+        "license": {
+          "type": "string",
+          "description": "License identifier (e.g., MIT, Apache-2.0)"
+        },
+        "pluginRoot": {
+          "type": "string",
+          "description": "Base path for relative plugin sources"
+        }
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "description": "Array of plugin entries available in this marketplace",
+      "items": {
+        "type": "object",
+        "required": ["name", "source"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Plugin identifier in kebab-case (no spaces)",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "source": {
+            "description": "Where to fetch the plugin",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Relative path (e.g., './plugins/my-plugin')"
+              },
+              {
+                "type": "object",
+                "description": "GitHub repository source",
+                "required": ["source", "repo"],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "const": "github"
+                  },
+                  "repo": {
+                    "type": "string",
+                    "description": "GitHub repo in format 'owner/repo'",
+                    "pattern": "^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "description": "Git URL source",
+                "required": ["source", "url"],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "const": "url"
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Git repository URL",
+                    "format": "uri"
+                  }
+                }
+              }
+            ]
+          },
+          "version": {
+            "type": "string",
+            "description": "Plugin version (semantic versioning)",
+            "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.-]+)?(\\+[a-zA-Z0-9.-]+)?$"
+          },
+          "description": {
+            "type": "string",
+            "description": "Brief plugin description"
+          },
+          "author": {
+            "type": "object",
+            "description": "Plugin author information",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Author's full name"
+              },
+              "email": {
+                "type": "string",
+                "description": "Author's email",
+                "format": "email"
+              },
+              "url": {
+                "type": "string",
+                "description": "Author's website or GitHub profile",
+                "format": "uri"
+              }
+            }
+          },
+          "homepage": {
+            "type": "string",
+            "description": "Plugin documentation URL",
+            "format": "uri"
+          },
+          "repository": {
+            "type": "string",
+            "description": "Plugin source code URL",
+            "format": "uri"
+          },
+          "license": {
+            "type": "string",
+            "description": "License identifier (SPDX format recommended)"
+          },
+          "keywords": {
+            "type": "array",
+            "description": "Tags for plugin discovery and categorization",
+            "items": {
+              "type": "string"
+            }
+          },
+          "category": {
+            "type": "string",
+            "description": "Plugin category for organization"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Alternative to keywords for searchability",
+            "items": {
+              "type": "string"
+            }
+          },
+          "strict": {
+            "type": "boolean",
+            "description": "Require plugin.json in plugin folder (default: true)",
+            "default": true
+          },
+          "commands": {
+            "description": "Custom command file paths (supplement default commands/ directory)",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Single command file path"
+              },
+              {
+                "type": "array",
+                "description": "Array of command file paths",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "agents": {
+            "description": "Custom agent directory paths (supplement default agents/ directory)",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Single agent directory path"
+              },
+              {
+                "type": "array",
+                "description": "Array of agent directory paths",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "hooks": {
+            "description": "Hooks configuration",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Path to hooks.json file"
+              },
+              {
+                "type": "object",
+                "description": "Inline hooks configuration"
+              }
+            ]
+          },
+          "mcpServers": {
+            "description": "MCP server configuration",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Path to MCP configuration file"
+              },
+              {
+                "type": "object",
+                "description": "Inline MCP server configuration"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

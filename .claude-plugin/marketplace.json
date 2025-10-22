@@ -1,18 +1,21 @@
 {
+  "$schema": "https://raw.githubusercontent.com/jbabin91/super-claude/main/.claude-plugin/marketplace.schema.json",
   "name": "super-claude",
-  "version": "0.1.0",
-  "description": "A comprehensive marketplace of Claude Code plugins for TypeScript, React, and Node.js development. Install individual category plugins or mix and match based on your project needs.",
   "owner": {
     "name": "Jace Babin",
     "email": "jbabin91@gmail.com",
-    "github": "jbabin91"
+    "url": "https://github.com/jbabin91"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jbabin91/super-claude"
+  "metadata": {
+    "version": "0.1.0",
+    "description": "A comprehensive marketplace of Claude Code plugins for TypeScript, React, and Node.js development. Install individual category plugins or mix and match based on your project needs.",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/jbabin91/super-claude"
+    },
+    "homepage": "https://github.com/jbabin91/super-claude",
+    "license": "MIT"
   },
-  "homepage": "https://github.com/jbabin91/super-claude",
-  "license": "MIT",
   "plugins": [
     {
       "name": "typescript-tools",
@@ -20,7 +23,7 @@
       "description": "TypeScript development tools: type checking, refactoring, import management, and test generation",
       "version": "0.1.0",
       "category": "typescript",
-      "tags": ["typescript", "type-checking", "refactoring", "testing"]
+      "keywords": ["typescript", "type-checking", "refactoring", "testing"]
     },
     {
       "name": "testing-tools",
@@ -28,7 +31,7 @@
       "description": "Testing automation: Vitest integration, Playwright E2E, coverage analysis, and monorepo testing strategies",
       "version": "0.1.0",
       "category": "testing",
-      "tags": ["testing", "vitest", "playwright", "coverage", "monorepo"]
+      "keywords": ["testing", "vitest", "playwright", "coverage", "monorepo"]
     },
     {
       "name": "git-tools",
@@ -36,7 +39,7 @@
       "description": "Git workflow automation: smart commits with gitmoji, PR descriptions, changelogs, and worktree management",
       "version": "0.1.0",
       "category": "git",
-      "tags": ["git", "commits", "pr", "changelog", "workflow"]
+      "keywords": ["git", "commits", "pr", "changelog", "workflow"]
     },
     {
       "name": "frontend-tools",
@@ -44,7 +47,7 @@
       "description": "Frontend development accelerators: React component generation, Tailwind utilities, and design patterns",
       "version": "0.1.0",
       "category": "frontend",
-      "tags": ["react", "frontend", "tailwind", "components"]
+      "keywords": ["react", "frontend", "tailwind", "components"]
     },
     {
       "name": "devops-tools",
@@ -52,7 +55,7 @@
       "description": "DevOps automation: Docker Compose helpers, environment management, and GitHub Actions generation",
       "version": "0.1.0",
       "category": "devops",
-      "tags": ["devops", "docker", "ci-cd", "github-actions"]
+      "keywords": ["devops", "docker", "ci-cd", "github-actions"]
     },
     {
       "name": "skill-tools",
@@ -60,7 +63,7 @@
       "description": "Meta-tools for creating and managing Claude Code skills, commands, agents, hooks, and plugins",
       "version": "0.1.0",
       "category": "meta",
-      "tags": ["meta", "skills", "generator", "validation", "automation"]
+      "keywords": ["meta", "skills", "generator", "validation", "automation"]
     }
   ]
 }
