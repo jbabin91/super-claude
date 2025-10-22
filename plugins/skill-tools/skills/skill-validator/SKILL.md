@@ -10,7 +10,8 @@ tags: [validation, quality, meta, claude-code]
 model: sonnet
 triggers:
   keywords: [validate skill, check skill, validate plugin, lint skill]
-  patterns: ["validate.*(skill|plugin|command|agent|hook)", "check.*(skill|plugin)"]
+  patterns:
+    ['validate.*(skill|plugin|command|agent|hook)', 'check.*(skill|plugin)']
 ---
 
 # Skill Validator
@@ -283,10 +284,10 @@ Score: 5/10 - Fix errors, address warnings
 
 ```markdown
 ❌ ## Feature X
-   TODO: Implement this later
+TODO: Implement this later
 
 ✅ ## Feature X
-   Complete implementation
+Complete implementation
 ```
 
 #### Vague Descriptions
@@ -369,6 +370,7 @@ description: Validate all skills in current plugin
 Run skill-validator on all SKILL.md files in current plugin.
 
 ## Usage
+
 \`\`\`
 /validate-skills
 \`\`\`

@@ -63,14 +63,14 @@ Create minimal skill addressing those failures:
 
 ```yaml
 ---
-name: skill-identifier              # kebab-case, unique
-version: 1.0.0                      # Semantic versioning
+name: skill-identifier # kebab-case, unique
+version: 1.0.0 # Semantic versioning
 description: |
   What it does + when to use + activation triggers.
   Be specific and searchable.
 category: workflow-automation
 tags: [typescript, testing]
-model: sonnet                       # sonnet | haiku | opus
+model: sonnet # sonnet | haiku | opus
 ---
 ```
 
@@ -80,18 +80,22 @@ model: sonnet                       # sonnet | haiku | opus
 # Skill Name
 
 ## When to Use
+
 - Concrete triggers and symptoms
 - Small flowchart ONLY for non-obvious decisions
 
 ## Core Pattern / Quick Reference
+
 - Before/after comparisons
 - Scannable tables
 
 ## Implementation
+
 - Inline code for simple patterns
 - Link to API_REFERENCE.md for heavy reference
 
 ## Common Mistakes
+
 - Specific failures + fixes for each
 ```
 

@@ -19,16 +19,9 @@
     "git/changelog"
   ],
 
-  "exclude": [
-    "// No work-specific skills",
-    "work/*",
-    "local/*"
-  ],
+  "exclude": ["// No work-specific skills", "work/*", "local/*"],
 
-  "agents": [
-    "test-implementer",
-    "code-reviewer"
-  ],
+  "agents": ["test-implementer", "code-reviewer"],
 
   "notes": [
     "Copy to [your-project-name].json",

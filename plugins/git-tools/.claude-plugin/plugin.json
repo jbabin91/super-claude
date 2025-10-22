@@ -9,6 +9,14 @@
   },
   "license": "MIT",
   "category": "git",
-  "keywords": ["git", "commits", "gitmoji", "pr", "changelog", "workflow", "worktree"],
+  "keywords": [
+    "git",
+    "commits",
+    "gitmoji",
+    "pr",
+    "changelog",
+    "workflow",
+    "worktree"
+  ],
   "skills": ["smart-commit", "pr-description", "changelog", "worktree-helper"]
 }

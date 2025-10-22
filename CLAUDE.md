@@ -1,3 +1,25 @@
+<!-- OPENSPEC:START -->
+
+# OpenSpec Instructions
+
+These instructions are for AI assistants working in this project.
+
+Always open `@/openspec/AGENTS.md` when the request:
+
+- Mentions planning or proposals (words like proposal, spec, change, plan)
+- Introduces new capabilities, breaking changes, architecture shifts, or big performance/security work
+- Sounds ambiguous and you need the authoritative spec before coding
+
+Use `@/openspec/AGENTS.md` to learn:
+
+- How to create and apply change proposals
+- Spec format and conventions
+- Project structure and guidelines
+
+Keep this managed block so 'openspec update' can refresh the instructions.
+
+<!-- OPENSPEC:END -->
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code when working with the super-claude repository.
@@ -92,18 +114,18 @@ For project-specific or work-related skills:
 
 ```yaml
 ---
-name: skill-identifier              # kebab-case
-version: 1.0.0                      # semantic versioning
+name: skill-identifier # kebab-case
+version: 1.0.0 # semantic versioning
 description: |
   What it does + when to use + activation triggers
 category: workflow-automation
 tags: [tag1, tag2]
-model: sonnet                       # sonnet | haiku | opus
+model: sonnet # sonnet | haiku | opus
 requires:
-  tools: [git, npm]                # External dependencies
+  tools: [git, npm] # External dependencies
 triggers:
   keywords: [keyword1, keyword2]
-  patterns: ["pattern1"]
+  patterns: ['pattern1']
 ---
 ```
 
@@ -168,6 +190,7 @@ yaml: content
 
 ```markdown
 Ask the user:
+
 - **Purpose**: What does this do?
 ```
 
@@ -185,7 +208,9 @@ Ask the user:
 
 ```markdown
 ### Model Selection Guide
+
 ### Haiku (Fast & Cheap)
+
 - Simple tasks
 ```
 
@@ -205,6 +230,7 @@ Ask the user:
 
 ```markdown
 **Solution**:
+
 - Check syntax
 ```
 
@@ -308,7 +334,6 @@ Ask the user:
    - Utility class optimization
    - Responsive design patterns
    - Color palette management
-
 
 ## 🚫 Anti-Patterns to Avoid
 

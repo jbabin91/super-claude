@@ -9,6 +9,18 @@
   },
   "license": "MIT",
   "category": "typescript",
-  "keywords": ["typescript", "type-checking", "refactoring", "testing", "imports", "tsc"],
-  "skills": ["tsc-files-validation", "refactor-imports", "generate-tests", "fix-types"]
+  "keywords": [
+    "typescript",
+    "type-checking",
+    "refactoring",
+    "testing",
+    "imports",
+    "tsc"
+  ],
+  "skills": [
+    "tsc-files-validation",
+    "refactor-imports",
+    "generate-tests",
+    "fix-types"
+  ]
 }

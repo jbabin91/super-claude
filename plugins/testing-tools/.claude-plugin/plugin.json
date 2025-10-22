@@ -9,6 +9,18 @@
   },
   "license": "MIT",
   "category": "testing",
-  "keywords": ["testing", "vitest", "playwright", "coverage", "e2e", "monorepo"],
-  "skills": ["vitest-integration", "playwright-e2e", "coverage-improve", "monorepo-testing"]
+  "keywords": [
+    "testing",
+    "vitest",
+    "playwright",
+    "coverage",
+    "e2e",
+    "monorepo"
+  ],
+  "skills": [
+    "vitest-integration",
+    "playwright-e2e",
+    "coverage-improve",
+    "monorepo-testing"
+  ]
 }

@@ -33,17 +33,11 @@ mkdir -p .claude/skills
   "description": "Brief description of project and its needs",
   "inheritGlobal": true,
 
-  "skills": [
-    "category/skill-name"
-  ],
+  "skills": ["category/skill-name"],
 
-  "exclude": [
-    "category/unwanted-skill"
-  ],
+  "exclude": ["category/unwanted-skill"],
 
-  "agents": [
-    "agent-name"
-  ]
+  "agents": ["agent-name"]
 }
 ```
 

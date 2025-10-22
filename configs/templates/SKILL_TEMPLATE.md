@@ -1,30 +1,30 @@
 ---
 # REQUIRED FIELDS
-name: skill-identifier              # kebab-case, unique within category
-version: 1.0.0                      # Semantic versioning
+name: skill-identifier # kebab-case, unique within category
+version: 1.0.0 # Semantic versioning
 description: |
   Brief description of what this skill does and when to use it.
   Include activation triggers: "Use when...", "Activates when user says..."
   Keep concise but searchable.
 
 # OPTIONAL FIELDS
-category: workflow-automation       # Primary category
-tags: [tag1, tag2, tag3]           # Searchable tags
+category: workflow-automation # Primary category
+tags: [tag1, tag2, tag3] # Searchable tags
 author: Your Name
 license: MIT
 homepage: https://github.com/jbabin91/super-claude
-model: sonnet                       # Preferred Claude model (sonnet/haiku/opus)
+model: sonnet # Preferred Claude model (sonnet/haiku/opus)
 
 # DEPENDENCIES
 requires:
-  skills: []                        # Other skills this depends on
-  agents: []                        # Agents this skill may invoke
-  tools: []                         # External tools required (git, npm, etc.)
+  skills: [] # Other skills this depends on
+  agents: [] # Agents this skill may invoke
+  tools: [] # External tools required (git, npm, etc.)
 
 # ACTIVATION
 triggers:
   keywords: [keyword1, keyword2]
-  patterns: ["pattern1", "pattern2"]
+  patterns: ['pattern1', 'pattern2']
   contexts: [development, testing]
 ---
 

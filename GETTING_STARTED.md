@@ -63,7 +63,6 @@ code .claude/skills/typescript/my-skill.md
 2. **[RESEARCH_FINDINGS.md](./RESEARCH_FINDINGS.md)** - Complete ecosystem analysis
 3. **[docs/CREATING_SKILLS.md](./docs/CREATING_SKILLS.md)** - RED-GREEN-REFACTOR workflow
 
-
 ## 🎯 What to Build First
 
 Based on research and your projects, prioritize:
@@ -111,7 +110,6 @@ Based on research and your projects, prioritize:
 - **Why:** odyssey-frontend is monorepo
 - **Pattern:** Multi-package validation
 - **Purpose:** Nx/Turborepo/pnpm workspaces support
-
 
 ## 🛠️ Development Workflow
 
@@ -252,19 +250,19 @@ See `RESEARCH_FINDINGS.md` → "lackeyjb/playwright-skill" for complete example.
 
 ```yaml
 ---
-name: skill-identifier              # kebab-case, unique
-version: 1.0.0                      # semantic versioning
+name: skill-identifier # kebab-case, unique
+version: 1.0.0 # semantic versioning
 description: |
   What it does + when to use.
   Include activation triggers.
-category: workflow-automation       # typescript, frontend, testing, git, devops
+category: workflow-automation # typescript, frontend, testing, git, devops
 tags: [tag1, tag2, tag3]
-model: sonnet                       # sonnet (default) | haiku | opus
+model: sonnet # sonnet (default) | haiku | opus
 requires:
-  tools: [git, npm]                # External dependencies
+  tools: [git, npm] # External dependencies
 triggers:
-  keywords: [keyword1, keyword2]   # Search terms
-  patterns: ["pattern1"]           # Regex patterns
+  keywords: [keyword1, keyword2] # Search terms
+  patterns: ['pattern1'] # Regex patterns
   contexts: [development, testing] # When to activate
 ---
 ```
@@ -277,33 +275,42 @@ triggers:
 Brief overview (1-2 sentences).
 
 ## When to Use
+
 - Concrete triggers
 - Specific scenarios
 
 ## Core Workflow
+
 ### 1. Step One
+
 ### 2. Step Two
 
 ## Best Practices
+
 - Practice 1
 - Practice 2
 
 ## Example Workflows
+
 ### Scenario 1: Common Use Case
+
 ### Scenario 2: Edge Case
 
 ## Integration Points
+
 - Works with: other skills
 - Calls: agents/tools
 
 ## Troubleshooting
+
 ### Issue 1
+
 ### Issue 2
 
 ## References
+
 - Links to docs
 ```
-
 
 ## 📊 Tracking Progress
 

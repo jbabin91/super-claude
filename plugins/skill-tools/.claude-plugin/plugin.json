@@ -9,7 +9,14 @@
   },
   "license": "MIT",
   "category": "meta",
-  "keywords": ["skills", "meta", "generator", "validation", "claude-code", "automation"],
+  "keywords": [
+    "skills",
+    "meta",
+    "generator",
+    "validation",
+    "claude-code",
+    "automation"
+  ],
   "skills": [
     "skill-creator",
     "command-creator",

@@ -9,6 +9,13 @@
   },
   "license": "MIT",
   "category": "devops",
-  "keywords": ["devops", "docker", "ci-cd", "github-actions", "environment", "automation"],
+  "keywords": [
+    "devops",
+    "docker",
+    "ci-cd",
+    "github-actions",
+    "environment",
+    "automation"
+  ],
   "skills": ["docker-compose", "env-manager", "github-actions"]
 }

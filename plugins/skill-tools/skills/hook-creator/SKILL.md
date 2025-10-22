@@ -10,7 +10,7 @@ tags: [hooks, events, automation, meta]
 model: sonnet
 triggers:
   keywords: [create hook, generate hook, new hook, event hook]
-  patterns: ["create.*hook", "generate.*hook"]
+  patterns: ['create.*hook', 'generate.*hook']
 ---
 
 # Hook Creator
@@ -233,10 +233,10 @@ Ensure:
 ```json
 {
   "filter": {
-    "tool": "Write",                    // Specific tool name
-    "filePattern": "*.ts",              // Glob pattern for files
-    "promptPattern": "commit|deploy",   // Regex for prompt content
-    "fileType": "typescript"            // File type detection
+    "tool": "Write", // Specific tool name
+    "filePattern": "*.ts", // Glob pattern for files
+    "promptPattern": "commit|deploy", // Regex for prompt content
+    "fileType": "typescript" // File type detection
   }
 }
 ```

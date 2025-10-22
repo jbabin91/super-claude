@@ -10,7 +10,7 @@ tags: [skill-generation, meta, automation, claude-code]
 model: sonnet
 triggers:
   keywords: [create skill, generate skill, new skill, custom skill, skill for]
-  patterns: ["create.*skill", "generate.*skill", "make.*skill"]
+  patterns: ['create.*skill', 'generate.*skill', 'make.*skill']
   contexts: [development, skill-creation]
 ---
 
@@ -206,7 +206,7 @@ Make skills activate automatically:
 ```yaml
 triggers:
   keywords: [specific, technical, terms]
-  patterns: ["regex.*patterns"]
+  patterns: ['regex.*patterns']
   contexts: [file-types, project-types]
 ```
 
@@ -218,7 +218,7 @@ Declare requirements:
 requires:
   tools: [git, npm, docker]
   skills: [typescript-tools/tsc-validation]
-  packages: ["@types/node"]
+  packages: ['@types/node']
 ```
 
 ## Example: Creating a Project-Specific Skill

@@ -9,6 +9,17 @@
   },
   "license": "MIT",
   "category": "frontend",
-  "keywords": ["react", "frontend", "tailwind", "components", "design-patterns"],
-  "skills": ["component-generator", "tailwind-helper", "react-patterns", "storybook-story"]
+  "keywords": [
+    "react",
+    "frontend",
+    "tailwind",
+    "components",
+    "design-patterns"
+  ],
+  "skills": [
+    "component-generator",
+    "tailwind-helper",
+    "react-patterns",
+    "storybook-story"
+  ]
 }

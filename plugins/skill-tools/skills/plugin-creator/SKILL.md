@@ -10,7 +10,7 @@ tags: [plugins, meta, automation, plugin-system]
 model: sonnet
 triggers:
   keywords: [create plugin, generate plugin, new plugin, plugin package]
-  patterns: ["create.*plugin", "generate.*plugin"]
+  patterns: ['create.*plugin', 'generate.*plugin']
 ---
 
 # Plugin Creator
@@ -126,14 +126,17 @@ mkdir -p plugin-name/hooks
 ## Usage
 
 ### Skills
+
 - **skill-1**: Description
 - **skill-2**: Description
 
 ### Commands
+
 - `/command-1`: Description
 - `/command-2`: Description
 
 ### Agents
+
 - **agent-1**: Description
 
 ## Examples
@@ -205,7 +208,15 @@ tanstack-tools/
   },
   "license": "MIT",
   "category": "framework",
-  "keywords": ["tanstack", "router", "query", "forms", "table", "start", "react"],
+  "keywords": [
+    "tanstack",
+    "router",
+    "query",
+    "forms",
+    "table",
+    "start",
+    "react"
+  ],
   "skills": [
     "tanstack-router-setup",
     "tanstack-query-hook",
@@ -213,10 +224,7 @@ tanstack-tools/
     "tanstack-table-config",
     "tanstack-start-project"
   ],
-  "commands": [
-    "setup-tanstack-start",
-    "generate-query-hook"
-  ],
+  "commands": ["setup-tanstack-start", "generate-query-hook"],
   "requires": {
     "tools": ["npm", "git"],
     "packages": ["@tanstack/router", "@tanstack/react-query"]
@@ -260,7 +268,15 @@ api-tools/
   },
   "license": "MIT",
   "category": "backend",
-  "keywords": ["api", "backend", "hono", "elysia", "drizzle", "better-auth", "openapi"],
+  "keywords": [
+    "api",
+    "backend",
+    "hono",
+    "elysia",
+    "drizzle",
+    "better-auth",
+    "openapi"
+  ],
   "skills": [
     "drizzle-setup",
     "drizzle-schema-generator",
@@ -268,11 +284,7 @@ api-tools/
     "hono-rpc-endpoint",
     "elysia-setup"
   ],
-  "commands": [
-    "init-drizzle",
-    "generate-api-client",
-    "setup-auth"
-  ],
+  "commands": ["init-drizzle", "generate-api-client", "setup-auth"],
   "agents": ["api-designer"],
   "requires": {
     "tools": ["npm", "node"],
@@ -344,9 +356,9 @@ design-system-tools/
 
 ```json
 {
-  "name": "plugin-identifier",           // Required: kebab-case
-  "version": "1.0.0",                    // Required: semantic versioning
-  "description": "Clear description"     // Required: what it does
+  "name": "plugin-identifier", // Required: kebab-case
+  "version": "1.0.0", // Required: semantic versioning
+  "description": "Clear description" // Required: what it does
 }
 ```
 
@@ -374,13 +386,13 @@ design-system-tools/
 
 ```json
 {
-  "skills": ["skill-1", "skill-2"],      // List of included skills
-  "commands": ["cmd-1", "cmd-2"],        // List of commands
-  "agents": ["agent-1"],                 // List of agents
+  "skills": ["skill-1", "skill-2"], // List of included skills
+  "commands": ["cmd-1", "cmd-2"], // List of commands
+  "agents": ["agent-1"], // List of agents
   "requires": {
-    "tools": ["git", "npm"],             // Required CLI tools
-    "plugins": ["other-plugin"],         // Plugin dependencies
-    "packages": ["package-name"]         // npm package dependencies
+    "tools": ["git", "npm"], // Required CLI tools
+    "plugins": ["other-plugin"], // Plugin dependencies
+    "packages": ["package-name"] // npm package dependencies
   }
 }
 ```

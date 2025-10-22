@@ -116,18 +116,23 @@ dependencies: (optional) Required tools
 
 ```markdown
 ## Overview
+
 Core principle in 1-2 sentences maximum.
 
 ## When to Use
+
 Bullet list with concrete triggers and symptoms.
 
 ## Core Pattern / Quick Reference
+
 Before/after comparisons or scannable tables.
 
 ## Implementation
+
 Inline code for simple patterns; link to files for heavy reference.
 
 ## Common Mistakes
+
 Specific failures + fixes for each.
 ```
 
@@ -354,7 +359,6 @@ Instead of serializing accessibility trees on every action (MCP pattern), Claude
 name: skill-identifier
 description: Brief description including activation triggers
 ---
-
 # Skill Title
 
 ## When to Use
@@ -370,9 +374,13 @@ description: Brief description including activation triggers
 # Agent Name
 
 ## Purpose
+
 ## Model (haiku/sonnet/opus)
+
 ## Operational Principles
+
 ## Workflow
+
 ## Quality Standards
 ```
 
@@ -667,7 +675,7 @@ Functions return validation metadata alongside results for transparent quality s
 ```yaml
 triggers:
   keywords: [type-check, tsc, tsconfig, lint-staged]
-  patterns: ["type[ -]check", "run.*tsc", "check.*types"]
+  patterns: ['type[ -]check', 'run.*tsc', 'check.*types']
   contexts: [development, testing, ci-cd]
 ```
 
@@ -689,8 +697,8 @@ description: Complete description of functionality and use cases
 ```yaml
 ---
 # REQUIRED
-name: skill-identifier              # kebab-case
-version: 1.0.0                      # semantic versioning
+name: skill-identifier # kebab-case
+version: 1.0.0 # semantic versioning
 description: |
   What it does + when to use + activation triggers
 
@@ -699,7 +707,7 @@ category: workflow-automation
 tags: [tag1, tag2]
 author: Name
 license: MIT
-model: sonnet                       # sonnet | haiku | opus
+model: sonnet # sonnet | haiku | opus
 
 # DEPENDENCIES
 requires:
@@ -723,31 +731,41 @@ triggers:
 ## Overview (1-2 sentences max)
 
 ## When to Use
+
 - Concrete triggers and symptoms
 
 ## Core Pattern / Quick Reference
+
 - Before/after comparisons or scannable tables
 
 ## Implementation
+
 - Inline code for simple patterns
 - Link to API_REFERENCE.md for heavy reference
 
 ## Common Mistakes
+
 - Specific failures + fixes
 
 ## Example Workflows
+
 ### Scenario 1
+
 ### Scenario 2
 
 ## Integration Points
+
 - Works with: other skills
 - Calls: agents/tools
 
 ## Troubleshooting
+
 ### Issue 1
+
 ### Issue 2
 
 ## References
+
 - Links to external docs
 ```
 

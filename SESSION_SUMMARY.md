@@ -60,16 +60,11 @@
 5. **RESEARCH_FINDINGS.md** - Comprehensive ecosystem analysis
 6. **SESSION_SUMMARY.md** - This file
 
-**Guides:**
-7. **docs/CREATING_SKILLS.md** - RED-GREEN-REFACTOR workflow
+**Guides:** 7. **docs/CREATING_SKILLS.md** - RED-GREEN-REFACTOR workflow
 
-**Templates & Examples:**
-8. **configs/templates/SKILL_TEMPLATE.md** - Complete skill template
-9. **configs/global.json.example** - Global configuration
-10. **configs/projects/personal-project.json.example**
+**Templates & Examples:** 8. **configs/templates/SKILL_TEMPLATE.md** - Complete skill template 9. **configs/global.json.example** - Global configuration 10. **configs/projects/personal-project.json.example**
 
-**Directory Guides:**
-11. **configs/projects/README.md** - Project configuration guide
+**Directory Guides:** 11. **configs/projects/README.md** - Project configuration guide
 
 ### 4. Installation Scripts
 
@@ -213,7 +208,7 @@ export async function execute(code, context) {
 ```yaml
 triggers:
   keywords: [type-check, tsc, tsconfig]
-  patterns: ["type[ -]check", "run.*tsc"]
+  patterns: ['type[ -]check', 'run.*tsc']
   contexts: [development, testing]
 ```
 

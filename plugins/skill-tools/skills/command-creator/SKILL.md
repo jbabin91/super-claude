@@ -10,7 +10,7 @@ tags: [commands, slash-commands, meta, automation]
 model: sonnet
 triggers:
   keywords: [create command, generate command, new command, slash command]
-  patterns: ["create.*(command|slash)", "generate.*command"]
+  patterns: ['create.*(command|slash)', 'generate.*command']
 ---
 
 # Command Creator
@@ -75,9 +75,11 @@ description: One-line description (required)
 # Command Name
 
 ## Purpose
+
 Clear explanation of what this command does.
 
 ## Usage
+
 \`\`\`
 /command-name [arguments]
 \`\`\`
@@ -98,12 +100,14 @@ Step-by-step instructions for Claude to follow:
 ## Examples
 
 ### Example 1: Common Use Case
+
 \`\`\`
 /command-name value1 value2
 \`\`\`
 Expected outcome: [description]
 
 ### Example 2: With Options
+
 \`\`\`
 /command-name --option value
 \`\`\`
@@ -137,9 +141,11 @@ description: Initialize a new TanStack Start project with drizzle and better-aut
 # Setup TanStack Fullstack
 
 ## Purpose
+
 Quickly scaffold a new TanStack Start project with database and authentication.
 
 ## Usage
+
 \`\`\`
 /setup-tanstack-fullstack [project-name]
 \`\`\`
@@ -161,11 +167,13 @@ Quickly scaffold a new TanStack Start project with database and authentication.
 ## Examples
 
 ### Example: Create New Project
+
 \`\`\`
 /setup-tanstack-fullstack my-app
 \`\`\`
 
 Creates:
+
 - my-app/ directory
 - TanStack Start configuration
 - Drizzle + Postgres setup
@@ -183,9 +191,11 @@ description: Perform comprehensive code review with focus areas
 # Review Code
 
 ## Purpose
+
 Systematic code review checking for common issues and best practices.
 
 ## Usage
+
 \`\`\`
 /review-code [--focus=area]
 \`\`\`
@@ -210,11 +220,13 @@ Systematic code review checking for common issues and best practices.
 ## Examples
 
 ### Example: General Review
+
 \`\`\`
 /review-code
 \`\`\`
 
 ### Example: Security Focus
+
 \`\`\`
 /review-code --focus=security
 \`\`\`
@@ -230,9 +242,11 @@ description: Deploy to Cloudflare Pages with pre-deployment checks
 # Deploy Cloudflare
 
 ## Purpose
+
 Deploy current project to Cloudflare Pages with safety checks.
 
 ## Usage
+
 \`\`\`
 /deploy-cloudflare [--environment=prod|staging]
 \`\`\`
@@ -257,11 +271,13 @@ Deploy current project to Cloudflare Pages with safety checks.
 ## Examples
 
 ### Example: Deploy to Staging
+
 \`\`\`
 /deploy-cloudflare
 \`\`\`
 
 ### Example: Deploy to Production
+
 \`\`\`
 /deploy-cloudflare --environment=prod
 \`\`\`
