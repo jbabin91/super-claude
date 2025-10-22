@@ -40,25 +40,28 @@ Ask the user:
 
 ### 2. Generate Skill Structure
 
+**Template Reference:** See `templates/skill_template.md` for the complete skill template with all available fields and examples.
+
 Create a properly formatted SKILL.md with:
 
 ```yaml
 ---
-name: skill-identifier                    # kebab-case
-version: 1.0.0                           # semantic versioning
-description: |
+# === OFFICIAL CLAUDE CODE FIELDS ===
+name: skill-identifier                    # Required: kebab-case
+description: |                            # Required: What it does and when to use
   Clear description of what it does and when to use it.
   Include activation triggers in the description.
-category: appropriate-category           # typescript, testing, git, etc.
-tags: [relevant, tags, here]
-model: sonnet                            # sonnet (default) | haiku | opus
-requires:
-  tools: [optional-tools]                # git, npm, docker, etc.
-  skills: [optional-skills]              # dependent skills
-triggers:
-  keywords: [keyword1, keyword2]         # words that activate this skill
-  patterns: ["pattern1", "pattern2"]     # regex patterns
-  contexts: [development, testing]       # when to activate
+allowed-tools: []                         # Optional: Restrict to specific tools
+
+# === COMMUNITY ENHANCEMENTS (super-claude) ===
+version: 1.0.0                           # Track changes
+category: appropriate-category           # Organization (typescript, testing, git, etc.)
+tags: [relevant, tags, here]             # Searchability
+model: sonnet                            # Preferred model: sonnet | haiku | opus
+triggers:                                # Explicit activation hints
+  keywords: [keyword1, keyword2]         # Words that activate this skill
+  patterns: ["pattern1", "pattern2"]     # Regex patterns
+  contexts: [development, testing]       # When to activate
 ---
 
 # Skill Name
