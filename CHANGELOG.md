@@ -9,18 +9,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### In Progress
 
-Skills currently in development (see `openspec list` for details):
+**Tier 1 Plugins** (see OpenSpec proposals in `openspec/changes/`):
 
-- **add-cli-testing-skill** - CLI testing with universal executor pattern (0/64 tasks)
-- **add-smart-commit-skill** - Conventional commits with gitmoji automation (0/53 tasks)
-- **add-refactor-imports-skill** - Import organization and cleanup (0/27 tasks)
-- **add-generate-tests-skill** - TypeScript test generation (0/16 tasks)
-- **add-fix-types-skill** - Auto-fix common TypeScript errors (0/16 tasks)
-- **add-worktree-helper-skill** - Git worktree management (0/14 tasks)
-- **add-pr-description-skill** - Auto-generate PR descriptions (0/11 tasks)
-- **add-changelog-skill** - Automated changelog generation (0/11 tasks)
+- **components-plugin** - Base UI components, design systems, WCAG AAA accessibility, Radix migration
+- **tanstack-plugin** - TanStack Start, Router, Query, Form, Table integration
+- **api-plugin** - Hono and Elysia API development with OpenAPI + RPC
+- **database-plugin** - Drizzle ORM for PostgreSQL, SQLite, Turso
+- **auth-plugin** - better-auth integration with providers and sessions
 
-## [0.2.0] - 2025-01-21
+## [0.3.0] - 2025-10-22
+
+### Changed
+
+- **Plugin Structure** - Restructured from generic `-tools` suffix to specific plugin names
+  - Renamed `skill-tools` → `claude-tools` (meta-tools for creating Claude Code enhancements)
+  - Renamed `frontend-tools` → `components` (Base UI components and design systems)
+  - Renamed `testing-tools` → `testing` (runtime-agnostic testing)
+  - Renamed `typescript-tools` → `typescript`
+  - Renamed `git-tools` → `git`
+  - Renamed `devops-tools` → `devops`
+
+- **Tech Stack Focus** - Pivoted to TanStack Start, Base UI, Hono, Drizzle, better-auth
+  - TanStack Start preferred over monorepos
+  - Base UI for new components (Radix UI migration support)
+  - Hono for API development (Elysia for exploration)
+  - Drizzle ORM for database
+  - better-auth for authentication
+
+- **Documentation** - Complete overhaul aligned with new tech stack
+  - Updated README.md with "Choose Your Stack" installation examples
+  - Updated CLAUDE.md with Tier 1-4 priorities from brainstorm
+  - Added component file structure standards (explicit exports, tests in .stories.tsx)
+  - Added Base UI vs Radix UI guidance
+
+- **OpenSpec Proposals** - Cleaned up and created new plugin proposals
+  - Deleted 9 outdated proposals (tsc-files, smart-commit, etc.)
+  - Created 5 Tier 1 plugin proposals (components, tanstack, api, database, auth)
+  - All proposals validated with comprehensive specs and scenarios
+
+### Added
+
+- **Plugin Categories** - 8 new plugins planned:
+  - `tanstack` - TanStack Start, Router, Query, Form, Table (Tier 1)
+  - `components` - Base UI components, design systems (Tier 1)
+  - `api` - Hono/Elysia API development (Tier 1)
+  - `database` - Drizzle ORM (Tier 1)
+  - `auth` - better-auth integration (Tier 1)
+  - `react` - React patterns and hooks
+  - `storybook` - Story generation
+  - `monorepo` - Turborepo/pnpm workspaces (lower priority)
+
+- **Brainstorm Documentation** - `docs/2025-10-22/`
+  - `brainstorm.md` - 18 skills, 4 agents, 7 commands, 8 hooks organized by tier
+  - `decisions.md` - Tech stack decisions and component structure standards
+  - `plugin-structure.md` - Plugin organization and installation matrix
+  - `cleanup-plan-revised.md` - Documentation cleanup strategy
+
+### Removed
+
+- **Outdated Documentation**
+  - ROADMAP.md (outdated priorities, obra/superpowers focus)
+  - GETTING_STARTED.md (redundant with README)
+  - RESEARCH_FINDINGS.md (preserved in git history)
+  - docs/CREATING_SKILLS.md (redundant with skill-creator)
+
+- **Old OpenSpec Proposals** - 9 proposals not aligned with new tech stack
+  - add-changelog-skill
+  - add-cli-testing-skill
+  - add-fix-types-skill
+  - add-generate-tests-skill
+  - add-pr-description-skill
+  - add-refactor-imports-skill
+  - add-smart-commit-skill
+  - add-worktree-helper-skill
+  - add-component-generator (replaced with components-plugin)
+
+## [0.2.0] - 2025-10-21
 
 ### Added
 
@@ -56,7 +120,7 @@ Skills currently in development (see `openspec list` for details):
 - `local/` directory concept
 - Old marketplace.json (moved to `.claude-plugin/marketplace.json`)
 
-## [0.1.0] - 2025-01-21
+## [0.1.0] - 2025-10-20
 
 ### Added
 

@@ -24,15 +24,66 @@
 
 ## Project Conventions
 
+### Naming Conventions
+
+**CRITICAL: These naming conventions apply to ALL plugins, skills, agents, commands, and hooks in this project.**
+
+#### Plugins
+
+- **Format:** `{category}` or `{category}-{purpose}` (no `-tools` suffix except for claude-tools)
+- **Examples:** `tanstack`, `api`, `database`, `auth`, `components`, `testing`, `git`, `typescript`
+- **Special case:** `claude-tools` (meta-tools for creating other enhancements)
+- **Rationale:** Simple, descriptive names without redundant suffixes
+
+#### Skills
+
+- **Format:** Descriptive kebab-case name (NO `-skill` suffix)
+- **Location:** `plugins/{plugin}/skills/{name}/SKILL.md`
+- **Examples:**
+  - `hono.md` (not `hono-skill.md`)
+  - `api.md` (not `api-skill.md`)
+  - `component-generator.md` (not `component-generator-skill.md`)
+  - `drizzle-maestro.md` (not `drizzle-maestro-skill.md`)
+- **Rationale:** The `skills/` directory already indicates the type
+
+#### Agents
+
+- **Format:** `{name}-agent.md` (WITH `-agent` suffix)
+- **Location:** `plugins/{plugin}/agents/{name}-agent.md`
+- **Examples:**
+  - `hono-agent.md`
+  - `api-agent.md`
+  - `component-agent.md`
+- **Rationale:** `-agent` suffix helps distinguish from skills with similar names
+
+#### Commands
+
+- **Format:** Verb phrases in kebab-case (NO `-command` suffix)
+- **Location:** `plugins/{plugin}/commands/{name}.md`
+- **Examples:**
+  - `create-hono-api.md` (not `create-hono-api-command.md`)
+  - `generate-component.md`
+  - `setup-auth.md`
+- **Rationale:** The `commands/` directory already indicates the type
+
+#### Hooks
+
+- **Format:** Event-based or lifecycle names (NO `-hook` suffix)
+- **Location:** `plugins/{plugin}/hooks/{name}.md`
+- **Examples:**
+  - `pre-commit.md` (not `pre-commit-hook.md`)
+  - `post-deploy.md`
+  - `on-error.md`
+- **Rationale:** The `hooks/` directory already indicates the type
+
 ### Code Style
 
-- **File Naming:** kebab-case for files and directories
+- **File Naming:** kebab-case for files and directories (see Naming Conventions above)
 - **Markdown:** Follow markdownlint rules (MD040, MD032, MD022/MD023)
   - Always use language identifiers in code fences
   - Blank lines before lists and after headings
   - Use `sh` for terminal/CLI, `txt` for general text, specific languages otherwise
 - **YAML Frontmatter:** Required in all SKILL.md files with name, version, description, category, tags, model, requires, and triggers
-- **Skill Naming:** kebab-case, verb-led (e.g., `tsc-files-validation`, `smart-commit`)
 
 ### Architecture Patterns
 

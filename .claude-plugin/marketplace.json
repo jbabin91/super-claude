@@ -7,60 +7,143 @@
     "url": "https://github.com/jbabin91"
   },
   "metadata": {
-    "version": "0.1.0",
-    "description": "A comprehensive marketplace of Claude Code plugins for TypeScript, React, and Node.js development. Install individual category plugins or mix and match based on your project needs.",
+    "version": "0.3.0",
+    "description": "A comprehensive marketplace of Claude Code plugins for TanStack Start, Base UI, Hono, and modern TypeScript development. Install individual plugins or mix and match based on your project needs.",
     "repository": "https://github.com/jbabin91/super-claude",
     "homepage": "https://github.com/jbabin91/super-claude",
     "license": "MIT"
   },
   "plugins": [
     {
-      "name": "typescript-tools",
-      "source": "./plugins/typescript-tools",
-      "description": "TypeScript development tools: type checking, refactoring, import management, and test generation",
-      "version": "0.1.0",
-      "category": "typescript",
-      "keywords": ["typescript", "type-checking", "refactoring", "testing"]
-    },
-    {
-      "name": "testing-tools",
-      "source": "./plugins/testing-tools",
-      "description": "Testing automation: Vitest integration, Playwright E2E, coverage analysis, and monorepo testing strategies",
-      "version": "0.1.0",
-      "category": "testing",
-      "keywords": ["testing", "vitest", "playwright", "coverage", "monorepo"]
-    },
-    {
-      "name": "git-tools",
-      "source": "./plugins/git-tools",
-      "description": "Git workflow automation: smart commits with gitmoji, PR descriptions, changelogs, and worktree management",
-      "version": "0.1.0",
-      "category": "git",
-      "keywords": ["git", "commits", "pr", "changelog", "workflow"]
-    },
-    {
-      "name": "frontend-tools",
-      "source": "./plugins/frontend-tools",
-      "description": "Frontend development accelerators: React component generation, Tailwind utilities, and design patterns",
-      "version": "0.1.0",
-      "category": "frontend",
-      "keywords": ["react", "frontend", "tailwind", "components"]
-    },
-    {
-      "name": "devops-tools",
-      "source": "./plugins/devops-tools",
-      "description": "DevOps automation: Docker Compose helpers, environment management, and GitHub Actions generation",
-      "version": "0.1.0",
-      "category": "devops",
-      "keywords": ["devops", "docker", "ci-cd", "github-actions"]
-    },
-    {
-      "name": "skill-tools",
-      "source": "./plugins/skill-tools",
+      "name": "claude-tools",
+      "source": "./plugins/claude-tools",
       "description": "Meta-tools for creating and managing Claude Code skills, commands, agents, hooks, and plugins",
       "version": "0.1.0",
       "category": "meta",
       "keywords": ["meta", "skills", "generator", "validation", "automation"]
+    },
+    {
+      "name": "components",
+      "source": "./plugins/components",
+      "description": "Base UI component generation, design systems, WCAG AAA accessibility, and Radix UI migration",
+      "version": "0.1.0",
+      "category": "frontend",
+      "keywords": [
+        "base-ui",
+        "components",
+        "design-system",
+        "accessibility",
+        "radix"
+      ]
+    },
+    {
+      "name": "tanstack",
+      "source": "./plugins/tanstack",
+      "description": "TanStack Start fullstack apps, Router, Query, Form, Table integration and patterns",
+      "version": "0.1.0",
+      "category": "fullstack",
+      "keywords": ["tanstack", "start", "router", "query", "form", "table"]
+    },
+    {
+      "name": "api",
+      "source": "./plugins/api",
+      "description": "Hono and Elysia API development with OpenAPI, RPC patterns, and Zod validation",
+      "version": "0.1.0",
+      "category": "backend",
+      "keywords": ["hono", "elysia", "api", "openapi", "rpc"]
+    },
+    {
+      "name": "database",
+      "source": "./plugins/database",
+      "description": "Drizzle ORM for PostgreSQL, SQLite, Turso with migrations, queries, and better-auth integration",
+      "version": "0.1.0",
+      "category": "backend",
+      "keywords": [
+        "drizzle",
+        "orm",
+        "postgresql",
+        "sqlite",
+        "turso",
+        "migrations"
+      ]
+    },
+    {
+      "name": "auth",
+      "source": "./plugins/auth",
+      "description": "better-auth integration with providers, sessions, protected routes, and Drizzle schemas",
+      "version": "0.1.0",
+      "category": "backend",
+      "keywords": [
+        "better-auth",
+        "authentication",
+        "sessions",
+        "oauth",
+        "security"
+      ]
+    },
+    {
+      "name": "react",
+      "source": "./plugins/react",
+      "description": "React patterns, hooks, context, and state management",
+      "version": "0.1.0",
+      "category": "frontend",
+      "keywords": ["react", "hooks", "context", "state"]
+    },
+    {
+      "name": "storybook",
+      "source": "./plugins/storybook",
+      "description": "Storybook story generation, component documentation, and testing",
+      "version": "0.1.0",
+      "category": "frontend",
+      "keywords": ["storybook", "documentation", "stories"]
+    },
+    {
+      "name": "testing",
+      "source": "./plugins/testing",
+      "description": "Unit, integration, E2E testing with Vitest, Playwright, and runtime-agnostic patterns",
+      "version": "0.1.0",
+      "category": "quality",
+      "keywords": ["testing", "vitest", "playwright", "e2e", "unit"]
+    },
+    {
+      "name": "typescript",
+      "source": "./plugins/typescript",
+      "description": "TypeScript type checking, refactoring, import management, and type contracts",
+      "version": "0.1.0",
+      "category": "language",
+      "keywords": ["typescript", "types", "refactoring", "imports"]
+    },
+    {
+      "name": "git",
+      "source": "./plugins/git",
+      "description": "Git workflow automation: smart commits with gitmoji, PR descriptions, changelogs, worktrees",
+      "version": "0.1.0",
+      "category": "workflow",
+      "keywords": ["git", "commits", "pr", "changelog", "worktrees"]
+    },
+    {
+      "name": "devops",
+      "source": "./plugins/devops",
+      "description": "GitHub Actions, Docker, CI/CD pipelines, and deployment automation",
+      "version": "0.1.0",
+      "category": "devops",
+      "keywords": ["devops", "github-actions", "docker", "ci-cd"]
+    },
+    {
+      "name": "monorepo",
+      "source": "./plugins/monorepo",
+      "description": "Turborepo setup, pnpm workspaces, and cross-package dependency management",
+      "version": "0.1.0",
+      "category": "architecture",
+      "keywords": ["monorepo", "turborepo", "pnpm", "workspaces"]
+    },
+    {
+      "name": "packages",
+      "source": "./plugins/packages",
+      "description": "npm library development, publishing, versioning, and package management",
+      "version": "0.1.0",
+      "category": "publishing",
+      "keywords": ["npm", "packages", "library", "publishing"]
     }
   ]
 }
