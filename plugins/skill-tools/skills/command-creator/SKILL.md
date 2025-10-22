@@ -2,15 +2,9 @@
 name: command-creator
 version: 1.0.0
 description: |
-  Create custom slash commands for Claude Code.
-  Generate commands with proper markdown structure and YAML frontmatter.
-  Use when you need project-specific or workflow-specific commands.
-category: meta
-tags: [commands, slash-commands, meta, automation]
-model: sonnet
-triggers:
-  keywords: [create command, generate command, new command, slash command]
-  patterns: ['create.*(command|slash)', 'generate.*command']
+  Create custom slash commands for Claude Code with proper markdown structure and YAML frontmatter.
+  Use when: creating commands, generating slash commands, making workflow automations.
+  Activates for: "create command", "generate command", "new command", "slash command", "make command"
 ---
 
 # Command Creator

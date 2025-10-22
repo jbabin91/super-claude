@@ -3,14 +3,9 @@ name: plugin-creator
 version: 1.0.0
 description: |
   Create complete Claude Code plugins with proper structure including skills, commands, agents, and hooks.
-  Generates plugin manifests and directory structures following Anthropic specifications.
-  Use when building complete plugin packages for distribution.
-category: meta
-tags: [plugins, meta, automation, plugin-system]
-model: sonnet
-triggers:
-  keywords: [create plugin, generate plugin, new plugin, plugin package]
-  patterns: ['create.*plugin', 'generate.*plugin']
+  Generates plugin manifests and directory structures for distribution.
+  Use when: building plugins, creating plugin packages, distributing skills to marketplace.
+  Activates for: "create plugin", "generate plugin", "new plugin", "plugin package", "make plugin"
 ---
 
 # Plugin Creator

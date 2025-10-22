@@ -4,13 +4,8 @@ version: 1.0.0
 description: |
   Create specialized agents for Claude Code that handle specific tasks autonomously.
   Generate agent definitions with proper configuration and best practices.
-  Use when you need focused sub-agents for complex, multi-step workflows.
-category: meta
-tags: [agents, sub-agents, automation, meta]
-model: sonnet
-triggers:
-  keywords: [create agent, generate agent, new agent, sub-agent]
-  patterns: ['create.*(agent|sub-agent)', 'generate.*agent']
+  Use when: creating agents, generating sub-agents, setting up autonomous workflows.
+  Activates for: "create agent", "generate agent", "new agent", "sub-agent", "make agent"
 ---
 
 # Agent Creator

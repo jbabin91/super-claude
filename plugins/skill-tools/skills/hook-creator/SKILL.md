@@ -3,14 +3,9 @@ name: hook-creator
 version: 1.0.0
 description: |
   Create event hooks for Claude Code that trigger on specific events.
-  Generate hooks with proper JSON configuration following Anthropic specifications.
-  Use for automating workflows based on events like file saves, tool calls, or user prompts.
-category: meta
-tags: [hooks, events, automation, meta]
-model: sonnet
-triggers:
-  keywords: [create hook, generate hook, new hook, event hook]
-  patterns: ['create.*hook', 'generate.*hook']
+  Generate hooks with proper JSON configuration for automating workflows.
+  Use when: creating hooks, setting up event triggers, automating on file saves or tool calls.
+  Activates for: "create hook", "generate hook", "new hook", "event hook", "make hook"
 ---
 
 # Hook Creator

@@ -46,22 +46,16 @@ Create a properly formatted SKILL.md with:
 
 ```yaml
 ---
-# === OFFICIAL CLAUDE CODE FIELDS ===
+# OFFICIAL CLAUDE CODE FIELDS (recognized by Claude Code)
 name: skill-identifier                    # Required: kebab-case
-description: |                            # Required: What it does and when to use
+description: |                            # Required: What it does AND when to activate
   Clear description of what it does and when to use it.
-  Include activation triggers in the description.
+  IMPORTANT: Include activation triggers in the description itself.
+  Example: "Generate React components. Use when creating new UI components."
 allowed-tools: []                         # Optional: Restrict to specific tools
 
-# === COMMUNITY ENHANCEMENTS (super-claude) ===
-version: 1.0.0                           # Track changes
-category: appropriate-category           # Organization (typescript, testing, git, etc.)
-tags: [relevant, tags, here]             # Searchability
-model: sonnet                            # Preferred model: sonnet | haiku | opus
-triggers:                                # Explicit activation hints
-  keywords: [keyword1, keyword2]         # Words that activate this skill
-  patterns: ["pattern1", "pattern2"]     # Regex patterns
-  contexts: [development, testing]       # When to activate
+# EXTENDED METADATA (ignored by Claude Code, useful for organization)
+version: 1.0.0                           # Track changes (skills are files, not packages)
 ---
 
 # Skill Name

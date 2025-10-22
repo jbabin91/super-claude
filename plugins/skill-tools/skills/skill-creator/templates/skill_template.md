@@ -1,38 +1,29 @@
 ---
 # ============================================================================
-# OFFICIAL CLAUDE CODE FIELDS
+# OFFICIAL CLAUDE CODE FIELDS (recognized by Claude Code)
 # Reference: https://docs.claude.com/en/docs/claude-code/skills.md
 # ============================================================================
 
 name: skill-identifier # Required: kebab-case, unique identifier
-description: | # Required: What the skill does and when to use it
+description: | # Required: What it does AND when to activate it
   Brief description of what this skill does and when to use it.
-  Include activation triggers: "Use when...", "Activates when user says..."
-  Keep concise but searchable.
+  IMPORTANT: Include activation triggers in the description itself since
+  Claude Code only uses the description field for discovery.
 
-allowed-tools: [] # Optional: Restrict to specific tools (Read, Write, Edit, Bash, Grep, Glob, etc.)
+  Examples: "Use when...", "Activates for...", "Helps with..."
+  Good: "Generate React components with TypeScript. Use when creating new UI components."
+  Bad: "Helps with components" (too vague)
+
+allowed-tools: [] # Optional: Restrict to specific tools
 # Example: allowed-tools: [Read, Grep, Glob] # Read-only skill
+# Available tools: Read, Write, Edit, Bash, Grep, Glob, WebFetch, Task, etc.
 
 # ============================================================================
-# COMMUNITY ENHANCEMENTS (super-claude)
-# These fields enhance organization and discoverability but are not required
+# EXTENDED METADATA (not used by Claude Code, but useful for humans/tooling)
+# These fields are ignored by Claude Code but help with organization
 # ============================================================================
 
-version: 1.0.0 # Track changes with semantic versioning
-category: workflow-automation # Primary category for organization
-tags: [tag1, tag2, tag3] # Searchable tags for discoverability
-model: sonnet # Preferred Claude model: sonnet (default) | haiku (fast) | opus (complex)
-
-# Explicit activation hints (helps Claude know when to invoke this skill)
-triggers:
-  keywords: [keyword1, keyword2] # Words that should activate this skill
-  patterns: ['pattern1', 'pattern2'] # Regex patterns for activation
-  contexts: [development, testing] # Contexts where this skill is relevant
-
-# Optional metadata
-author: Your Name
-license: MIT
-homepage: https://github.com/jbabin91/super-claude
+version: 1.0.0 # Track changes since skills are files, not versioned packages
 ---
 
 # Skill Name
@@ -138,22 +129,21 @@ function example() {
 
 ## Template Notes (Remove before publishing)
 
-### Official vs Community Fields
+### What Claude Code Actually Uses
 
-**Official Fields (Required by Claude Code):**
+**Claude Code ONLY recognizes these fields:**
 
-- `name` - Skill identifier
-- `description` - What it does and when to activate
+- `name` - Skill identifier (required)
+- `description` - What it does AND when to activate (required)
+- `allowed-tools` - Tool restrictions (optional)
 
-**Official Fields (Optional):**
+**Extended metadata (ignored by Claude Code, but useful for humans):**
 
-- `allowed-tools` - Restrict tools (e.g., `[Read, Grep, Glob]` for read-only)
+- `version` - Track changes since skills are files, not versioned packages
 
-**Community Enhancements (super-claude):**
+Note: Author info is in the plugin's `plugin.json`, not individual skill files.
 
-- `version`, `category`, `tags` - Organization and tracking
-- `model` - Performance tuning (haiku=fast, sonnet=balanced, opus=complex)
-- `triggers` - Explicit activation hints for better discoverability
+All activation hints, keywords, and patterns should go directly in the `description` field since that's the only field Claude Code uses for skill discovery.
 
 ### File Organization
 
@@ -170,25 +160,30 @@ skill-name/
 
 ### Activation Best Practices
 
-Claude autonomously decides when to use skills based on:
+**Claude Code only uses the `description` field for discovery!**
 
-1. **Description content** - Include trigger words users would say
-2. **Trigger keywords** - Explicit words that should activate
-3. **Context relevance** - File types, project structure, user intent
+Put ALL activation hints directly in the description:
 
-**Good description:**
+```yaml
+description: |
+  Generate React components with TypeScript and Tailwind CSS.
+  Use when: creating new components, scaffolding UI elements, building design system.
+  Activates for: "create component", "new component", "generate component"
+```
+
+**Good description examples:**
 
 > "Analyze Excel spreadsheets, generate pivot tables, create charts. Use when working with .xlsx files or data analysis requests."
 
-**Bad description:**
+> "Refactor TypeScript imports, organize import statements, remove unused imports. Use when cleaning up imports or seeing import-related errors."
 
-> "Helps with data" (too vague, lacks triggers)
+**Bad description (too vague):**
+
+> "Helps with data" ❌ - No activation triggers, no use cases
 
 ### Model Selection
 
-- **haiku** - Simple, repetitive tasks (formatting, validation)
-- **sonnet** - Most skills (balanced speed/quality)
-- **opus** - Complex reasoning (architecture, research)
+Claude Code automatically picks the appropriate model. The `model` field in YAML is ignored.
 
 ### Tool Restrictions
 

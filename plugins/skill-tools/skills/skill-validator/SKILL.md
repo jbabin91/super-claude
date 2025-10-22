@@ -2,16 +2,10 @@
 name: skill-validator
 version: 1.0.0
 description: |
-  Validate Claude Code skills, commands, agents, hooks, and plugins against Anthropic specifications.
-  Checks structure, format, best practices, and common issues.
-  Use before committing or distributing skills/plugins.
-category: meta
-tags: [validation, quality, meta, claude-code]
-model: sonnet
-triggers:
-  keywords: [validate skill, check skill, validate plugin, lint skill]
-  patterns:
-    ['validate.*(skill|plugin|command|agent|hook)', 'check.*(skill|plugin)']
+  Validate Claude Code skills, commands, agents, hooks, and plugins against specifications.
+  Checks structure, format, best practices, and common issues before committing or distributing.
+  Use when: validating skills, checking plugins, linting components, ensuring quality.
+  Activates for: "validate skill", "check skill", "validate plugin", "lint skill", "verify skill"
 ---
 
 # Skill Validator
