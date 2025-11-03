@@ -39,9 +39,9 @@ The skill auto-activation system automatically suggests relevant skills when you
 
 **1. Install a plugin with auto-activation support:**
 
-```bash
+```sh
 /plugin install claude-tools
-```txt
+```
 
 **2. Skills activate automatically:**
 
@@ -52,13 +52,13 @@ You: "I want to create a new skill for testing"
   -> skill-creator
 
 ACTION: Use Skill tool BEFORE responding
-```txt
+```
 
 **3. (Optional) Customize for your project:**
 
-```bash
+```sh
 /configure-activation
-```txt
+```
 
 Edit `.claude/skills/skill-rules.json` to customize triggers, priorities, or disable skills.
 
@@ -85,7 +85,7 @@ Edit `.claude/skills/skill-rules.json` to customize triggers, priorities, or dis
     }
   }
 }
-```txt
+```
 
 **2. Place in your plugin:**
 
@@ -93,7 +93,7 @@ Edit `.claude/skills/skill-rules.json` to customize triggers, priorities, or dis
 plugins/your-plugin/
 └── skills/
     └── skill-rules.json
-```txt
+```
 
 **3. Users get auto-activation when they install your plugin!**
 
@@ -113,13 +113,13 @@ UserPromptSubmit Hook (skill-activation-prompt.ts)
 5. Format and output suggestions
     ↓
 Claude sees augmented context with skill suggestions
-```txt
+```
 
 ### File Organization
 
 **Installed plugins (after /plugin install):**
 
-```txt
+```sh
 .claude/skills/
 ├── claude-tools/
 │   ├── skill-rules.json       # From plugin
@@ -128,14 +128,14 @@ Claude sees augmented context with skill suggestions
 │   ├── skill-rules.json       # From another plugin
 │   └── skills/...
 └── skill-rules.json           # Your project overrides (optional)
-```txt
+```
 
 **Hook location:**
 
-```txt
+```sh
 .claude/hooks/
 └── skill-activation-prompt.ts  # Installed with claude-tools
-```txt
+```
 
 ## Plugin-Level Rules
 
@@ -163,7 +163,7 @@ interface SkillConfig {
     intentPatterns?: string[]; // Regex patterns
   };
 }
-```txt
+```
 
 ### Example: claude-tools
 
@@ -203,7 +203,7 @@ interface SkillConfig {
     }
   }
 }
-```txt
+```
 
 ## Project-Level Overrides
 
@@ -221,13 +221,13 @@ interface ProjectSkillRules {
     priorityThreshold?: 'critical' | 'high' | 'medium' | 'low';
   };
 }
-```txt
+```
 
 ### Generate Template
 
-```bash
+```sh
 /configure-activation
-```txt
+```
 
 Creates `.claude/skills/skill-rules.json` with clean template.
 
@@ -246,7 +246,7 @@ Creates `.claude/skills/skill-rules.json` with clean template.
   "disabled": [],
   "global": {}
 }
-```txt
+```
 
 **2. Add project-specific keywords:**
 
@@ -263,7 +263,7 @@ Creates `.claude/skills/skill-rules.json` with clean template.
   "disabled": [],
   "global": {}
 }
-```txt
+```
 
 **3. Disable unwanted skills:**
 
@@ -274,7 +274,7 @@ Creates `.claude/skills/skill-rules.json` with clean template.
   "disabled": ["claude/old-skill", "tanstack/deprecated-helper"],
   "global": {}
 }
-```txt
+```
 
 **4. Limit suggestions:**
 
@@ -288,7 +288,7 @@ Creates `.claude/skills/skill-rules.json` with clean template.
     "priorityThreshold": "high"
   }
 }
-```txt
+```
 
 ### Merge Strategy (MVP)
 
@@ -316,7 +316,7 @@ Creates `.claude/skills/skill-rules.json` with clean template.
     "keywords": ["create skill", "scaffold skill"]
   }
 }
-```txt
+```
 
 **Workaround:** Copy the entire object from plugin and modify it.
 
@@ -331,7 +331,7 @@ function matchKeywords(prompt: string, keywords: string[]): boolean {
   const normalizedPrompt = prompt.toLowerCase();
   return keywords.some((kw) => normalizedPrompt.includes(kw.toLowerCase()));
 }
-```txt
+```
 
 **Example:**
 
@@ -356,7 +356,7 @@ function matchIntent(prompt: string, patterns: string[]): boolean {
     return regex.test(prompt);
   });
 }
-```txt
+```
 
 **Example:**
 
@@ -379,7 +379,7 @@ how to.*?(create|add).*?skill          # Question format
 (pre|post)[-\s](commit|push)           # Git hooks
 (fix|solve|debug).*?(error|bug)        # Debugging
 (setup|configure|install).*?auth       # Configuration
-```txt
+```
 
 ## Configuration Options
 
@@ -438,7 +438,7 @@ how to.*?(create|add).*?skill          # Question format
 
 // ❌ Bad: Too narrow
 "keywords": ["create a new skill with proper YAML frontmatter"]
-```txt
+```
 
 **2. Design intent patterns:**
 
@@ -454,15 +454,15 @@ how to.*?(create|add).*?skill          # Question format
 
 // ❌ Bad: Matches everything
 "intentPatterns": [".*skill.*"]
-```txt
+```
 
 **3. Test with real prompts:**
 
-```bash
+```sh
 # Test your patterns
 echo '{"cwd":".","prompt":"I want to create a skill"}' | \
   bun run plugins/claude-tools/hooks/skill-activation-prompt.ts
-```txt
+```
 
 **4. Balance precision and recall:**
 
@@ -500,7 +500,7 @@ Don't create overrides until you need them. Plugin defaults work well!
     }
   }
 }
-```txt
+```
 
 **3. Disable unused skills:**
 
@@ -511,7 +511,7 @@ Don't create overrides until you need them. Plugin defaults work well!
     "tanstack/deprecated-helper"
   ]
 }
-```txt
+```
 
 **4. Limit noise in large projects:**
 
@@ -522,7 +522,7 @@ Don't create overrides until you need them. Plugin defaults work well!
     "priorityThreshold": "high"
   }
 }
-```txt
+```
 
 ## Troubleshooting
 
@@ -534,27 +534,27 @@ Don't create overrides until you need them. Plugin defaults work well!
 
 1. **Is Bun installed?**
 
-   ```bash
-   bun --version
-   ```
+```sh
+ bun --version
+```
 
-   Install: <https://bun.sh>
+Install: <https://bun.sh>
 
 2. **Is hook in correct location?**
 
-   ```bash
+   ```sh
    ls -la .claude/hooks/skill-activation-prompt.ts
    ```
 
 3. **Is hook executable?**
 
-   ```bash
+   ```sh
    chmod +x .claude/hooks/skill-activation-prompt.ts
    ```
 
 4. **Check hook input:**
 
-   ```bash
+   ```sh
    echo '{"cwd":".","prompt":"test"}' | \
      bun run .claude/hooks/skill-activation-prompt.ts
    ```
@@ -567,7 +567,7 @@ Don't create overrides until you need them. Plugin defaults work well!
 
 1. **Does plugin have skill-rules.json?**
 
-   ```bash
+   ```sh
    cat .claude/skills/claude-tools/skill-rules.json
    ```
 
@@ -577,7 +577,7 @@ Don't create overrides until you need them. Plugin defaults work well!
 
 3. **Is skill disabled in overrides?**
 
-   ```bash
+   ```sh
    cat .claude/skills/skill-rules.json | grep disabled
    ```
 
@@ -612,13 +612,13 @@ Don't create overrides until you need them. Plugin defaults work well!
        "maxSkillsPerPrompt": 3
      }
    }
-   ```txt
+   ```
 
 4. **Check warnings:**
 
    ```txt
    [WARNING]  Slow hook execution: 65ms
-   ```txt
+   ```
 
 ### Invalid JSON
 
@@ -628,9 +628,9 @@ Don't create overrides until you need them. Plugin defaults work well!
 
 Validate JSON:
 
-```bash
+```sh
 cat .claude/skills/claude-tools/skill-rules.json | jq .
-```txt
+```
 
 Common issues:
 
@@ -650,7 +650,7 @@ triggers:
   keywords: [create skill, skill development]
   patterns: ['(create|add).*?skill']
 ---
-```txt
+```
 
 ### New Format (skill-rules.json)
 
@@ -673,13 +673,13 @@ triggers:
     }
   }
 }
-```txt
+```
 
 ### Migration Command (Future)
 
-```bash
+```sh
 /generate-skill-rules
-```txt
+```
 
 Will parse YAML frontmatter and generate skill-rules.json entries.
 
@@ -704,18 +704,18 @@ Will parse YAML frontmatter and generate skill-rules.json entries.
 
 **A:** Yes, remove the hook:
 
-```bash
+```sh
 rm .claude/hooks/skill-activation-prompt.ts
-```txt
+```
 
 ### Q: How do I test my activation rules?
 
 **A:** Use the hook directly:
 
-```bash
+```sh
 echo '{"cwd":".","prompt":"your test prompt"}' | \
   bun run .claude/hooks/skill-activation-prompt.ts
-```txt
+```
 
 ### Q: Can I use environment variables in patterns?
 

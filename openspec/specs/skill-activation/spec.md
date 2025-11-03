@@ -1,8 +1,11 @@
 # skill-activation Specification
 
 ## Purpose
+
 TBD - created by archiving change add-skill-auto-activation. Update Purpose after archive.
+
 ## Requirements
+
 ### Requirement: Hook Execution on Prompt Submit
 
 The `skill-activation-prompt.ts` hook SHALL execute on every `user-prompt-submit` event and analyze the user's prompt for skill matches.
@@ -290,4 +293,3 @@ Project overrides SHALL support global configuration affecting all skills.
 - **AND** medium-priority skills are excluded
 
 ---
-

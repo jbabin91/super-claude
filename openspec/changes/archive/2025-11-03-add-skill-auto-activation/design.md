@@ -39,7 +39,7 @@ The skill auto-activation system uses a **hook-based, multi-source aggregation**
 │                                                          │
 │ [Original user prompt]                                  │
 └─────────────────────────────────────────────────────────┘
-```txt
+```
 
 ## File Organization
 
@@ -54,7 +54,7 @@ plugins/claude-tools/
 │   └── ...
 └── hooks/
     └── skill-activation-prompt.ts # The aggregator hook
-```txt
+```
 
 ### User Project (After Installation)
 
@@ -70,7 +70,7 @@ user-project/.claude/
 │       └── skills/...
 └── hooks/
     └── skill-activation-prompt.ts # Installed with claude-tools
-```txt
+```
 
 ## Data Schemas
 
@@ -97,7 +97,7 @@ interface SkillConfig {
   };
   // Future: fileTriggers, blockMessage, skipConditions
 }
-```txt
+```
 
 ### Project-Level Overrides
 
@@ -111,7 +111,7 @@ interface ProjectSkillRules {
     priorityThreshold?: 'critical' | 'high' | 'medium' | 'low';
   };
 }
-```txt
+```
 
 ## Matching Algorithm
 
@@ -122,7 +122,7 @@ function matchKeywords(prompt: string, keywords: string[]): boolean {
   const normalizedPrompt = prompt.toLowerCase();
   return keywords.some((kw) => normalizedPrompt.includes(kw.toLowerCase()));
 }
-```txt
+```
 
 **Example:**
 
@@ -139,7 +139,7 @@ function matchIntent(prompt: string, patterns: string[]): boolean {
     return regex.test(prompt);
   });
 }
-```txt
+```
 
 **Example:**
 
@@ -158,7 +158,7 @@ function sortByPriority(skills: MatchedSkill[]): MatchedSkill[] {
       priorityOrder[a.config.priority] - priorityOrder[b.config.priority],
   );
 }
-```txt
+```
 
 ## Merge Strategy
 
@@ -193,7 +193,7 @@ function mergeRules(
 
   return merged;
 }
-```txt
+```
 
 **MVP Simplification:** Use shallow merge (object spread) instead of deep merge to avoid complexity.
 
@@ -209,7 +209,7 @@ function mergeRules(
   "permission_mode": "standard",
   "prompt": "I want to create a new skill"
 }
-```txt
+```
 
 ### Processing Steps
 
@@ -236,7 +236,7 @@ function mergeRules(
 
 ACTION: Use Skill tool BEFORE responding
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```txt
+```
 
 ### Error Handling
 
@@ -252,7 +252,7 @@ try {
   }
   process.exit(1); // Fail gracefully
 }
-```txt
+```
 
 ## Auto-Migration from YAML
 
@@ -265,7 +265,7 @@ triggers:
   keywords: [create skill, skill development]
   patterns: ['(create|add).*?skill']
 ---
-```txt
+```
 
 ### Migration Process
 
@@ -284,7 +284,7 @@ function migrateYAMLtoJSON(skillDir: string): SkillConfig {
     },
   };
 }
-```txt
+```
 
 **Trigger:** `/generate-skill-rules` command (internal use during MVP setup)
 
@@ -308,7 +308,7 @@ const duration = Date.now() - startTime;
 if (duration > 50) {
   console.warn(`Slow hook execution: ${duration}ms`);
 }
-```txt
+```
 
 ## Future Enhancements (Not MVP)
 
@@ -323,7 +323,7 @@ if (duration > 50) {
     }
   }
 }
-```txt
+```
 
 ### Guardrail Skills (Blocking)
 
@@ -334,7 +334,7 @@ if (duration > 50) {
     "blockMessage": "⚠️ Use Skill tool: 'frontend-guidelines' first"
   }
 }
-```txt
+```
 
 ### Skill Dependencies
 
@@ -345,7 +345,7 @@ if (duration > 50) {
     "suggestsWith": ["hono-api-builder"]
   }
 }
-```txt
+```
 
 ## Trade-offs & Decisions
 
@@ -364,7 +364,7 @@ Pre-commit validation with OpenSpec:
 
 ```bash
 openspec validate add-skill-auto-activation --strict
-```txt
+```
 
 Validates:
 

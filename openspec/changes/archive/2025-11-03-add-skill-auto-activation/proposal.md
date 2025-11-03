@@ -56,7 +56,7 @@ Add a **Skill Auto-Activation System** to the `claude-tools` plugin (MVP scope):
 │   ├── skill-rules.json       # Another plugin's rules
 │   └── skills/...
 └── skill-rules.json           # Project overrides (optional)
-```txt
+```
 
 **Hook Runtime:**
 
