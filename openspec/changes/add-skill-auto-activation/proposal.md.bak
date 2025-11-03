@@ -1,0 +1,160 @@
+# Proposal: Add Skill Auto-Activation System
+
+## Why
+
+Skills currently rely on natural language descriptions for discovery, which is unreliable. Claude Code doesn't consistently activate skills when needed, forcing developers to manually invoke them. This creates a poor developer experience and reduces skill effectiveness.
+
+**Problem Statement:**
+
+1. **Skills sit unused** - Claude must remember to check for relevant skills
+2. **Inconsistent activation** - Same prompt may or may not trigger a skill
+3. **No structured triggers** - YAML `triggers` field is custom metadata, not recognized by Claude Code
+4. **Manual invocation required** - Developers must explicitly use Skill tool
+
+**Inspiration:**
+
+The diet103/claude-code-infrastructure-showcase repository demonstrates a production-tested auto-activation system using hooks + JSON configuration that solved this problem across 300k LOC and 6 months of daily use.
+
+## What Changes
+
+Add a **Skill Auto-Activation System** to the `claude-tools` plugin (MVP scope):
+
+### Core Infrastructure
+
+1. **`skill-activation-prompt.ts` hook** - UserPromptSubmit hook that:
+   - Analyzes user prompts for keywords and intent patterns
+   - Discovers all `skill-rules.json` files across installed plugins
+   - Loads project-level overrides
+   - Outputs formatted skill suggestions BEFORE Claude responds
+
+2. **`skill-rules.json` schema** - Per-plugin activation rules defining:
+   - Keywords for literal matching
+   - Regex patterns for intent matching
+   - Priority levels (critical, high, medium, low)
+   - Enforcement types (suggest, block, warn)
+
+3. **Project-level overrides** - Optional `.claude/skills/skill-rules.json` for:
+   - Customizing trigger priorities
+   - Adding project-specific keywords
+   - Disabling specific skills
+   - Global configuration (max skills per prompt)
+
+4. **`/configure-activation` command** - Generates project overrides template
+
+5. **Auto-migration** - Parse existing YAML `triggers` frontmatter → JSON rules
+
+### Architecture
+
+**Per-Plugin Rules + Runtime Aggregation:**
+
+```
+.claude/skills/
+├── claude-tools/
+│   ├── skill-rules.json       # Plugin's activation rules
+│   └── skills/...
+├── tanstack/
+│   ├── skill-rules.json       # Another plugin's rules
+│   └── skills/...
+└── skill-rules.json           # Project overrides (optional)
+```
+
+**Hook Runtime:**
+
+- Bun + TypeScript for maintainability
+- Aggregates all `skill-rules.json` files
+- Merges with project overrides (precedence: project > plugin)
+- Fails gracefully if Bun not installed
+
+### MVP Scope
+
+**What's Included:**
+
+- ✅ Hook implementation with keyword + pattern matching
+- ✅ Schema definition with TypeScript interfaces
+- ✅ Plugin-level `skill-rules.json` for claude-tools
+- ✅ Project overrides template
+- ✅ `/configure-activation` command
+- ✅ Auto-migration from YAML triggers
+- ✅ Documentation and setup guide
+
+**What's Deferred (Future):**
+
+- ❌ File-based triggers (pathPatterns, contentPatterns)
+- ❌ Guardrail skills (enforcement: "block")
+- ❌ Skill dependencies
+- ❌ Activation analytics
+- ❌ Full plugin coverage (other plugins adopt later)
+
+## Impact
+
+**Affected specs:**
+
+- `specs/skill-activation/` - **NEW** capability for auto-activation system
+
+**Affected code:**
+
+- `plugins/claude-tools/hooks/skill-activation-prompt.ts` - **NEW** UserPromptSubmit hook
+- `plugins/claude-tools/commands/configure-activation.md` - **NEW** slash command
+- `plugins/claude-tools/templates/skill-rules.template.json` - **NEW** plugin template
+- `plugins/claude-tools/templates/project-overrides.template.json` - **NEW** project template
+- `plugins/claude-tools/skills/skill-rules.json` - **NEW** rules for claude-tools skills
+- `plugins/claude-tools/types/skill-rules.d.ts` - **NEW** TypeScript interfaces
+- `CLAUDE.md` - **MODIFIED** - Add auto-activation architecture section
+- `docs/SKILL_ACTIVATION_GUIDE.md` - **NEW** comprehensive documentation
+
+**Related docs:**
+
+- `docs/2025-10-22/brainstorm.md` - Inspired by diet103 showcase
+- Reddit post: ["Claude Code is a Beast – Tips from 6 Months of Hardcore Use"](https://www.reddit.com/r/ClaudeAI/comments/1oivjvm/claude_code_is_a_beast_tips_from_6_months_of/)
+- [diet103/claude-code-infrastructure-showcase](https://github.com/diet103/claude-code-infrastructure-showcase)
+
+## Dependencies
+
+**Runtime Requirements:**
+
+- Bun (user prerequisite for hook execution)
+- Node.js (already required by project)
+
+**No New npm Dependencies:**
+
+- Uses Node.js built-in modules (fs, path)
+- Bun provides TypeScript runtime
+
+## Risks & Mitigation
+
+| Risk                       | Impact           | Mitigation                                        |
+| -------------------------- | ---------------- | ------------------------------------------------- |
+| Users don't have Bun       | Hook fails       | Graceful error with installation instructions     |
+| Performance impact         | Slower prompts   | Keep hook fast (<50ms), efficient file operations |
+| Complex merge conflicts    | User confusion   | Start with simple replacement, not deep merge     |
+| Breaking existing triggers | Skill regression | Auto-migration maintains backward compatibility   |
+
+## Timeline
+
+- **Week 1:** Core implementation (hook, schema, templates)
+- **Week 2:** Documentation, testing, polish
+- **Total:** 2 weeks for MVP
+
+## Success Criteria
+
+MVP is successful if:
+
+1. ✅ Hook runs on every prompt submission without errors
+2. ✅ Correctly matches keywords in prompts (>95% accuracy)
+3. ✅ Correctly matches regex intent patterns (>90% accuracy)
+4. ✅ Outputs formatted skill suggestions
+5. ✅ Gracefully handles missing Bun with clear error message
+6. ✅ Project overrides correctly merge with plugin rules
+7. ✅ Documentation enables users to set up in <10 minutes
+8. ✅ Auto-migration preserves existing YAML triggers
+
+## Open Questions
+
+1. **Namespace separator**: Use `/` (claude/skill-creator) or `.` (claude.skill-creator)?
+   - Recommendation: `/` (more familiar to developers)
+
+2. **Hook install location**: Confirm `.claude/hooks/` is correct install path
+   - Based on hook-creator skill: Yes, this is correct
+
+3. **Bun as dependency**: Add to package.json or document as prerequisite?
+   - Recommendation: Document as prerequisite (not all users will need hooks)

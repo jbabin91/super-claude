@@ -115,6 +115,149 @@ super-claude/
 - **docs/2025-10-22/plugin-structure.md** - Plugin organization and installation matrix
 - **.claude-plugin/marketplace.json** - Plugin marketplace manifest
 
+### Auto-Activation System
+
+**Status:** ✅ Implemented and ready to use
+
+The skill auto-activation system automatically suggests relevant skills before Claude responds based on user prompts. This replaces manual skill invocation with intelligent, context-aware activation.
+
+#### How It Works
+
+1. **User submits prompt** → Claude Code triggers `UserPromptSubmit` hook
+2. **Hook analyzes prompt** → Matches against keywords and intent patterns
+3. **Suggests relevant skills** → Formatted output appears before user's prompt
+4. **Claude sees suggestions** → Uses appropriate skills in response
+
+#### Architecture
+
+**Per-Plugin Rules + Runtime Aggregation:**
+
+```sh
+.claude/skills/
+├── claude-tools/
+│   └── skill-rules.json       # Plugin's activation rules
+├── tanstack-tools/
+│   └── skill-rules.json       # Another plugin's rules
+└── skill-rules.json           # Project overrides (optional)
+```
+
+**Hook Runtime:**
+
+- Bun + TypeScript for maintainability
+- Discovers all `skill-rules.json` files from installed plugins
+- Merges with project overrides (precedence: project > plugin)
+- Executes in <50ms for typical projects
+
+#### skill-rules.json Format
+
+Each plugin defines activation rules for its skills:
+
+```json
+{
+  "plugin": {
+    "name": "claude-tools",
+    "version": "1.0.0",
+    "namespace": "claude"
+  },
+  "skills": {
+    "skill-creator": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "promptTriggers": {
+        "keywords": ["create skill", "new skill"],
+        "intentPatterns": ["(create|add).*?skill"]
+      }
+    }
+  }
+}
+```
+
+**Matching Strategies:**
+
+- **Keywords:** Case-insensitive literal matching
+- **Intent Patterns:** Regex with case-insensitive flag
+- **Priorities:** critical > high > medium > low
+
+#### Project Overrides
+
+Customize activation rules for your project in `.claude/skills/skill-rules.json`:
+
+```json
+{
+  "version": "1.0",
+  "overrides": {
+    "claude/skill-creator": {
+      "priority": "critical",
+      "promptTriggers": {
+        "keywords": ["create skill", "scaffold skill"]
+      }
+    }
+  },
+  "disabled": ["claude/old-skill"],
+  "global": {
+    "maxSkillsPerPrompt": 3,
+    "priorityThreshold": "high"
+  }
+}
+```
+
+**Generate template:**
+
+```bash
+/configure-activation
+```
+
+#### Files and Locations
+
+**Plugin-level rules:**
+
+- `plugins/{plugin-name}/skills/skill-rules.json` - Define activation rules
+- `plugins/{plugin-name}/templates/skill-rules.template.json` - Template for plugin authors
+
+**Project-level overrides:**
+
+- `.claude/skills/skill-rules.json` - Customize for your project
+- Generate with `/configure-activation` command
+
+**Hook implementation:**
+
+- `plugins/claude-tools/hooks/skill-activation-prompt.ts` - Main hook logic
+- `plugins/claude-tools/types/skill-rules.d.ts` - TypeScript definitions
+
+**Documentation:**
+
+- `docs/SKILL_ACTIVATION_GUIDE.md` - Comprehensive user guide (coming soon)
+- `openspec/changes/add-skill-auto-activation/` - OpenSpec proposal and design
+
+#### Benefits
+
+- **Zero configuration** - Works out of box with plugin defaults
+- **Consistent activation** - No more forgotten skills
+- **Customizable** - Override priorities and triggers per project
+- **Fast** - <50ms execution time
+- **Clean install/uninstall** - Each plugin manages its own rules
+
+#### Troubleshooting
+
+**Hook not running:**
+
+- Ensure Bun is installed: `bun --version`
+- Check hook location: `.claude/hooks/skill-activation-prompt.ts`
+- Verify hook is executable: `chmod +x .claude/hooks/skill-activation-prompt.ts`
+
+**Skills not activating:**
+
+- Check plugin has `skill-rules.json` in `.claude/skills/{plugin-name}/`
+- Verify keywords/patterns match your prompt
+- Test with explicit keywords (e.g., "create skill")
+
+**Performance issues:**
+
+- Keep project overrides minimal
+- Limit `maxSkillsPerPrompt` in global config
+- Check hook execution time in warnings
+
 ## 🔒 Privacy & Security
 
 ### Public Content

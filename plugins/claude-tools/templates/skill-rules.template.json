@@ -1,0 +1,87 @@
+{
+  "_comment_1": "Plugin-Level Skill Activation Rules Template",
+  "_comment_2": "This file defines when skills should be auto-activated based on user prompts",
+  "_comment_3": "Location: plugins/{plugin-name}/skills/skill-rules.json",
+  "_comment_4": "Documentation: see SKILL_ACTIVATION_GUIDE.md",
+
+  "plugin": {
+    "name": "your-plugin-name",
+    "version": "1.0.0",
+    "namespace": "your-namespace",
+
+    "_comment_namespace": "Namespace prevents conflicts (e.g., 'claude', 'tanstack', 'hono'). Skills will be referenced as 'namespace/skill-name'."
+  },
+
+  "skills": {
+    "example-skill": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Optional human-readable description of when to use this skill",
+
+      "promptTriggers": {
+        "keywords": ["create example", "example development"],
+        "intentPatterns": [
+          "(create|add|generate).*?example",
+          "how to.*?example"
+        ],
+
+        "_comment_keywords": "Case-insensitive literal matches. Example: 'create example' matches 'I want to create example'",
+        "_comment_patterns": "Regex patterns with case-insensitive flag. Example: '(create|add).*?example' matches 'How do I add a new example?'"
+      },
+
+      "_comment_type": "domain = domain-specific skill | guardrail = safety/quality enforcement (future)",
+      "_comment_enforcement": "suggest = show recommendation (MVP) | block = require skill use (future) | warn = show warning (future)",
+      "_comment_priority": "critical = must-use | high = strongly recommended | medium = moderately useful | low = optional"
+    },
+
+    "another-skill": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+
+      "promptTriggers": {
+        "keywords": ["another skill keyword"],
+        "intentPatterns": ["(use|try).*?another"]
+      }
+    }
+  },
+
+  "_comment_5": "Example Real-World Rules:",
+  "_example_skill-creator": {
+    "type": "domain",
+    "enforcement": "suggest",
+    "priority": "high",
+    "description": "Generate new Claude Code skills with proper structure",
+    "promptTriggers": {
+      "keywords": ["create skill", "skill development", "new skill"],
+      "intentPatterns": [
+        "(create|add|generate).*?skill",
+        "how to.*?(create|add).*?skill",
+        "skill.*?(template|generator)"
+      ]
+    }
+  },
+
+  "_example_hook-creator": {
+    "type": "domain",
+    "enforcement": "suggest",
+    "priority": "high",
+    "description": "Generate Claude Code hooks for workflow automation",
+    "promptTriggers": {
+      "keywords": ["create hook", "hook development", "new hook"],
+      "intentPatterns": [
+        "(create|add|generate).*?hook",
+        "how to.*?(create|add).*?hook",
+        "(pre|post)[-\\s](commit|push)"
+      ]
+    }
+  },
+
+  "_comment_6": "Tips for Good Triggers:",
+  "_tip_1": "Use 2-4 keywords per skill (most common phrases)",
+  "_tip_2": "Use 1-3 patterns per skill (capture intent variations)",
+  "_tip_3": "Test patterns with real user prompts",
+  "_tip_4": "Avoid overly broad patterns that match everything",
+  "_tip_5": "Balance precision (avoid false positives) with recall (catch all relevant prompts)"
+}

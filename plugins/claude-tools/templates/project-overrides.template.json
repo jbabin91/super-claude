@@ -1,0 +1,105 @@
+{
+  "_comment_1": "Project-Level Skill Activation Overrides Template",
+  "_comment_2": "This file allows you to customize plugin-defined skill activation rules",
+  "_comment_3": "Location: .claude/skills/skill-rules.json (in your project root)",
+  "_comment_4": "Precedence: Project overrides > Plugin defaults",
+  "_comment_5": "Documentation: see SKILL_ACTIVATION_GUIDE.md",
+
+  "version": "1.0",
+
+  "overrides": {
+    "_comment": "Customize specific skills. Keys MUST include namespace (e.g., 'claude/skill-creator')",
+    "_example": "Uncomment and modify the examples below",
+
+    "_claude/skill-creator": {
+      "priority": "critical",
+      "description": "Override: Make skill-creator critical priority for this project",
+      "promptTriggers": {
+        "keywords": ["create skill", "scaffold skill", "skill template"],
+        "_comment": "Add project-specific keywords. This REPLACES the entire promptTriggers object (shallow merge)."
+      }
+    },
+
+    "_tanstack/query-helper": {
+      "priority": "high",
+      "promptTriggers": {
+        "keywords": ["query", "tanstack query", "react query"],
+        "intentPatterns": ["(fetch|load).*?data", "server.*?state"]
+      }
+    }
+  },
+
+  "_comment_disabled": "Array of skill IDs to completely disable. Use full namespace/skill-name format.",
+  "disabled": [],
+  "_disabled_examples": ["claude/old-skill", "tanstack/deprecated-helper"],
+
+  "global": {
+    "_comment": "Global configuration affecting all skills",
+
+    "maxSkillsPerPrompt": null,
+    "_comment_maxSkillsPerPrompt": "Limit number of suggestions per prompt. Set to number (e.g., 3) or null for unlimited. When more skills match, only top N (by priority) are shown.",
+
+    "priorityThreshold": null,
+    "_comment_priorityThreshold": "Minimum priority to show. Options: 'critical' | 'high' | 'medium' | 'low' | null. Skills below this threshold are filtered out.",
+
+    "_examples": {
+      "_example_maxSkillsPerPrompt": 2,
+      "_example_priorityThreshold": "high",
+      "_comment": "With these settings, only the top 2 high-or-higher priority skills would be shown"
+    }
+  },
+
+  "_comment_6": "Common Use Cases:",
+
+  "_use_case_1_increase_priority": {
+    "_description": "Make a skill more prominent in your project",
+    "_example": {
+      "overrides": {
+        "claude/skill-creator": {
+          "priority": "critical"
+        }
+      }
+    }
+  },
+
+  "_use_case_2_add_keywords": {
+    "_description": "Add project-specific trigger words",
+    "_example": {
+      "overrides": {
+        "hono/api-builder": {
+          "promptTriggers": {
+            "keywords": [
+              "create endpoint",
+              "new route",
+              "api endpoint",
+              "REST API"
+            ]
+          }
+        }
+      }
+    }
+  },
+
+  "_use_case_3_disable_skills": {
+    "_description": "Turn off skills you don't use",
+    "_example": {
+      "disabled": ["claude/old-skill", "plugin/unused-helper"]
+    }
+  },
+
+  "_use_case_4_limit_suggestions": {
+    "_description": "Reduce noise by limiting suggestions",
+    "_example": {
+      "global": {
+        "maxSkillsPerPrompt": 3,
+        "priorityThreshold": "high"
+      }
+    }
+  },
+
+  "_comment_7": "Notes:",
+  "_note_1": "Shallow Merge Strategy: When overriding 'promptTriggers', the ENTIRE object is replaced (not deep merged)",
+  "_note_2": "Namespace Required: Always use 'namespace/skill-name' format (e.g., 'claude/skill-creator')",
+  "_note_3": "Validation: Invalid skill IDs in overrides or disabled will show warnings but won't crash the hook",
+  "_note_4": "Performance: Keep overrides minimal for best performance (<50ms target)"
+}

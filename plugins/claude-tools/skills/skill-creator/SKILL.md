@@ -218,6 +218,302 @@ requires:
   packages: ['@types/node']
 ```
 
+## Auto-Activation System
+
+### Overview
+
+Skills can auto-activate based on user prompts using the skill-rules.json system. This enables Claude to proactively suggest relevant skills before responding.
+
+**For complete details, see:** [SKILL_ACTIVATION_GUIDE.md](../../docs/SKILL_ACTIVATION_GUIDE.md)
+
+### When to Add Activation Rules
+
+Add skill-rules.json entries when:
+
+- Skill is part of a plugin (not project-local)
+- Skill should auto-activate from specific keywords
+- Skill addresses a common workflow pattern
+- Skill is high-value and frequently needed
+
+**Skip activation rules for:**
+
+- One-off project-specific skills
+- Rarely-used experimental skills
+- Skills that should only run on explicit user request
+
+### Creating skill-rules.json Entries
+
+**For plugin developers:** Add entries to `plugins/{plugin}/skills/skill-rules.json`
+
+**Schema:**
+
+```json
+{
+  "plugin": {
+    "name": "plugin-name",
+    "version": "1.0.0",
+    "namespace": "namespace"
+  },
+  "skills": {
+    "skill-name": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Brief description of what the skill does",
+      "promptTriggers": {
+        "keywords": ["keyword1", "keyword2"],
+        "intentPatterns": ["pattern1", "pattern2"]
+      }
+    }
+  }
+}
+```
+
+### Writing Good Keywords
+
+**✅ Good Keywords** (specific, unambiguous):
+
+```json
+"keywords": [
+  "create skill",
+  "new skill",
+  "skill template",
+  "generate skill",
+  "skill development"
+]
+```
+
+**❌ Bad Keywords** (too generic):
+
+```json
+"keywords": [
+  "create",
+  "new",
+  "help",
+  "build"
+]
+```
+
+**Rules for keywords:**
+
+- Minimum 2 words for specificity
+- Include the domain (e.g., "skill", "hook", "component")
+- Match how users naturally ask for help
+- Case-insensitive literal matching
+- No regex needed for keywords
+
+### Writing Good Intent Patterns
+
+**✅ Good Patterns** (capture intent, not exact wording):
+
+```json
+"intentPatterns": [
+  "(create|add|generate|build).*?skill",
+  "how to.*?(create|add|build).*?skill",
+  "skill.*?(template|generator|builder)",
+  "need.*?skill.*?(for|to)",
+  "(make|write).*?skill"
+]
+```
+
+**❌ Bad Patterns** (too broad or too narrow):
+
+```json
+"intentPatterns": [
+  ".*skill.*",
+  "^create exactly this specific phrase$"
+]
+```
+
+**Rules for patterns:**
+
+- Use regex with case-insensitive flag (`i`)
+- Include action verbs: create, add, generate, build, make
+- Include domain terms: skill, hook, component, etc.
+- Use `.*?` for flexible matching between keywords
+- Capture natural variations of the same intent
+
+### Priority Guidelines
+
+**critical** - Must run for safety/correctness:
+
+```json
+"priority": "critical"
+// Examples: security validators, syntax checkers
+```
+
+**high** - Highly recommended:
+
+```json
+"priority": "high"
+// Examples: skill-creator, component-generator
+```
+
+**medium** - Useful but optional:
+
+```json
+"priority": "medium"
+// Examples: documentation generators, formatters
+```
+
+**low** - Nice-to-have:
+
+```json
+"priority": "low"
+// Examples: experimental features, rarely-used tools
+```
+
+### Example: skill-creator Activation Rules
+
+```json
+{
+  "plugin": {
+    "name": "claude-tools",
+    "version": "1.0.0",
+    "namespace": "claude"
+  },
+  "skills": {
+    "skill-creator": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "description": "Generate new Claude Code skills with proper structure and validation",
+      "promptTriggers": {
+        "keywords": [
+          "create skill",
+          "new skill",
+          "skill development",
+          "generate skill",
+          "skill template"
+        ],
+        "intentPatterns": [
+          "(create|add|generate|build).*?skill",
+          "how to.*?(create|add|build).*?skill",
+          "skill.*?(template|generator|builder)",
+          "need.*?skill.*?(for|to)",
+          "(make|write).*?skill"
+        ]
+      }
+    }
+  }
+}
+```
+
+### Migration Tool
+
+Use `/generate-skill-rules` to auto-generate entries from existing SKILL.md YAML frontmatter:
+
+```sh
+# Preview generated rules
+/generate-skill-rules --plugin plugins/tanstack-tools --namespace tanstack
+
+# Write to skill-rules.json
+/generate-skill-rules --plugin plugins/api-tools --namespace api --write
+```
+
+### Testing Activation Rules
+
+**Test in isolated project:**
+
+```sh
+# 1. Create test project
+mkdir test-activation && cd test-activation
+
+# 2. Copy hook and rules
+mkdir -p .claude/hooks .claude/skills/your-plugin
+cp {hook-path}/skill-activation-prompt.ts .claude/hooks/
+cp {plugin-path}/skill-rules.json .claude/skills/your-plugin/
+
+# 3. Test with prompts
+echo '{"prompt":"create a new skill","cwd":"'$(pwd)'"}' | \
+  bun run .claude/hooks/skill-activation-prompt.ts
+```
+
+**Expected output:**
+
+```txt
+============================================================
+SKILL ACTIVATION CHECK
+============================================================
+
+[RECOMMENDED] SKILLS:
+  -> skill-creator
+
+ACTION: Use Skill tool BEFORE responding
+============================================================
+```
+
+### Workflow: Adding Auto-Activation to New Skills
+
+When creating a skill that should auto-activate:
+
+1. **Create the SKILL.md** (as normal)
+
+2. **Identify triggers** by asking:
+   - What keywords would users type to need this skill?
+   - What questions or requests indicate this intent?
+   - How do users naturally express this need?
+
+3. **Add to skill-rules.json**:
+
+   ```json
+   {
+     "skills": {
+       "new-skill": {
+         "type": "domain",
+         "enforcement": "suggest",
+         "priority": "high",
+         "description": "What the skill does",
+         "promptTriggers": {
+           "keywords": ["keyword1", "keyword2"],
+           "intentPatterns": ["pattern1", "pattern2"]
+         }
+       }
+     }
+   }
+   ```
+
+4. **Test the triggers**:
+   - Try prompts that SHOULD activate it
+   - Try prompts that should NOT activate it
+   - Refine keywords/patterns based on results
+
+5. **Document in SKILL.md**:
+
+   ```markdown
+   ## Auto-Activation
+
+   This skill auto-activates when you mention:
+
+   - Creating/generating {domain objects}
+   - Specific workflow requests
+   - Related keywords
+
+   Triggered by: create skill, new skill, generate skill
+   ```
+
+### Project-Level Overrides
+
+Users can customize activation in their projects via `.claude/skills/skill-rules.json`:
+
+```json
+{
+  "version": "1.0",
+  "overrides": {
+    "claude/skill-creator": {
+      "priority": "critical"
+    }
+  },
+  "disabled": ["claude/skill-validator"],
+  "global": {
+    "maxSkillsPerPrompt": 3,
+    "priorityThreshold": "medium"
+  }
+}
+```
+
+**Command for users:** `/configure-activation`
+
 ## Example: Creating a Project-Specific Skill
 
 **User Request:**

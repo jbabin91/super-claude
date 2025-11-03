@@ -1,0 +1,322 @@
+# Tasks: Add Skill Auto-Activation System
+
+## Phase 1: Core Infrastructure (Week 1, Days 1-3)
+
+### 1. Define TypeScript Interfaces
+- [ ] Create `plugins/claude-tools/types/skill-rules.d.ts`
+- [ ] Define `PluginSkillRules` interface
+- [ ] Define `ProjectSkillRules` interface
+- [ ] Define `SkillConfig` interface
+- [ ] Define `MatchedSkill` interface
+- [ ] Add JSDoc comments to all interfaces
+- [ ] Export all types
+
+**Validation:** TypeScript compiles with no errors
+
+**Dependencies:** None
+
+---
+
+### 2. Create Hook Infrastructure
+- [ ] Create `plugins/claude-tools/hooks/` directory
+- [ ] Create `skill-activation-prompt.ts` hook file
+- [ ] Add shebang: `#!/usr/bin/env bun`
+- [ ] Implement stdin parsing (read hook input JSON)
+- [ ] Implement Bun runtime check with helpful error message
+- [ ] Add proper error handling and exit codes
+
+**Validation:** Hook runs successfully with `bun run skill-activation-prompt.ts < test-input.json`
+
+**Dependencies:** Task 1 (TypeScript interfaces)
+
+---
+
+### 3. Implement Rule Discovery
+- [ ] Add function to scan `.claude/skills/*/skill-rules.json`
+- [ ] Implement JSON parsing with error handling
+- [ ] Add validation for required fields (plugin.namespace, skills)
+- [ ] Implement loading of project overrides from `.claude/skills/skill-rules.json`
+- [ ] Add logging for invalid files (warn, don't crash)
+- [ ] Handle missing files gracefully
+
+**Validation:** Hook discovers and loads all rule files correctly
+
+**Dependencies:** Task 2 (Hook infrastructure)
+
+---
+
+### 4. Implement Rule Merging
+- [ ] Create merge function with precedence (project > plugin)
+- [ ] Implement shallow merge for overrides
+- [ ] Handle disabled skills array
+- [ ] Apply global configuration (maxSkillsPerPrompt, priorityThreshold)
+- [ ] Add namespace to skill keys (`namespace/skill-name`)
+- [ ] Validate override keys include namespace
+
+**Validation:** Merged rules correctly apply precedence and filtering
+
+**Dependencies:** Task 3 (Rule discovery)
+
+---
+
+### 5. Implement Matching Logic
+- [ ] Create keyword matching function (case-insensitive literal)
+- [ ] Create intent pattern matching function (regex with 'i' flag)
+- [ ] Handle invalid regex patterns gracefully
+- [ ] Track match type (keyword vs intent)
+- [ ] Filter by priority threshold if configured
+- [ ] Sort results by priority (critical → low)
+- [ ] Limit results to maxSkillsPerPrompt if configured
+
+**Validation:** Matches correctly identify relevant skills from prompts
+
+**Dependencies:** Task 4 (Rule merging)
+
+---
+
+### 6. Implement Output Formatting
+- [ ] Create formatted output with box drawing characters
+- [ ] Group skills by priority (critical, high, medium, low)
+- [ ] Use emoji icons for visual hierarchy
+- [ ] Add "ACTION: Use Skill tool BEFORE responding" message
+- [ ] Handle empty results (no output)
+- [ ] Ensure output goes to stdout for hook consumption
+
+**Validation:** Output is formatted correctly and readable
+
+**Dependencies:** Task 5 (Matching logic)
+
+---
+
+### 7. Add Performance Monitoring
+- [ ] Add execution time tracking
+- [ ] Log warning if execution >50ms
+- [ ] Optimize file operations (minimize reads)
+- [ ] Pre-compile regex patterns at load time
+- [ ] Cache plugin discovery if possible
+
+**Validation:** Hook executes in <50ms for typical projects
+
+**Dependencies:** Task 6 (Output formatting)
+
+---
+
+## Phase 2: Templates & Configuration (Week 1, Days 4-5)
+
+### 8. Create Plugin-Level Template
+- [ ] Create `plugins/claude-tools/templates/skill-rules.template.json`
+- [ ] Add plugin metadata section with placeholders
+- [ ] Add example skill with all fields documented
+- [ ] Include comments (using special format for JSON)
+- [ ] Add link to documentation
+
+**Validation:** Template is valid JSON and well-documented
+
+**Dependencies:** Task 1 (TypeScript interfaces)
+
+---
+
+### 9. Create Project Override Template
+- [ ] Create `plugins/claude-tools/templates/project-overrides.template.json`
+- [ ] Add version field
+- [ ] Add overrides section with example
+- [ ] Add disabled array with example
+- [ ] Add global configuration with all options
+- [ ] Include extensive comments explaining each field
+
+**Validation:** Template is valid JSON and clear
+
+**Dependencies:** Task 1 (TypeScript interfaces)
+
+---
+
+### 10. Create skill-rules.json for claude-tools
+- [ ] Create `plugins/claude-tools/skills/skill-rules.json`
+- [ ] Add plugin metadata (name: "claude-tools", namespace: "claude")
+- [ ] Add rules for skill-creator
+- [ ] Add rules for hook-creator
+- [ ] Add rules for command-creator
+- [ ] Add rules for agent-creator
+- [ ] Add rules for plugin-creator
+- [ ] Add rules for skill-validator
+- [ ] Test all rules with real prompts
+
+**Validation:** All claude-tools skills auto-activate correctly
+
+**Dependencies:** Tasks 2-6 (Hook implementation)
+
+---
+
+## Phase 3: Commands & Migration (Week 1, Days 6-7)
+
+### 11. Create /configure-activation Command
+- [ ] Create `plugins/claude-tools/commands/configure-activation.md`
+- [ ] Add YAML frontmatter with command metadata
+- [ ] Implement logic to check if file exists
+- [ ] Prompt user for confirmation if file exists
+- [ ] Copy project-overrides.template.json to `.claude/skills/skill-rules.json`
+- [ ] Add success message with next steps
+- [ ] Test command execution in Claude Code
+
+**Validation:** Command successfully generates override file
+
+**Dependencies:** Task 9 (Project override template)
+
+---
+
+### 12. Implement Auto-Migration (Internal Command)
+- [ ] Create `/generate-skill-rules` command (for maintainers)
+- [ ] Parse YAML frontmatter from SKILL.md files
+- [ ] Extract triggers.keywords and triggers.patterns
+- [ ] Generate skill-rules.json entries
+- [ ] Handle skills without triggers gracefully
+- [ ] Output generated JSON to stdout
+- [ ] Add option to write directly to skill-rules.json
+
+**Validation:** YAML triggers correctly converted to JSON format
+
+**Dependencies:** Task 10 (skill-rules.json for claude-tools)
+
+---
+
+## Phase 4: Documentation (Week 2, Day 1)
+
+### 13. Update CLAUDE.md
+- [ ] Add "Auto-Activation System" section under Architecture
+- [ ] Explain per-plugin rules + runtime aggregation
+- [ ] Document skill-rules.json location and structure
+- [ ] Add project overrides section
+- [ ] Include setup instructions
+- [ ] Add troubleshooting for common issues
+- [ ] Update "Key Patterns" section
+
+**Validation:** Documentation is clear and complete
+
+**Dependencies:** Tasks 2-12 (all implementation)
+
+---
+
+### 14. Create SKILL_ACTIVATION_GUIDE.md
+- [ ] Create `docs/SKILL_ACTIVATION_GUIDE.md`
+- [ ] Add comprehensive overview
+- [ ] Document skill-rules.json schema with examples
+- [ ] Explain matching algorithms (keywords + patterns)
+- [ ] Document project overrides with use cases
+- [ ] Add troubleshooting section
+- [ ] Include migration guide from YAML
+- [ ] Add FAQs section
+- [ ] Link to diet103 showcase as inspiration
+
+**Validation:** Guide enables users to set up in <10 minutes
+
+**Dependencies:** Tasks 2-12 (all implementation)
+
+---
+
+### 15. Update skill-creator Skill
+- [ ] Update skill-creator/SKILL.md
+- [ ] Add section about generating skill-rules.json entries
+- [ ] Include examples of good keywords and patterns
+- [ ] Reference SKILL_ACTIVATION_GUIDE.md
+- [ ] Update template to remind about adding activation rules
+
+**Validation:** skill-creator promotes auto-activation best practices
+
+**Dependencies:** Task 14 (Documentation)
+
+---
+
+## Phase 5: Testing & Polish (Week 2, Day 2)
+
+### 16. Manual Testing
+- [ ] Test with various prompts (keyword matches)
+- [ ] Test with various prompts (pattern matches)
+- [ ] Test with no matches
+- [ ] Test with multiple plugin installs
+- [ ] Test project overrides
+- [ ] Test disabled skills
+- [ ] Test priority sorting
+- [ ] Test maxSkillsPerPrompt limit
+- [ ] Test without Bun installed
+- [ ] Test with malformed JSON files
+- [ ] Test performance with 10+ plugins
+
+**Validation:** All scenarios pass successfully
+
+**Dependencies:** Tasks 2-12 (all implementation)
+
+---
+
+### 17. Error Message Refinement
+- [ ] Review all error messages for clarity
+- [ ] Ensure actionable steps included
+- [ ] Add helpful links where appropriate
+- [ ] Test error handling paths
+- [ ] Add color/formatting to error output (if possible)
+
+**Validation:** Error messages are helpful and actionable
+
+**Dependencies:** Task 16 (Manual testing)
+
+---
+
+### 18. Performance Optimization
+- [ ] Profile hook execution time
+- [ ] Optimize file reading (minimize I/O)
+- [ ] Cache compiled regex patterns
+- [ ] Add early exit optimizations
+- [ ] Test with 10+ plugins
+- [ ] Ensure <50ms execution time
+
+**Validation:** Performance meets requirements
+
+**Dependencies:** Task 16 (Manual testing)
+
+---
+
+### 19. OpenSpec Validation
+- [ ] Run `openspec validate add-skill-auto-activation --strict`
+- [ ] Fix any validation errors
+- [ ] Ensure all requirements have scenarios
+- [ ] Check for orphaned references
+- [ ] Verify task completeness
+
+**Validation:** OpenSpec validation passes with no errors
+
+**Dependencies:** All previous tasks
+
+---
+
+### 20. Update Plugin Metadata
+- [ ] Update `plugins/claude-tools/.claude-plugin/plugin.json`
+- [ ] Bump version to next minor (e.g., 0.2.0)
+- [ ] Update description to mention auto-activation
+- [ ] Add "auto-activation" to keywords
+- [ ] Update README.md if needed
+
+**Validation:** Plugin metadata is accurate
+
+**Dependencies:** Tasks 2-12 (all implementation)
+
+---
+
+## Summary
+
+**Total Tasks:** 20
+**Estimated Time:** 2 weeks
+**Parallelizable:**
+  - Tasks 8-9 (Templates) can be done alongside Tasks 2-7 (Hook implementation)
+  - Tasks 13-15 (Documentation) can start after Task 10
+
+**Critical Path:**
+1. Define interfaces (Task 1)
+2. Create hook (Tasks 2-7)
+3. Create skill-rules.json (Task 10)
+4. Testing (Tasks 16-19)
+
+**Completion Criteria:**
+- [ ] All 20 tasks completed
+- [ ] OpenSpec validation passes
+- [ ] Manual testing successful
+- [ ] Documentation complete
+- [ ] Ready for use in claude-tools plugin
