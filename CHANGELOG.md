@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Skill Auto-Activation System** - Skills now automatically activate based on user prompts (inspired by diet103's battle-tested setup)
+  - UserPromptSubmit hook with keyword/pattern matching
+  - TypeScript interfaces (PluginSkillRules, ProjectSkillRules, SkillConfig)
+  - Rule discovery and merging (plugin + project overrides)
+  - Priority-based matching (critical > high > medium > low)
+  - Performance optimized (<50ms execution)
+  - `/configure-activation` command - Generate project overrides
+  - `/generate-skill-rules` command - Migrate YAML triggers to JSON
+  - Comprehensive documentation (SKILL_ACTIVATION_GUIDE.md)
+  - claude-tools v0.2.0 with activation rules for all meta-tools
+
 ### In Progress
 
 **Tier 1 Plugins** (see OpenSpec proposals in `openspec/changes/`):
