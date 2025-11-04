@@ -9,7 +9,7 @@
     "lint:fix": "eslint . --fix --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "lint:md": "markdownlint-cli2",
     "lint:md:fix": "markdownlint-cli2 --fix",
-    "prepare": "husky",
+    "prepare": "lefthook install",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
@@ -21,8 +21,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unicorn": "^62.0.0",
     "globals": "^16.5.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.6",
+    "lefthook": "^2.0.2",
     "markdownlint-cli2": "^0.18.1",
     "prettier": "^3.6.2",
     "prettier-plugin-packagejson": "^2.5.19",

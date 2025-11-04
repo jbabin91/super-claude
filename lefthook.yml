@@ -1,0 +1,18 @@
+# Lefthook configuration file
+#   Refer for explanation to following link:
+#   https://lefthook.dev/configuration/
+
+pre-commit:
+  parallel: true
+  jobs:
+    - run: bunx @jbabin91/tsc-files {staged_files}
+      glob: '*.{ts,tsx}'
+    - run: bunx eslint {staged_files} --fix
+      glob: '*.{js,ts,jsx,tsx}'
+      stage_fixed: true
+    - run: bunx markdownlint-cli2 {staged_files} --fix
+      glob: '*.md'
+      stage_fixed: true
+    - run: bunx prettier -uwl {staged_files}
+      glob: '*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,yml,yaml}'
+      stage_fixed: true
