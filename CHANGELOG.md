@@ -7,9 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Plugin Naming Cleanup** - Removed `-tools` suffix for cleaner, more natural names
+  - Renamed `claude-tools/` → `plugins/meta/` (meta-tools for creating skills, commands, agents, hooks, plugins)
+  - Renamed `frontend-tools/` → `plugins/design-system/` (Base UI, shadcn/ui, design tokens, accessibility)
+  - Renamed `testing-tools/` → `plugins/testing/`
+  - Renamed `typescript-tools/` → `plugins/typescript/`
+  - Renamed `git-tools/` → `plugins/git/`
+  - Renamed `devops-tools/` → `plugins/devops/`
+  - Updated `.claude-plugin/marketplace.json` to reflect new names
+  - Updated all documentation (README.md, CLAUDE.md) with correct plugin names and installation examples
+
+- **File Naming Conventions** - Removed redundant type suffixes
+  - Agent files no longer require `-agent` suffix (directory structure indicates type)
+  - Updated CLAUDE.md naming conventions to match
+
+### Removed
+
+- **Outdated Documentation** - Deleted old docs (git history preserved):
+  - `SESSION_SUMMARY.md` (outdated project setup from 2025-01-21)
+  - `docs/2025-10-22/cleanup-plan.md` (work completed)
+  - `docs/2025-10-22/cleanup-plan-revised.md` (work completed)
+  - `openspec/README.md` (redundant - content already in AGENTS.md and project.md)
+
+### Planned
+
+**Tier 1 Plugins** (see OpenSpec proposals in `openspec/changes/`):
+
+- **workflow** - Skill auto-activation, OpenSpec workflow, session management (high priority - split from meta)
+- **frontend** - App architecture, performance, build optimization
+- **tanstack** - TanStack Start, Router, Query, Form, Table integration
+- **api** - Hono and Elysia API development with OpenAPI + RPC
+- **database** - Drizzle ORM for PostgreSQL, SQLite, Turso
+- **auth** - better-auth integration with providers and sessions
+- **react** - React patterns, hooks, state management
+- **storybook** - Story generation and documentation
+
+## [0.4.0] - 2025-11-02
+
 ### Added
 
-- **Skill Auto-Activation System** - Skills now automatically activate based on user prompts (inspired by diet103's battle-tested setup)
+- **Skill Auto-Activation System** - Skills automatically activate based on user prompts
   - UserPromptSubmit hook with keyword/pattern matching
   - TypeScript interfaces (PluginSkillRules, ProjectSkillRules, SkillConfig)
   - Rule discovery and merging (plugin + project overrides)
@@ -18,29 +57,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `/configure-activation` command - Generate project overrides
   - `/generate-skill-rules` command - Migrate YAML triggers to JSON
   - Comprehensive documentation (SKILL_ACTIVATION_GUIDE.md)
-  - claude-tools v0.2.0 with activation rules for all meta-tools
+  - meta plugin v0.2.0 with activation rules for all meta-tools
 
-### In Progress
+- **OpenSpec Workflow Integration** - Spec-driven development commands
+  - `/openspec:proposal` - Create new change proposals
+  - `/openspec:work` - Start/resume work on changes
+  - `/openspec:status` - Check progress
+  - `/openspec:checkpoint` - Save progress to design.md
+  - `/openspec:apply` - Implement approved changes
+  - `/openspec:done` - Complete and archive changes
+  - `/openspec:archive` - Archive completed changes
+  - Session persistence with `active.json` tracking
+  - Comprehensive workflow guide (OPENSPEC_WORKFLOW_GUIDE.md)
 
-**Tier 1 Plugins** (see OpenSpec proposals in `openspec/changes/`):
-
-- **components-plugin** - Base UI components, design systems, WCAG AAA accessibility, Radix migration
-- **tanstack-plugin** - TanStack Start, Router, Query, Form, Table integration
-- **api-plugin** - Hono and Elysia API development with OpenAPI + RPC
-- **database-plugin** - Drizzle ORM for PostgreSQL, SQLite, Turso
-- **auth-plugin** - better-auth integration with providers and sessions
+- **Plugin Distribution Design** - Documented plugin marketplace architecture
+  - Plugin packaging and distribution patterns
+  - MCP server integration (e.g., shadcn for design-system)
+  - No dependency system - plugins are self-contained
+  - Domain bundle strategy for related functionality
 
 ## [0.3.0] - 2025-10-22
 
 ### Changed
-
-- **Plugin Structure** - Restructured from generic `-tools` suffix to specific plugin names
-  - Renamed `skill-tools` → `claude-tools` (meta-tools for creating Claude Code enhancements)
-  - Renamed `frontend-tools` → `components` (Base UI components and design systems)
-  - Renamed `testing-tools` → `testing` (runtime-agnostic testing)
-  - Renamed `typescript-tools` → `typescript`
-  - Renamed `git-tools` → `git`
-  - Renamed `devops-tools` → `devops`
 
 - **Tech Stack Focus** - Pivoted to TanStack Start, Base UI, Hono, Drizzle, better-auth
   - TanStack Start preferred over monorepos
@@ -57,20 +95,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **OpenSpec Proposals** - Cleaned up and created new plugin proposals
   - Deleted 9 outdated proposals (tsc-files, smart-commit, etc.)
-  - Created 5 Tier 1 plugin proposals (components, tanstack, api, database, auth)
+  - Created 5 Tier 1 plugin proposals (design-system, tanstack, api, database, auth)
   - All proposals validated with comprehensive specs and scenarios
 
 ### Added
 
-- **Plugin Categories** - 8 new plugins planned:
+- **Plugin Planning** - 8 new plugins documented in proposals:
   - `tanstack` - TanStack Start, Router, Query, Form, Table (Tier 1)
-  - `components` - Base UI components, design systems (Tier 1)
+  - `design-system` - Base UI components, shadcn/ui, design tokens (Tier 1)
   - `api` - Hono/Elysia API development (Tier 1)
   - `database` - Drizzle ORM (Tier 1)
   - `auth` - better-auth integration (Tier 1)
   - `react` - React patterns and hooks
   - `storybook` - Story generation
-  - `monorepo` - Turborepo/pnpm workspaces (lower priority)
+  - `workflow` - Skill activation, OpenSpec, session management
 
 - **Brainstorm Documentation** - `docs/2025-10-22/`
   - `brainstorm.md` - 18 skills, 4 agents, 7 commands, 8 hooks organized by tier
@@ -95,7 +133,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - add-refactor-imports-skill
   - add-smart-commit-skill
   - add-worktree-helper-skill
-  - add-component-generator (replaced with components-plugin)
+  - add-component-generator (replaced with design-system plugin)
 
 ## [0.2.0] - 2025-10-21
 

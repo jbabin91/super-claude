@@ -42,6 +42,5 @@ Add `plugins/components/` with three Tier 1 skills:
 
 **Related docs:**
 
-- `docs/2025-10-22/brainstorm.md` - Tier 1 priority
-- `docs/2025-10-22/decisions.md` - Component file structure standards
+- `supporting/rationale.md` - Tier 1 priority, skill details, design philosophy
 - `README.md` - Installation examples

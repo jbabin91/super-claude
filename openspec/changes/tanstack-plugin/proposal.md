@@ -56,5 +56,4 @@ Add `plugins/tanstack/` with five Tier 1 skills:
 
 **Related docs:**
 
-- `docs/2025-10-22/brainstorm.md` - Tier 1 priority
-- `docs/2025-10-22/decisions.md` - TanStack Start preferred over monorepos
+- `supporting/rationale.md` - Tier 1 priority, skill details, integration patterns

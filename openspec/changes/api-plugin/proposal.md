@@ -44,5 +44,7 @@ Add `plugins/api/` with three Tier 1 skills:
 
 **Related docs:**
 
+- `supporting/rationale.md` - Tier 1 priority, skill details, integration patterns
+
 - `docs/2025-10-22/brainstorm.md` - Tier 1 priority (Hono), Tier 4 (Elysia)
 - `docs/2025-10-22/decisions.md` - Hono first, Elysia exploration

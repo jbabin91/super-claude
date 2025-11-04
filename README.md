@@ -24,135 +24,111 @@ A comprehensive collection of Claude Code plugins for TanStack Start, Base UI, H
 
 ### Choose Your Stack
 
-#### TanStack Start Fullstack App
+#### Component Library Author
 
 ```bash
-/plugin install skill-tools       # Meta-tools for creating skills
-/plugin install tanstack-tools    # TanStack Start, Router, Query, Form, Table
-/plugin install api-tools         # Hono, Drizzle, better-auth
+/plugin install design-system   # Base UI, shadcn/ui, design tokens, WCAG AAA
+/plugin install testing         # Vitest, Playwright, E2E testing
 ```
 
-#### Component Library
+#### Frontend App Developer
 
 ```bash
-/plugin install skill-tools       # Meta-tools
-/plugin install frontend-tools    # Base UI components, design system, Tailwind
-/plugin install testing-tools     # Storybook + Vitest component testing
+/plugin install design-system   # UI component libraries (optional)
+# Additional plugins coming soon: frontend, tanstack
 ```
 
-#### Backend API
+#### Plugin Creator / Power User
 
 ```bash
-/plugin install skill-tools       # Meta-tools
-/plugin install api-tools         # Hono, Drizzle, better-auth, Zod/ArkType
-/plugin install typescript-tools  # Type safety and validation
+/plugin install meta           # Create custom skills, commands, agents
+/plugin install design-system  # Your domain work
 ```
+
+> **Note:** TanStack, API, Database, and Auth plugins are planned but not yet implemented. See Available Plugins below for current status.
 
 ## 📦 Available Plugins
 
-### Core
+### ✅ Ready to Use
 
-#### skill-tools (Meta-Tools) ✅
+#### meta
 
-Create and manage Claude Code enhancements:
+**Create custom skills, commands, agents, hooks, and plugins**
 
-- **skill-creator** - Generate new skills with proper structure and validation
-- **command-creator** - Create custom slash commands
-- **hook-creator** - Build event-driven hooks for automation
-- **agent-creator** - Create specialized autonomous agents
-- **plugin-creator** - Generate complete plugin packages
-- **skill-validator** - Validate skills against Anthropic specifications
+For plugin creators and power users extending Claude Code with custom capabilities.
 
-### Feature Plugins
+**Features:**
 
-#### tanstack-tools 🆕
+- skill-creator - Generate new skills with proper structure
+- command-creator - Create custom slash commands
+- agent-creator - Build specialized autonomous agents
+- hook-creator - Event-driven automation
+- plugin-creator - Generate complete plugin packages
+- skill-validator - Validate against Anthropic specs
 
-TanStack ecosystem integration (Start, Router, Query, Form, Table):
+**Install:** `/plugin install meta`
 
-- **tanstack-start-wizard** - Fullstack app setup with TanStack Start
-- **tanstack-query-helper** - Server state management patterns
-- **tanstack-form-helper** - Forms with Zod validation
-- **tanstack-router-helper** - File-based routing and loaders
-- **tanstack-table-helper** - Data tables with filtering and sorting
+#### design-system
 
-**Status:** 🚧 In Development
+**Component libraries with Base UI, shadcn/ui, and design tokens**
 
-#### api-tools 🆕
+Build professional component libraries with accessibility, theming, and documentation.
 
-Backend API development (Hono, Drizzle, better-auth):
+**Features:**
 
-- **hono-api-builder** - API endpoints with OpenAPI + RPC
-- **drizzle-maestro** - Database schema, migrations, queries
-- **better-auth-integrator** - Authentication providers setup
-- **schema-validator** - Zod/ArkType schema management
+- Base UI component generation
+- shadcn/ui MCP integration
+- Design tokens and theming
+- WCAG AAA accessibility validation
+- Storybook integration
+- Radix UI migration support
 
-**Status:** 🚧 In Development
+**Install:** `/plugin install design-system`
 
-#### frontend-tools
+### 🚧 In Development (Scaffolding Only)
 
-React/UI development with Base UI focus:
+#### testing
 
-- **component-generator** - Base UI components with Storybook + Vitest
-- **design-system-orchestrator** - Theming, design tokens, WCAG AAA validation
-- **radix-to-baseui-migrator** - Migration helper for existing Radix UI code
-- **tailwind-helper** - Utility class optimization
+Unit, integration, and E2E testing with Vitest and Playwright.
 
-**Status:** 🚧 In Development
+#### typescript
 
-#### testing-tools
+TypeScript type checking, refactoring, and import management.
 
-Testing automation (Storybook-based component tests):
+#### git
 
-- **vitest-component-tester** - Component tests in .stories.tsx files
-- **storybook-automator** - Story generation with embedded tests
-- **playwright-e2e-generator** - End-to-end testing workflows
+Git workflow automation with smart commits, gitmoji, PR descriptions.
 
-**Status:** 🚧 In Development
+#### devops
 
-#### devops-tools
+CI/CD pipelines, GitHub Actions, Docker, and deployment automation.
 
-DevOps and deployment automation:
+### 📋 Planned
 
-- **turborepo-architect** - Monorepo setup and optimization
-- **pnpm-workspace-manager** - Workspace management
-- **quality-enforcer** - Git hooks, linting, formatting
+The following plugins are planned but not yet started:
 
-**Status:** 🚧 Planned
-
-#### git-tools
-
-Git workflow automation:
-
-- **smart-commit** - Conventional commits with gitmoji
-- **pr-description** - Auto-generate PR descriptions
-- **changelog-generator** - Semantic versioning changelogs
-
-**Status:** 🚧 Planned
-
-#### typescript-tools
-
-TypeScript development tools:
-
-- **type-safety-enforcer** - API ↔ frontend type contracts
-- **refactor-imports** - Import organization and cleanup
-
-**Status:** 🚧 Planned
+- **workflow** - Skill auto-activation, OpenSpec, session management (high priority)
+- **frontend** - App architecture, performance, build optimization
+- **tanstack** - TanStack Start, Router, Query, Form, Table
+- **api** - Hono and Elysia API development
+- **database** - Drizzle ORM for PostgreSQL, SQLite, Turso
+- **auth** - better-auth integration
+- **react** - React patterns, hooks, state management
+- **storybook** - Story generation and documentation
 
 ## 🏗️ Project Structure
 
 ```sh
 super-claude/
-├── plugins/               # Plugin packages
-│   ├── skill-tools/      # Meta-tools (ready)
-│   ├── tanstack-tools/   # TanStack ecosystem (in dev)
-│   ├── api-tools/        # Backend development (in dev)
-│   ├── frontend-tools/   # React/UI (in dev)
-│   ├── testing-tools/    # Testing automation (in dev)
-│   ├── devops-tools/     # DevOps (planned)
-│   ├── git-tools/        # Git workflows (planned)
-│   └── typescript-tools/ # TypeScript (planned)
-├── .claude-plugin/       # Marketplace configuration
-└── docs/                 # Brainstorm sessions and decisions
+├── plugins/            # Plugin packages
+│   ├── meta/          # Meta-tools (ready)
+│   ├── design-system/ # Component libraries (ready)
+│   ├── testing/       # Testing automation (in dev)
+│   ├── typescript/    # TypeScript tools (in dev)
+│   ├── git/           # Git workflows (in dev)
+│   └── devops/        # DevOps (in dev)
+├── .claude-plugin/    # Marketplace configuration
+└── docs/              # Brainstorm sessions and decisions
 ```
 
 ## 💡 Tech Stack Focus
@@ -188,11 +164,11 @@ This plugin collection is optimized for:
 
 ## 🎯 Creating Skills
 
-Use the skill-creator from skill-tools plugin:
+Use the skill-creator from meta plugin:
 
 ```bash
-# Install skill-tools
-/plugin install skill-tools
+# Install meta (for plugin creators)
+/plugin install meta
 
 # In Claude Code, ask:
 "Create a skill for [purpose]"

@@ -12,6 +12,29 @@
 - Provide reusable patterns for the TypeScript/React/Node ecosystem
 - Create a community-driven skill marketplace
 
+## Architecture Decisions
+
+Strategic architectural decisions for this project are documented as Architecture Decision Records (ADRs).
+
+**Location:** `docs/architecture/decisions/`
+
+**Browse decisions:**
+
+- [docs/architecture/INDEX.md](../docs/architecture/INDEX.md) - Categorical and chronological index
+- [docs/architecture/README.md](../docs/architecture/README.md) - ADR usage guide
+
+**Workflow:** When making project-wide technology or architecture choices, create an ADR first before creating OpenSpec proposals. See [openspec/AGENTS.md](AGENTS.md) for the ADR vs OpenSpec decision tree.
+
+**Key Decisions:**
+
+- **Component Library:** Base UI (see [ADR-0001](../docs/architecture/decisions/ADR-0001-adopt-base-ui.md))
+- **Primary Database:** PostgreSQL (see [ADR-0002](../docs/architecture/decisions/ADR-0002-use-postgresql-primary-db.md))
+- **Fullstack Framework:** TanStack Start (see [ADR-0003](../docs/architecture/decisions/ADR-0003-tanstack-start-over-nextjs.md))
+- **Accessibility Standard:** WCAG AAA (see [ADR-0004](../docs/architecture/decisions/ADR-0004-wcag-aaa-accessibility-standard.md))
+- **Code Organization:** No Barrel Exports (see [ADR-0005](../docs/architecture/decisions/ADR-0005-no-barrel-exports.md))
+- **Skill Documentation:** Progressive Disclosure (see [ADR-0006](../docs/architecture/decisions/ADR-0006-progressive-disclosure-pattern.md))
+- **Skill Invocation:** Auto-Activation System (see [ADR-0007](../docs/architecture/decisions/ADR-0007-skill-auto-activation.md))
+
 ## Tech Stack
 
 - **Languages:** TypeScript, JavaScript, Markdown
@@ -30,9 +53,9 @@
 
 #### Plugins
 
-- **Format:** `{category}` or `{category}-{purpose}` (no `-tools` suffix except for claude-tools)
-- **Examples:** `tanstack`, `api`, `database`, `auth`, `components`, `testing`, `git`, `typescript`
-- **Special case:** `claude-tools` (meta-tools for creating other enhancements)
+- **Format:** `{category}` or `{category}-{purpose}` (no `-tools` suffix)
+- **Examples:** `tanstack`, `api`, `database`, `auth`, `design-system`, `testing`, `git`, `typescript`
+- **Special case:** `meta` (meta-tools for creating skills, commands, agents, hooks, plugins)
 - **Rationale:** Simple, descriptive names without redundant suffixes
 
 #### Skills
@@ -48,13 +71,13 @@
 
 #### Agents
 
-- **Format:** `{name}-agent.md` (WITH `-agent` suffix)
-- **Location:** `plugins/{plugin}/agents/{name}-agent.md`
+- **Format:** Descriptive kebab-case name (NO `-agent` suffix)
+- **Location:** `plugins/{plugin}/agents/{name}.md`
 - **Examples:**
-  - `hono-agent.md`
-  - `api-agent.md`
-  - `component-agent.md`
-- **Rationale:** `-agent` suffix helps distinguish from skills with similar names
+  - `hono.md` (not `hono-agent.md`)
+  - `api.md` (not `api-agent.md`)
+  - `component.md` (not `component-agent.md`)
+- **Rationale:** The `agents/` directory already indicates the type
 
 #### Commands
 
@@ -92,12 +115,12 @@
 ```sh
 .claude-plugin/marketplace.json  # Marketplace registry
 plugins/
-├── skill-tools/                 # Meta-tools for creating skills
-├── typescript-tools/            # TypeScript development
-├── testing-tools/               # Testing automation
-├── git-tools/                   # Git workflows
-├── frontend-tools/              # React/Frontend tools
-└── devops-tools/                # DevOps automation
+├── meta/                        # Meta-tools for creating skills, commands, agents
+├── design-system/               # Component libraries (Base UI, shadcn/ui)
+├── testing/                     # Testing automation
+├── typescript/                  # TypeScript development
+├── git/                         # Git workflows
+└── devops/                      # DevOps automation
 ```
 
 **Key Patterns:**

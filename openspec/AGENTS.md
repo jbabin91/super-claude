@@ -100,6 +100,7 @@ After deployment, create separate PR to:
 - [ ] Read relevant specs in `specs/[capability]/spec.md`
 - [ ] Check pending changes in `changes/` for conflicts
 - [ ] Read `openspec/project.md` for conventions
+- [ ] **Check `docs/architecture/INDEX.md` for relevant ADRs** (strategic decisions)
 - [ ] Run `openspec list` to see active changes
 - [ ] Run `openspec list --specs` to see existing capabilities
 
@@ -175,17 +176,43 @@ openspec/
 
 ## Creating Change Proposals
 
-### Decision Tree
+### ADR vs OpenSpec Decision Tree
+
+**Strategic Decision (affects project direction):**
+
+```txt
+Is this a project-wide architectural or technology choice?
+├─ Choosing tech stack (Base UI vs Radix)? → Write ADR
+├─ Establishing standards (WCAG AAA vs AA)? → Write ADR
+├─ Setting conventions (no barrel exports)? → Write ADR
+├─ Architecture patterns (progressive disclosure)? → Write ADR
+└─ Will be referenced by multiple future changes? → Write ADR
+```
+
+**Location:** `docs/architecture/decisions/ADR-NNNN-title.md`
+
+See [docs/architecture/README.md](../docs/architecture/README.md) for ADR workflow.
+
+**Implementation Change (building features):**
 
 ```txt
 New request?
 ├─ Bug fix restoring spec behavior? → Fix directly
 ├─ Typo/format/comment? → Fix directly
-├─ New feature/capability? → Create proposal
-├─ Breaking change? → Create proposal
-├─ Architecture change? → Create proposal
-└─ Unclear? → Create proposal (safer)
+├─ New feature/capability? → Create OpenSpec proposal
+├─ Breaking change? → Create OpenSpec proposal
+├─ Architecture change? → Create OpenSpec proposal
+└─ Unclear? → Create OpenSpec proposal (safer)
 ```
+
+**Location:** `openspec/changes/[change-id]/`
+
+**Workflow:**
+
+1. Check if strategic decision exists in `docs/architecture/INDEX.md`
+2. If not, create ADR first (if needed for project-wide decision)
+3. Create OpenSpec proposal (references ADRs in proposal.md)
+4. Add design.md if implementation needs technical decisions documented
 
 ### Proposal Structure
 
@@ -205,8 +232,17 @@ New request?
 
 ## Impact
 
-- Affected specs: [list capabilities]
-- Affected code: [key files/systems]
+**Affected specs:**
+
+- [List capabilities]
+
+**Affected code:**
+
+- [Key files/systems]
+
+**Related ADRs:**
+
+- [ADR-NNNN: Title](../../docs/architecture/decisions/ADR-NNNN-title.md) - Brief why this ADR is relevant
 ```
 
 3. **Create spec deltas:** `specs/[capability]/spec.md`

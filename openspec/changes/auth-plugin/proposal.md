@@ -31,5 +31,7 @@ Add `plugins/auth/` with one Tier 1 skill:
 
 **Related docs:**
 
+- `supporting/rationale.md` - Tier 1 priority, skill details, integration patterns
+
 - `docs/2025-10-22/brainstorm.md` - Tier 1 priority
 - `docs/2025-10-22/decisions.md` - better-auth focus
