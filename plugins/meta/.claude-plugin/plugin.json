@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/jbabin91/super-claude/main/.claude-plugin/plugin.schema.json",
-  "name": "skill-tools",
-  "version": "0.2.0",
-  "description": "Meta-tools for creating, validating, and managing Claude Code skills. Build custom skills with intelligent auto-activation that suggests relevant skills based on user prompts.",
+  "name": "meta",
+  "version": "0.3.0",
+  "description": "Meta-tools for creating and managing Claude Code components. Generate skills, commands, agents, hooks, and plugins with proper structure and validation.",
   "author": {
     "name": "Jace Babin",
     "email": "jbabin91@gmail.com",
@@ -15,8 +15,9 @@
     "generator",
     "validation",
     "claude-code",
-    "automation",
-    "auto-activation",
-    "hooks"
+    "commands",
+    "agents",
+    "hooks",
+    "plugins"
   ]
 }

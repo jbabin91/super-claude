@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jbabin91/super-claude/main/.claude-plugin/plugin.schema.json",
+  "name": "workflow",
+  "version": "0.1.0",
+  "description": "Development workflow enhancements including OpenSpec proposal management and skill auto-activation system. Streamline spec-driven development with commands for creating, working on, and archiving OpenSpec changes.",
+  "author": {
+    "name": "Jace Babin",
+    "email": "jbabin91@gmail.com",
+    "url": "https://github.com/jbabin91"
+  },
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "openspec",
+    "automation",
+    "auto-activation",
+    "hooks",
+    "development",
+    "claude-code"
+  ]
+}
