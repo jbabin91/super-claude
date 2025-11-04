@@ -297,20 +297,24 @@ See individual OpenSpec proposals in `openspec/changes/` for complete feature br
 
 ### Testing Principles
 
+**Philosophy:** Testing first, but Storybook IS test infrastructure for components.
+
 **Component Testing:**
 
-- Tests in `.stories.tsx` files (not separate test files)
-- Storybook stories include Vitest tests
-- WCAG AAA accessibility validation
+- **Stories-based testing** - Tests live in `.stories.tsx` files (not separate test files)
+- **Storybook + Vitest integration** - Stories include embedded Vitest tests
+- **WCAG AAA accessibility validation** - Automated accessibility checks in stories
+- **Visual + functional testing** - Stories serve dual purpose (documentation + tests)
 
 **Domain Logic Testing:**
 
-- Separate `.test.ts` files for functions/utilities
-- Unit → Integration → E2E priority order
+- **Separate test files** - Functions/utilities get `.test.ts` files
+- **Priority order** - Unit → Integration → E2E
+- **Pure functions preferred** - Easier to test, better reliability
 
-### Code Organization
+**File Structure Examples:**
 
-**Component Structure:**
+**UI Components (use stories):**
 
 ```txt
 src/components/ui/button/
@@ -318,6 +322,32 @@ src/components/ui/button/
 ├── button.stories.tsx      # Storybook + Vitest tests combined
 └── index.ts                # Explicit exports only
 ```
+
+**Utility Functions (use separate tests):**
+
+```txt
+src/utils/formatters/
+├── currency.ts             # Function implementation
+└── currency.test.ts        # Vitest unit tests
+```
+
+**File Generation Rules:**
+
+| Type             | Files to Generate                    | Testing Approach                              |
+| ---------------- | ------------------------------------ | --------------------------------------------- |
+| UI Component     | `.tsx` + `.stories.tsx` + `index.ts` | Stories with embedded Vitest tests            |
+| Function/Utility | `.ts` + `.test.ts`                   | Separate Vitest test file                     |
+| Hook             | `.ts` + `.test.ts`                   | Separate test file with React Testing Library |
+| API Endpoint     | `.ts` + `.test.ts`                   | Separate integration test file                |
+
+**Rationale:**
+
+- **Component library projects** benefit from Storybook as living documentation + test infrastructure
+- **Stories as tests** reduces duplication and ensures visual examples stay tested
+- **Separate test files** for domain logic keeps business logic tests focused
+- **No barrel exports** (use explicit exports in `index.ts`) for better tree-shaking
+
+### Code Organization
 
 **Explicit Exports (No Barrel Exports):**
 

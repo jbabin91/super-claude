@@ -45,6 +45,44 @@ Strategic architectural decisions for this project are documented as Architectur
 - **CI/CD:** GitHub Actions
 - **Container:** Docker Compose
 
+## Technology Strategy
+
+### Backend Framework Strategy
+
+**Primary:** Hono
+**Exploration:** Elysia
+
+**Rationale:**
+
+- More experience with Hono in production
+- Node.js compatibility (Elysia requires Bun runtime)
+- Mature ecosystem and broader deployment options
+- Elysia on exploration roadmap for Bun-native projects
+- Similar patterns enable future Elysia skills when needed
+
+**Action:** Build `hono-api-builder` first (Tier 1), consider Elysia for future iterations
+
+### Monorepo vs Single App
+
+**Default:** TanStack Start (single fullstack app)
+**Fallback:** Monorepo for managing multiple related packages
+
+**Rationale:**
+
+- TanStack Start handles most fullstack use cases in a single app
+- Reduces complexity compared to monorepo setups (Turborepo, pnpm workspaces)
+- Simpler deployment and development workflow
+- Goal: Reduce number of repos to manage, not create more complexity
+- Monorepo tools available when genuinely needed (multi-package libraries, shared components across apps)
+
+**Priority Impact:**
+
+- `tanstack-start-wizard` → Higher priority (Tier 1)
+- `turborepo-architect` → Lower priority (Tier 3)
+- `pnpm-workspace-manager` → Lower priority (Tier 3)
+
+**Rationale Reference:** See [ADR-0003: TanStack Start Over Next.js](../docs/architecture/decisions/ADR-0003-tanstack-start-over-nextjs.md) for related fullstack framework decision.
+
 ## Project Conventions
 
 ### Naming Conventions
