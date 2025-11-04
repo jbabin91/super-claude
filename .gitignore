@@ -10,6 +10,10 @@ configs/projects/*.json
 
 # Local Claude Code settings
 .claude/settings.local.json
+.claude/node_modules/
+
+# OpenSpec workflow state (personal, not shared)
+openspec/active.json
 
 # Script logs and temp files
 *.log

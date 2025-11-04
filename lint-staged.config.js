@@ -4,9 +4,9 @@
  */
 export default {
   // Lint markdown files first
-  '**/*.{md,mdx}': ['pnpm run lint:fix'],
+  '**/*.{md,mdx}': ['bun run lint:fix'],
 
   // Format files
   '*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,yml,yaml}': (files) =>
-    `pnpm prettier -uwl --cache ${files.join(' ')}`,
+    `bun prettier -uwl --cache ${files.join(' ')}`,
 };

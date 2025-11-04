@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Personal state in parent
+../openspec/active.json
+
+# Temp files
+*.log
+.DS_Store
+
+# Cache files
+.cache/
+*.cache
