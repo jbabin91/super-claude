@@ -22,7 +22,9 @@ node_modules/
 .claude-cache/
 
 # Editor
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo

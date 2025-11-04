@@ -1,0 +1,39 @@
+{
+  // GitHub Copilot commit message generation
+  // References commit conventions from docs/workflows/git/commit-conventions.md
+  // (nested AGENTS.md still available for other AI tools via auto-discovery)
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": "docs/workflows/git/commit-conventions.md"
+    }
+  ],
+
+  // Markdown linting
+  "markdownlint.config": {
+    "extends": ".markdownlint-cli2.mjs"
+  },
+
+  // Editor settings for markdown
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "strings": "on",
+      "other": "on"
+    }
+  },
+
+  // Auto-fix on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.markdownlint": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // ESLint settings
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
+}
