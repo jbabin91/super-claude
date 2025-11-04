@@ -87,7 +87,7 @@ Creates `.claude/skills/skill-rules.json` in your project with a template for cu
 User: /configure-activation
 Assistant: [Creates .claude/skills/skill-rules.json with clean template]
           [Shows success message with next steps]
-```txt
+```
 
 **Scenario 2: File already exists**
 
@@ -96,7 +96,7 @@ User: /configure-activation
 Assistant: File already exists at .claude/skills/skill-rules.json. Overwrite? (y/n)
 User: n
 Assistant: Configuration cancelled. Your existing file was not modified.
-```txt
+```
 
 **Scenario 3: Overwrite existing**
 
@@ -106,7 +106,7 @@ Assistant: File already exists at .claude/skills/skill-rules.json. Overwrite? (y
 User: y
 Assistant: [Overwrites file with clean template]
           [Shows success message]
-```txt
+```
 
 ## Notes
 

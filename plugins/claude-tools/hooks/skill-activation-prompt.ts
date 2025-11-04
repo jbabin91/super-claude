@@ -15,15 +15,16 @@
  * Performance Target: <50ms for typical projects (<10 plugins)
  */
 
-import { readFileSync, readdirSync, existsSync } from 'fs';
-import { join, resolve } from 'path';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+
 import type {
   HookInput,
+  MatchedSkill,
   PluginSkillRules,
+  Priority,
   ProjectSkillRules,
   SkillConfig,
-  MatchedSkill,
-  Priority,
 } from '../types/skill-rules.d.ts';
 
 /**
@@ -86,7 +87,7 @@ async function parseStdin(): Promise<HookInput> {
  * @returns Array of validated PluginSkillRules
  */
 function discoverPluginRules(cwd: string): PluginSkillRules[] {
-  const skillsDir = resolve(cwd, '.claude/skills');
+  const skillsDir = path.resolve(cwd, '.claude/skills');
   const pluginRules: PluginSkillRules[] = [];
 
   if (!existsSync(skillsDir)) {
@@ -99,12 +100,12 @@ function discoverPluginRules(cwd: string): PluginSkillRules[] {
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
 
-      const rulesPath = join(skillsDir, entry.name, 'skill-rules.json');
+      const rulesPath = path.join(skillsDir, entry.name, 'skill-rules.json');
 
       if (!existsSync(rulesPath)) continue;
 
       try {
-        const content = readFileSync(rulesPath, 'utf-8');
+        const content = readFileSync(rulesPath, 'utf8');
         const rules = JSON.parse(content) as PluginSkillRules;
 
         // Validate required fields
@@ -143,14 +144,14 @@ function discoverPluginRules(cwd: string): PluginSkillRules[] {
  * @returns ProjectSkillRules or null if not found/invalid
  */
 function loadProjectOverrides(cwd: string): ProjectSkillRules | null {
-  const overridesPath = resolve(cwd, '.claude/skills/skill-rules.json');
+  const overridesPath = path.resolve(cwd, '.claude/skills/skill-rules.json');
 
   if (!existsSync(overridesPath)) {
     return null;
   }
 
   try {
-    const content = readFileSync(overridesPath, 'utf-8');
+    const content = readFileSync(overridesPath, 'utf8');
     const overrides = JSON.parse(content) as ProjectSkillRules;
 
     // Validate schema
@@ -401,51 +402,55 @@ function formatOutput(matches: MatchedSkill[]): string {
     byPriority[match.config.priority].push(match);
   }
 
-  const lines: string[] = [];
+  // Build sections conditionally
+  const criticalSection =
+    byPriority.critical.length > 0
+      ? [
+          '[CRITICAL] REQUIRED SKILLS:',
+          ...byPriority.critical.map((match) => '  -> ' + match.name),
+          '',
+        ]
+      : [];
 
-  lines.push('='.repeat(60));
-  lines.push('SKILL ACTIVATION CHECK');
-  lines.push('='.repeat(60));
-  lines.push('');
+  const highSection =
+    byPriority.high.length > 0
+      ? [
+          '[RECOMMENDED] SKILLS:',
+          ...byPriority.high.map((match) => '  -> ' + match.name),
+          '',
+        ]
+      : [];
 
-  // Critical skills (required)
-  if (byPriority.critical.length > 0) {
-    lines.push('[CRITICAL] REQUIRED SKILLS:');
-    for (const match of byPriority.critical) {
-      lines.push('  -> ' + match.name);
-    }
-    lines.push('');
-  }
+  const mediumSection =
+    byPriority.medium.length > 0
+      ? [
+          '[OPTIONAL] SKILLS:',
+          ...byPriority.medium.map((match) => '  -> ' + match.name),
+          '',
+        ]
+      : [];
 
-  // High priority (recommended)
-  if (byPriority.high.length > 0) {
-    lines.push('[RECOMMENDED] SKILLS:');
-    for (const match of byPriority.high) {
-      lines.push('  -> ' + match.name);
-    }
-    lines.push('');
-  }
+  const lowSection =
+    byPriority.low.length > 0
+      ? [
+          '[SUGGESTED] SKILLS:',
+          ...byPriority.low.map((match) => '  -> ' + match.name),
+          '',
+        ]
+      : [];
 
-  // Medium priority (optional)
-  if (byPriority.medium.length > 0) {
-    lines.push('[OPTIONAL] SKILLS:');
-    for (const match of byPriority.medium) {
-      lines.push('  -> ' + match.name);
-    }
-    lines.push('');
-  }
-
-  // Low priority (suggested)
-  if (byPriority.low.length > 0) {
-    lines.push('[SUGGESTED] SKILLS:');
-    for (const match of byPriority.low) {
-      lines.push('  -> ' + match.name);
-    }
-    lines.push('');
-  }
-
-  lines.push('ACTION: Use Skill tool BEFORE responding');
-  lines.push('='.repeat(60));
+  const lines = [
+    '='.repeat(60),
+    'SKILL ACTIVATION CHECK',
+    '='.repeat(60),
+    '',
+    ...criticalSection,
+    ...highSection,
+    ...mediumSection,
+    ...lowSection,
+    'ACTION: Use Skill tool BEFORE responding',
+    '='.repeat(60),
+  ];
 
   return lines.join('\n');
 }
@@ -510,4 +515,4 @@ async function main(): Promise<void> {
 }
 
 // Execute
-main();
+await main();
