@@ -18,7 +18,7 @@
       "name": "meta",
       "source": "./plugins/meta",
       "description": "Create custom skills, commands, agents, hooks, and plugins. For plugin creators and power users extending Claude Code.",
-      "version": "0.1.0",
+      "version": "0.3.0",
       "category": "meta",
       "keywords": [
         "meta",
@@ -26,6 +26,21 @@
         "generator",
         "validation",
         "customization"
+      ]
+    },
+    {
+      "name": "workflow",
+      "source": "./plugins/workflow",
+      "description": "Development workflow enhancements including OpenSpec proposal management and skill auto-activation system.",
+      "version": "0.1.0",
+      "category": "workflow",
+      "keywords": [
+        "workflow",
+        "openspec",
+        "automation",
+        "auto-activation",
+        "hooks",
+        "development"
       ]
     },
     {
