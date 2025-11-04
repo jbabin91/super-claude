@@ -30,5 +30,8 @@ node_modules/
 *.swo
 *~
 
+# Git hooks (lefthook uses .git/hooks directly)
+.husky
+
 # OS
 Thumbs.db
