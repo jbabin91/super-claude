@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/jbabin91/super-claude/main/.claude-plugin/plugin.schema.json",
   "name": "meta",
   "version": "0.3.0",
   "description": "Meta-tools for creating and managing Claude Code components. Generate skills, commands, agents, hooks, and plugins with proper structure and validation.",

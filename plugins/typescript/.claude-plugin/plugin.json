@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/jbabin91/super-claude/main/.claude-plugin/plugin.schema.json",
   "name": "typescript-tools",
   "version": "0.1.0",
   "description": "TypeScript development tools including type checking (tsc-files-validation), refactoring, import management, and test generation",

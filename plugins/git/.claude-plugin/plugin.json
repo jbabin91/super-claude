@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/jbabin91/super-claude/main/.claude-plugin/plugin.schema.json",
   "name": "git-tools",
   "version": "0.1.0",
   "description": "Git workflow automation including smart commits with gitmoji, PR descriptions, changelog generation, and worktree management",
