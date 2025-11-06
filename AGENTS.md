@@ -229,6 +229,33 @@ bun run lint     # Lint TypeScript/JavaScript
 - [Markdown Standards](docs/standards/markdown.md) - Formatting rules
 - [Architecture Decisions](docs/architecture/INDEX.md) - ADR catalog
 
+### Official Claude Code Documentation
+
+**Documentation Index:** <https://code.claude.com/docs/llms.txt> (multilingual)
+
+**Core Features:**
+
+- [Settings](https://code.claude.com/docs/en/settings.md) - Global and project-level configuration
+- [Interactive Mode](https://code.claude.com/docs/en/interactive-mode.md) - Keyboard shortcuts and interactive features
+- [Slash Commands](https://code.claude.com/docs/en/slash-commands.md) - Control Claude's behavior
+- [Memory](https://code.claude.com/docs/en/memory.md) - Manage memory across sessions
+- [Checkpointing](https://code.claude.com/docs/en/checkpointing.md) - Track and rewind edits
+
+**Extension System:**
+
+- [Plugins](https://code.claude.com/docs/en/plugins.md) - Plugin system overview
+- [Plugins Reference](https://code.claude.com/docs/en/plugins-reference.md) - Technical reference and schemas
+- [Plugin Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces.md) - Create and manage marketplaces
+- [Skills](https://code.claude.com/docs/en/skills.md) - Create and manage Skills
+- [Subagents](https://code.claude.com/docs/en/sub-agents.md) - Specialized AI subagents
+- [Hooks Guide](https://code.claude.com/docs/en/hooks-guide.md) - Get started with hooks
+- [Hooks Reference](https://code.claude.com/docs/en/hooks.md) - Hooks implementation reference
+
+**Integrations:**
+
+- [MCP (Model Context Protocol)](https://code.claude.com/docs/en/mcp.md) - Connect to tools via MCP
+- [Headless Mode](https://code.claude.com/docs/en/headless.md) - Run programmatically without UI
+
 ### Before Starting Work
 
 **ALWAYS read these first:**
