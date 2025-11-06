@@ -47,6 +47,32 @@ Using `--tools none` prevents OpenSpec CLI from creating duplicate basic command
 ## Implementation
 
 ```bash
+# Get current working directory first for cleaner checks
+PROJECT_DIR=$(pwd)
+
+# Check if already initialized - exit early with helpful message
+if [ -d "$PROJECT_DIR/openspec" ]; then
+  echo "✅ OpenSpec is already initialized in this project!"
+  echo ""
+  echo "📂 Current structure:"
+  echo "   openspec/"
+  echo "   ├── AGENTS.md"
+  echo "   ├── project.md"
+  echo "   ├── changes/"
+  echo "   └── specs/"
+  echo ""
+  echo "💡 Useful commands:"
+  echo "   /openspec-update      - Update instruction files to latest"
+  echo "   /openspec:proposal    - Create a new change proposal"
+  echo "   /openspec:status      - Check current proposal status"
+  echo ""
+  echo "🔧 To reinitialize (advanced):"
+  echo "   1. Remove openspec/ directory manually"
+  echo "   2. Run /openspec-init again"
+  echo ""
+  exit 0
+fi
+
 # Check if openspec is installed
 if ! command -v openspec &> /dev/null; then
   echo "Error: openspec CLI not found"
@@ -58,21 +84,6 @@ if ! command -v openspec &> /dev/null; then
   echo "  # or"
   echo "  yarn global add @jsdocs-io/openspec"
   exit 1
-fi
-
-# Get current working directory
-PROJECT_DIR=$(pwd)
-
-# Check if already initialized
-if [ -d "$PROJECT_DIR/openspec" ]; then
-  echo "Warning: openspec/ directory already exists in $PROJECT_DIR"
-  echo ""
-  read -p "Reinitialize? This will update instruction files. (y/N): " -n 1 -r
-  echo ""
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "Initialization cancelled"
-    exit 0
-  fi
 fi
 
 # Initialize OpenSpec without tool-specific commands
