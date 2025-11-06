@@ -1,0 +1,52 @@
+# Implementation Tasks
+
+## 1. Plugin Setup
+
+- [ ] 1.1 Verify `plugins/design-system/` directory exists
+- [ ] 1.2 Create `plugins/design-system/.claude-plugin/metadata.json`
+- [ ] 1.3 Create `plugins/design-system/skills/` directory structure
+- [ ] 1.4 Verify plugin in `.claude-plugin/marketplace.json` (already registered)
+
+## 2. Component Generator Skill
+
+- [ ] 2.1 Create `skills/component-generator/SKILL.md`
+- [ ] 2.2 Add YAML frontmatter with triggers
+- [ ] 2.3 Define component.tsx template
+- [ ] 2.4 Define component.stories.tsx template with Vitest tests
+- [ ] 2.5 Define index.ts template with explicit exports
+- [ ] 2.6 Add Base UI primitive detection logic
+- [ ] 2.7 Add WCAG AAA accessibility patterns
+- [ ] 2.8 Add package.json validation for @base-ui-components/react
+
+## 3. Design System Orchestrator Skill
+
+- [ ] 3.1 Create `skills/design-system-orchestrator/SKILL.md`
+- [ ] 3.2 Add Tailwind configuration helpers
+- [ ] 3.3 Add design token management patterns
+- [ ] 3.4 Add WCAG AAA color contrast validation
+- [ ] 3.5 Add ripple effect analysis for theme changes
+
+## 4. Radix to Base UI Migrator Skill
+
+- [ ] 4.1 Create `skills/radix-to-baseui-migrator/SKILL.md`
+- [ ] 4.2 Add Radix UI pattern detection
+- [ ] 4.3 Add Base UI alternative suggestions
+- [ ] 4.4 Add migration guides for common components
+- [ ] 4.5 Add side-by-side comparison examples
+
+## 5. Testing
+
+- [ ] 5.1 Test component-generator with button component
+- [ ] 5.2 Test component-generator with dialog component
+- [ ] 5.3 Verify explicit exports (no `export *`)
+- [ ] 5.4 Verify Vitest tests run successfully
+- [ ] 5.5 Verify Storybook stories render correctly
+- [ ] 5.6 Verify WCAG AAA compliance with axe-core
+- [ ] 5.7 Test design-system-orchestrator theme generation
+- [ ] 5.8 Test radix-to-baseui-migrator migration suggestions
+
+## 6. Documentation
+
+- [ ] 6.1 Update README.md with design-system plugin
+- [ ] 6.2 Add usage examples
+- [ ] 6.3 Add Base UI vs Radix UI guidance
