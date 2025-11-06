@@ -15,6 +15,9 @@ For guidance on when and how to write ADRs, see [README.md](README.md).
 - [ADR-0005: No Barrel Exports](decisions/ADR-0005-no-barrel-exports.md)
 - [ADR-0006: Progressive Disclosure](decisions/ADR-0006-progressive-disclosure-pattern.md)
 - [ADR-0007: Skill Auto-Activation](decisions/ADR-0007-skill-auto-activation.md)
+- [ADR-0008: No Auto-Formatting Hooks](decisions/ADR-0008-no-auto-formatting-hooks.md)
+- [ADR-0009: Token-Efficient Skill Design](decisions/ADR-0009-token-efficient-skill-design.md)
+- [ADR-0010: Hook Type Selection](decisions/ADR-0010-hook-type-selection.md)
 
 ### Deprecated
 
@@ -47,6 +50,9 @@ _None_
 
 - [ADR-0006: Progressive Disclosure Pattern](decisions/ADR-0006-progressive-disclosure-pattern.md) - SKILL.md + API_REFERENCE.md for token efficiency
 - [ADR-0007: Skill Auto-Activation System](decisions/ADR-0007-skill-auto-activation.md) - Automatic skill activation based on prompt analysis
+- [ADR-0008: No Auto-Formatting Hooks During Conversations](decisions/ADR-0008-no-auto-formatting-hooks.md) - Avoid file-modifying hooks to prevent 160k+ token waste
+- [ADR-0009: Token-Efficient Skill Design with Progressive Disclosure](decisions/ADR-0009-token-efficient-skill-design.md) - 500-line limit for SKILL.md, 40-60% token savings
+- [ADR-0010: Hook Type Selection (Command vs Prompt)](decisions/ADR-0010-hook-type-selection.md) - Decision matrix for choosing hook execution types
 
 ## By Date (Chronological)
 
@@ -58,6 +64,11 @@ _None_
   - [ADR-0005: No Barrel Exports](decisions/ADR-0005-no-barrel-exports.md)
   - [ADR-0006: Progressive Disclosure Pattern](decisions/ADR-0006-progressive-disclosure-pattern.md)
   - [ADR-0007: Skill Auto-Activation](decisions/ADR-0007-skill-auto-activation.md)
+
+- **2025-11-06** - Token optimization and hooks guidance based on production evidence:
+  - [ADR-0008: No Auto-Formatting Hooks](decisions/ADR-0008-no-auto-formatting-hooks.md)
+  - [ADR-0009: Token-Efficient Skill Design](decisions/ADR-0009-token-efficient-skill-design.md)
+  - [ADR-0010: Hook Type Selection](decisions/ADR-0010-hook-type-selection.md)
 
 ## Quick Links
 
