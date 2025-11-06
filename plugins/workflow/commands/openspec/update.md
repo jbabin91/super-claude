@@ -1,3 +1,10 @@
+---
+name: openspec:update
+description: Update OpenSpec instruction files to the latest version without affecting slash commands.
+category: openspec
+tags: [openspec, setup, update]
+---
+
 # OpenSpec Update Command
 
 Update OpenSpec instruction files to the latest version without affecting slash commands.

@@ -16,22 +16,24 @@ The workflow plugin provides development workflow enhancements for Claude Code, 
 
 ### Commands
 
-#### OpenSpec Setup
+#### OpenSpec Commands
 
-- `/openspec-init` - Initialize OpenSpec directory structure in your project (run once per project)
-- `/openspec-update` - Update OpenSpec instruction files to latest version (safe to run anytime)
-
-#### OpenSpec Workflow Commands
-
-Manage architectural changes and feature proposals with a structured workflow.
+All OpenSpec commands use the `/openspec:*` namespace for consistency.
 
 **Note:** These are **enhanced versions** of OpenSpec commands, maintained by this plugin for customization and workflow optimization. They follow OpenSpec patterns but include additional context and features tailored for Claude Code.
 
-- `/openspec:proposal` - Create new OpenSpec change proposal
+**Setup (run once per project):**
+
+- `/openspec:init` - Initialize OpenSpec directory structure
+- `/openspec:update` - Update instruction files to latest version
+
+**Workflow (daily development):**
+
+- `/openspec:proposal` - Create new change proposal
 - `/openspec:work` - Start working on a proposal with full context
 - `/openspec:apply` - Implement an approved proposal
-- `/openspec:status` - Check current proposal status and progress
 - `/openspec:checkpoint` - Save progress and context to design.md
+- `/openspec:status` - Check current proposal status and progress
 - `/openspec:done` - Complete and archive a proposal
 - `/openspec:archive` - Archive a deployed change and update specs
 
@@ -106,7 +108,7 @@ Runs automatically when Claude Code session starts.
 1. **Initialize OpenSpec:**
 
    ```bash
-   /openspec-init
+   /openspec:init
    ```
 
    This creates the `openspec/` directory structure with AGENTS.md, project.md, changes/, and specs/.

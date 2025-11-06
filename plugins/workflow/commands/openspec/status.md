@@ -1,7 +1,7 @@
 ---
-name: OpenSpec: Status
+name: openspec:status
 description: Show current OpenSpec change status and progress.
-category: OpenSpec
+category: openspec
 tags: [openspec, status, progress]
 ---
 

@@ -1,3 +1,10 @@
+---
+name: openspec:init
+description: Initialize OpenSpec directory structure in your project without duplicating slash commands.
+category: openspec
+tags: [openspec, setup, init]
+---
+
 # OpenSpec Init Command
 
 Initialize OpenSpec directory structure in your project without duplicating slash commands.
@@ -62,13 +69,13 @@ if [ -d "$PROJECT_DIR/openspec" ]; then
   echo "   └── specs/"
   echo ""
   echo "💡 Useful commands:"
-  echo "   /openspec-update      - Update instruction files to latest"
+  echo "   /openspec:update      - Update instruction files to latest"
   echo "   /openspec:proposal    - Create a new change proposal"
   echo "   /openspec:status      - Check current proposal status"
   echo ""
   echo "🔧 To reinitialize (advanced):"
   echo "   1. Remove openspec/ directory manually"
-  echo "   2. Run /openspec-init again"
+  echo "   2. Run /openspec:init again"
   echo ""
   exit 0
 fi

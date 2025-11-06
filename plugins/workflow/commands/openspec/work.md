@@ -1,7 +1,7 @@
 ---
-name: OpenSpec: Work
+name: openspec:work
 description: Start working on an OpenSpec change with full context loading.
-category: OpenSpec
+category: openspec
 tags: [openspec, work, context]
 ---
 

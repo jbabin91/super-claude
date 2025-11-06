@@ -1,7 +1,7 @@
 ---
-name: OpenSpec: Done
+name: openspec:done
 description: Complete and archive an OpenSpec change.
-category: OpenSpec
+category: openspec
 tags: [openspec, done, archive, complete]
 ---
 

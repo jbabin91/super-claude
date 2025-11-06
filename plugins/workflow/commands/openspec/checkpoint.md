@@ -1,7 +1,7 @@
 ---
-name: OpenSpec: Checkpoint
+name: openspec:checkpoint
 description: Save current progress and context to design.md.
-category: OpenSpec
+category: openspec
 tags: [openspec, checkpoint, save]
 ---
 

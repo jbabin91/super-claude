@@ -1,7 +1,7 @@
 ---
-name: OpenSpec: Proposal
+name: openspec:proposal
 description: Scaffold a new OpenSpec change and validate strictly.
-category: OpenSpec
+category: openspec
 tags: [openspec, change]
 ---
 
