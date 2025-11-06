@@ -16,9 +16,16 @@ The workflow plugin provides development workflow enhancements for Claude Code, 
 
 ### Commands
 
+#### OpenSpec Setup
+
+- `/openspec-init` - Initialize OpenSpec directory structure in your project (run once per project)
+- `/openspec-update` - Update OpenSpec instruction files to latest version (safe to run anytime)
+
 #### OpenSpec Workflow Commands
 
-Manage architectural changes and feature proposals with a structured workflow:
+Manage architectural changes and feature proposals with a structured workflow.
+
+**Note:** These are **enhanced versions** of OpenSpec commands, maintained by this plugin for customization and workflow optimization. They follow OpenSpec patterns but include additional context and features tailored for Claude Code.
 
 - `/openspec:proposal` - Create new OpenSpec change proposal
 - `/openspec:work` - Start working on a proposal with full context
@@ -86,12 +93,29 @@ Runs automatically when Claude Code session starts.
 ## Requirements
 
 - Claude Code CLI
+- OpenSpec CLI (`npm install -g @jsdocs-io/openspec`)
 - Bun (for hook execution)
 - Git (for OpenSpec workflow)
 
 ## OpenSpec Workflow
 
 ### Quick Start
+
+**First time setup:**
+
+1. **Initialize OpenSpec:**
+
+   ```bash
+   /openspec-init
+   ```
+
+   This creates the `openspec/` directory structure with AGENTS.md, project.md, changes/, and specs/.
+
+2. **Fill out project context:**
+
+   Ask Claude: "Please read openspec/project.md and help me fill it out with details about my project"
+
+**Working with proposals:**
 
 1. **Create a proposal:**
 
@@ -285,10 +309,16 @@ ls -la .claude/skills/workflow/
 
 ### OpenSpec Commands Not Working
 
-**Check commands are registered:**
+**Check OpenSpec is initialized:**
 
 ```bash
-ls -la .claude/commands/openspec/
+ls -la openspec/  # Should see AGENTS.md, project.md, changes/, specs/
+```
+
+**Verify OpenSpec CLI is installed:**
+
+```bash
+openspec --version
 ```
 
 **Verify Git repository:**
@@ -296,6 +326,8 @@ ls -la .claude/commands/openspec/
 ```bash
 git status  # OpenSpec requires Git
 ```
+
+**Note:** Commands come from the workflow plugin, not `.claude/commands/`. If commands don't show up, ensure the workflow plugin is installed: `/plugin list`
 
 ## Performance
 
