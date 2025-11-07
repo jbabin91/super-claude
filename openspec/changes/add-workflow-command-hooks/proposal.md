@@ -2,7 +2,7 @@
 
 ## Why
 
-Based on production evidence (ADR-0008, ADR-0010) and 6+ months of Claude Code usage, command hooks provide zero-token, fast (<50ms), offline automation for development workflows. Currently, super-claude has no production hooks despite having the infrastructure. Adding session-checklist, build-checker, and git-commit-guard hooks addresses immediate workflow needs while demonstrating hook patterns for future plugin creators.
+Based on production evidence (ADR-0008, ADR-0010) and 6+ months of Claude Code usage, command hooks provide zero-token, fast (<50ms), offline automation for development workflows. Currently, super-claude has no production hooks despite having the infrastructure. Adding session-checklist, type-checker, and git-commit-guard hooks addresses immediate workflow needs while demonstrating hook patterns for future plugin creators.
 
 **Production evidence:**
 
@@ -20,9 +20,9 @@ Add three production-ready command hooks to workflow plugin:
    - Fast context refresh at session start
    - Target: <100ms execution
 
-2. **build-checker** (PreToolUse: Edit/Write)
+2. **type-checker** (PreToolUse: Edit/Write)
    - Validate TypeScript types before file modifications
-   - Use @jbabin91/tsc-files for incremental checking
+   - Use @jbabin91/tsc-files for incremental type checking
    - Block on type errors with actionable messages
    - Target: <2s execution (only changed files)
 
@@ -55,7 +55,7 @@ Add three production-ready command hooks to workflow plugin:
 **Affected code:**
 
 - `plugins/workflow/hooks/session-checklist.ts` - SessionStart hook
-- `plugins/workflow/hooks/build-checker.ts` - PreToolUse hook
+- `plugins/workflow/hooks/type-checker.ts` - PreToolUse hook
 - `plugins/workflow/hooks/git-commit-guard.ts` - PreToolUse hook
 - `plugins/workflow/plugin.json` - Hook registrations
 - `docs/guides/command-hooks.md` - Hook development guide

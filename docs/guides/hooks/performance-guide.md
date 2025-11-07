@@ -519,11 +519,11 @@ await benchmark();
 ```sh
 # Test with realistic input
 printf '{"cwd":"%s","tool_name":"Edit","tool_input":{"file_path":"src/example.ts"}}' \
-  "$(pwd)" | time bun hooks/build-checker.ts
+  "$(pwd)" | time bun hooks/type-checker.ts
 
 # Test early exit path
 printf '{"cwd":"%s","tool_name":"Read"}' \
-  "$(pwd)" | time bun hooks/build-checker.ts
+  "$(pwd)" | time bun hooks/type-checker.ts
 
 # Test with large transcript
 printf '{"cwd":"%s","transcript_path":"/path/to/large/transcript.json"}' \

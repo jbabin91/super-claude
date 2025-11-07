@@ -27,10 +27,10 @@
       "path": "hooks/session-checklist.ts"
     },
     {
-      "name": "build-checker",
+      "name": "type-checker",
       "description": "Validate TypeScript types before Edit/Write operations",
       "event": "PreToolUse",
-      "path": "hooks/build-checker.ts"
+      "path": "hooks/type-checker.ts"
     },
     {
       "name": "git-commit-guard",

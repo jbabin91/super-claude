@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * Build Checker Hook
+ * Type Checker Hook
  *
  * Pre-validates TypeScript types before Edit/Write operations.
  * Uses @jbabin91/tsc-files for incremental type checking.
@@ -124,7 +124,7 @@ function formatTypeErrors(errors: string): string {
     '',
     'To disable this hook:',
     '  Add to .claude/settings.json:',
-    '  { "customHooks": { "buildChecker": { "enabled": false } } }',
+    '  { "customHooks": { "typeChecker": { "enabled": false } } }',
     '═'.repeat(70),
     '',
   ].join('\n');
@@ -142,7 +142,7 @@ async function main(): Promise<void> {
     const input = await parseStdin();
 
     // Check if hook is enabled
-    checkHookEnabled(input.cwd, 'buildChecker');
+    checkHookEnabled(input.cwd, 'typeChecker');
 
     // Only run for Edit and Write tools
     if (input.tool_name !== 'Edit' && input.tool_name !== 'Write') {
@@ -173,15 +173,15 @@ async function main(): Promise<void> {
     if (!result.valid) {
       // Type errors found - block operation
       console.error(formatTypeErrors(result.errors));
-      checkPerformance(startTime, 2000, 'build-checker');
+      checkPerformance(startTime, 2000, 'type-checker');
       process.exit(2); // Block tool execution
     }
 
     // Types are valid - allow operation
-    checkPerformance(startTime, 2000, 'build-checker');
+    checkPerformance(startTime, 2000, 'type-checker');
     process.exit(0);
   } catch (error) {
-    console.error(formatError(error, 'build-checker'));
+    console.error(formatError(error, 'type-checker'));
     // On hook error, don't block the operation
     process.exit(0);
   }

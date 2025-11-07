@@ -76,7 +76,7 @@ Triggered before tool execution. Receives tool name and input.
 - Block unsafe operations
 - Pre-check conditions (type errors, test failures)
 
-**Example:** `build-checker.ts` - Type checks before Edit/Write
+**Example:** `type-checker.ts` - Type checks before Edit/Write
 
 **Exit codes:**
 
@@ -231,7 +231,7 @@ Use `customHooks` namespace in settings:
     "gitCommitGuard": {
       "enabled": true
     },
-    "buildChecker": {
+    "typeChecker": {
       "enabled": true
     }
   }
@@ -322,7 +322,7 @@ async function main(): Promise<void> {
 **Purpose:** Validate TypeScript types before file modifications
 
 ```typescript
-// plugins/workflow/hooks/build-checker.ts
+// plugins/workflow/hooks/type-checker.ts
 
 function checkTypes(cwd: string, filePath: string) {
   try {
@@ -428,7 +428,7 @@ Test hooks by simulating stdin input:
 # Test session-checklist
 printf '{"cwd":"%s"}' "$(pwd)" | plugins/workflow/hooks/session-checklist.ts
 
-# Test build-checker with Edit tool
+# Test type-checker with Edit tool
 cat > /tmp/test-input.json <<EOF
 {
   "cwd": "$(pwd)",
@@ -438,7 +438,7 @@ cat > /tmp/test-input.json <<EOF
   }
 }
 EOF
-cat /tmp/test-input.json | plugins/workflow/hooks/build-checker.ts
+cat /tmp/test-input.json | plugins/workflow/hooks/type-checker.ts
 
 # Test git-commit-guard with Bash tool
 cat > /tmp/test-commit.json <<EOF
@@ -465,7 +465,7 @@ Test in actual Claude Code session:
 **Example:**
 
 ```sh
-# Test build-checker
+# Test type-checker
 # 1. Create TypeScript file with error
 echo 'const x: string = 123;' > test.ts
 

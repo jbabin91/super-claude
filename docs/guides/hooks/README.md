@@ -20,7 +20,7 @@ super-claude provides three production-ready hooks:
 | Hook                  | Event        | Purpose                                      | Performance |
 | --------------------- | ------------ | -------------------------------------------- | ----------- |
 | **session-checklist** | SessionStart | Display project status at session start      | <100ms      |
-| **build-checker**     | PreToolUse   | Validate TypeScript types before Edit/Write  | <2s         |
+| **type-checker**      | PreToolUse   | Validate TypeScript types before Edit/Write  | <2s         |
 | **git-commit-guard**  | PreToolUse   | Prevent auto-commits without explicit intent | <50ms       |
 
 ## Documentation Quick Links
@@ -195,7 +195,7 @@ await main();
 - Block unsafe operations
 - Type checking
 
-**Example:** `build-checker.ts`, `git-commit-guard.ts`
+**Example:** `type-checker.ts`, `git-commit-guard.ts`
 
 **Exit codes:**
 
@@ -384,7 +384,7 @@ async function main(): Promise<void> {
 }
 ```
 
-**See:** `plugins/workflow/hooks/build-checker.ts`
+**See:** `plugins/workflow/hooks/type-checker.ts`
 
 ### Example 3: Commit Guard Hook
 
@@ -433,7 +433,7 @@ async function main(): Promise<void> {
 # Test session-checklist
 printf '{"cwd":"%s"}' "$(pwd)" | plugins/workflow/hooks/session-checklist.ts
 
-# Test build-checker with Edit tool
+# Test type-checker with Edit tool
 cat > /tmp/test-input.json <<EOF
 {
   "cwd": "$(pwd)",
@@ -443,7 +443,7 @@ cat > /tmp/test-input.json <<EOF
   }
 }
 EOF
-cat /tmp/test-input.json | plugins/workflow/hooks/build-checker.ts
+cat /tmp/test-input.json | plugins/workflow/hooks/type-checker.ts
 ```
 
 **For complete testing strategies, see [Command Hooks Guide](../command-hooks.md#testing-strategies)**
