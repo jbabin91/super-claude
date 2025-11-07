@@ -59,8 +59,8 @@ function checkTypes(
   filePath: string,
 ): { valid: boolean; errors: string } {
   try {
-    // Run tsc-files on the specific file
-    execSync(`bunx tsc-files --noEmit "${filePath}"`, {
+    // Run tsc-files on the specific file (no --noEmit flag needed)
+    execSync(`bunx tsc-files "${filePath}"`, {
       cwd,
       encoding: 'utf8',
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -69,9 +69,9 @@ function checkTypes(
     return { valid: true, errors: '' };
   } catch (error: unknown) {
     // Type errors will cause execSync to throw
-    if (error && typeof error === 'object' && 'stdout' in error) {
-      const stdout = (error as { stdout: Buffer }).stdout.toString();
-      return { valid: false, errors: stdout };
+    if (error && typeof error === 'object' && 'stderr' in error) {
+      const stderr = (error as { stderr: Buffer }).stderr.toString();
+      return { valid: false, errors: stderr };
     }
 
     return {
