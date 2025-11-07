@@ -1,7 +1,7 @@
 {
   "name": "workflow",
   "version": "0.1.0",
-  "description": "Development workflow enhancements including OpenSpec proposal management and skill auto-activation system. Streamline spec-driven development with commands for creating, working on, and archiving OpenSpec changes.",
+  "description": "Development workflow enhancements including OpenSpec proposal management, skill auto-activation, and command hooks for session checklists, type checking, and commit guards.",
   "author": {
     "name": "Jace Babin",
     "email": "jbabin91@gmail.com",
@@ -15,6 +15,28 @@
     "auto-activation",
     "hooks",
     "development",
-    "claude-code"
+    "claude-code",
+    "type-checking",
+    "commit-guard"
+  ],
+  "hooks": [
+    {
+      "name": "session-checklist",
+      "description": "Display project status at session start (git status, commits, active changes)",
+      "event": "SessionStart",
+      "path": "hooks/session-checklist.ts"
+    },
+    {
+      "name": "build-checker",
+      "description": "Validate TypeScript types before Edit/Write operations",
+      "event": "PreToolUse",
+      "path": "hooks/build-checker.ts"
+    },
+    {
+      "name": "git-commit-guard",
+      "description": "Prevent auto-committing without explicit user request",
+      "event": "PreToolUse",
+      "path": "hooks/git-commit-guard.ts"
+    }
   ]
 }
