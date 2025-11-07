@@ -55,32 +55,132 @@ All OpenSpec commands use the `/openspec:*` namespace for consistency.
 
 ### Hooks
 
-#### skill-activation-prompt.ts
+The workflow plugin provides production-ready command hooks demonstrating best practices from ADR-0008 and ADR-0010.
+
+#### session-checklist
+
+**Event:** `SessionStart`
+**Purpose:** Display project status at session start
+
+Automatically displays when session starts:
+
+- Git status (branch, staged, modified files)
+- Recent commits (last 3)
+- Active OpenSpec changes
+- Quick command reference
+
+**Performance:** < 100ms
+
+**Implementation:** [`hooks/session-checklist.ts`](./hooks/session-checklist.ts)
+
+#### type-checker
+
+**Event:** `PreToolUse` (Edit/Write)
+**Purpose:** Validate TypeScript types before file modifications
+
+Automatically runs before Edit/Write operations:
+
+- Incremental type checking with `@jbabin91/tsc-files`
+- Blocks file modifications on type errors (exit code 2)
+- Shows actionable error messages
+- Configurable per-project via settings
+
+**Performance:** < 2s (incremental checking)
+
+**Implementation:** [`hooks/type-checker.ts`](./hooks/type-checker.ts)
+
+**Configuration:**
+
+```json
+// .claude/settings.json
+{
+  "customHooks": {
+    "typeChecker": { "enabled": true }
+  }
+}
+
+// .claude/settings.local.json (personal override)
+{
+  "customHooks": {
+    "typeChecker": { "enabled": false }
+  }
+}
+```
+
+#### git-commit-guard
+
+**Event:** `PreToolUse` (Bash)
+**Purpose:** Prevent auto-committing without explicit user request
+
+Analyzes conversation context:
+
+- Detects git commit commands
+- Checks for explicit commit intent in recent messages
+- Blocks commits without user request (exit code 2)
+- Configurable per-project/developer
+
+**Performance:** < 50ms
+
+**Implementation:** [`hooks/git-commit-guard.ts`](./hooks/git-commit-guard.ts)
+
+**Explicit intent examples:**
+
+- "commit these changes"
+- "create a commit with this"
+- "let's commit"
+
+#### skill-activation-prompt
 
 **Event:** `UserPromptSubmit`
-**Execution:** Before Claude processes user input
+**Purpose:** Auto-suggest relevant skills
 
-Automatically suggests relevant skills based on:
+Automatically suggests skills based on:
 
 - Keyword matching (case-insensitive)
 - Intent pattern matching (regex)
 - Skill priority levels (critical > high > medium > low)
 
-**Architecture:**
+**Performance:** < 50ms
 
-1. Discovers all `skill-rules.json` from installed plugins
-2. Merges with project overrides (`.claude/skills/skill-rules.json`)
-3. Matches user prompt against triggers
-4. Suggests up to 3 relevant skills before Claude responds
+**Implementation:** [`hooks/skill-activation-prompt.ts`](./hooks/skill-activation-prompt.ts)
 
-**Performance:** < 50ms execution time
+### Hook Testing
 
-#### session-start.ts
+**Test session-checklist:**
 
-**Event:** Session start
-**Purpose:** Initialize consistent development environment
+```bash
+printf '{"cwd":"%s"}' "$(pwd)" | bun plugins/workflow/hooks/session-checklist.ts
+```
 
-Runs automatically when Claude Code session starts.
+**Test type-checker:**
+
+```bash
+echo '{"cwd":"'$(pwd)'","tool_name":"Edit","tool_input":{"file_path":"your-file.ts"}}' \
+  | bun plugins/workflow/hooks/type-checker.ts
+```
+
+**Test git-commit-guard:**
+
+```bash
+# Create test transcript without commit intent
+cat > /tmp/test-transcript.json <<'EOF'
+{"messages":[{"role":"user","content":"Help me implement a feature"}]}
+EOF
+
+echo '{"cwd":"'$(pwd)'","tool_name":"Bash","tool_input":{"command":"git commit -m test"},"transcript_path":"/tmp/test-transcript.json"}' \
+  | bun plugins/workflow/hooks/git-commit-guard.ts
+# Should block with exit code 2
+```
+
+### Hook Documentation
+
+Comprehensive guides available:
+
+- **[Command Hooks Guide](../../docs/guides/command-hooks.md)** - Complete implementation reference
+- **[Hook Lifecycle](../../docs/guides/hooks/lifecycle.md)** - Execution flow and timing
+- **[Anti-Patterns](../../docs/guides/hooks/anti-patterns.md)** - What to avoid (with evidence)
+- **[Performance Guide](../../docs/guides/hooks/performance-guide.md)** - Optimization strategies
+- **[Placement Guide](../../docs/guides/hooks/placement-guide.md)** - Choosing the right hook
 
 ## Installation
 

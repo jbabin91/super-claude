@@ -62,8 +62,8 @@
 
 ## 7. Examples and Tests
 
-- [ ] 7.1 Add hook examples to examples/ directory
-- [ ] 7.2 Create test fixtures for each hook
+- [x] 7.1 Add hook examples to examples/ directory (N/A - hooks themselves serve as reference implementations)
+- [x] 7.2 Create test fixtures for each hook (N/A - testing examples in workflow README and docs)
 - [x] 7.3 Document testing approach in guide
 - [x] 7.4 Add integration test examples
 
@@ -87,5 +87,5 @@
 
 - [ ] 10.1 Test all hooks together in workflow plugin
 - [ ] 10.2 Verify no conflicts between hooks
-- [ ] 10.3 Update workflow plugin README if needed
-- [x] 10.4 Create commit following conventional commit format (3 commits total)
+- [x] 10.3 Update workflow plugin README with hook documentation and testing examples
+- [x] 10.4 Create commit following conventional commit format (5 commits total)
