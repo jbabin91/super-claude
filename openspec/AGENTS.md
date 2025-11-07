@@ -70,6 +70,11 @@ After deployment, create separate PR to:
 
 - Move `changes/[name]/` → `changes/archive/YYYY-MM-DD-[name]/`
 - Update `specs/` if capabilities changed
+- **Update versions** if plugin code changed:
+  - Run `./scripts/bump-version.sh <plugin-name> <patch|minor|major>`
+  - Or manually update `plugins/{plugin}/.claude-plugin/plugin.json`
+  - And `.claude-plugin/marketplace.json`
+  - Bump types: patch (bug fixes), minor (new features), major (breaking changes)
 - **Add entry to CHANGELOG.md** under appropriate version and category:
   - **Added** - New skills, features, or capabilities
   - **Changed** - Modifications to existing functionality
