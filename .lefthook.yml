@@ -38,4 +38,4 @@ commit-msg:
 pre-push:
   commands:
     check-versions:
-      run: bash .lefthook/pre-push/check-plugin-versions.sh
+      run: bash scripts/check-plugin-versions.sh
