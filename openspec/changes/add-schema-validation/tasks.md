@@ -2,54 +2,54 @@
 
 ## 1. Setup and Dependencies
 
-- [ ] 1.1 Install ArkType: `bun add -d arktype`
-- [ ] 1.2 Create `schemas/` directory
-- [ ] 1.3 Create `scripts/` directory (if not exists)
+- [x] 1.1 Install ArkType: `bun add -d arktype`
+- [x] 1.2 Create `schemas/` directory
+- [x] 1.3 Create `scripts/` directory (if not exists)
 
 ## 2. Schema Definitions
 
-- [ ] 2.1 Create `schemas/plugin.schema.ts` with ArkType schema for plugin.json
-  - [ ] Core fields: name, version, description, author, license, keywords
-  - [ ] Optional hooks field (inline object or string path)
-  - [ ] Optional skills, commands, agents, subAgents arrays
-- [ ] 2.2 Create `schemas/hooks.schema.ts` with ArkType schema for hooks.json
-  - [ ] Event type keys: SessionStart, PreToolUse, PostToolUse, etc.
-  - [ ] Hook group structure with matcher (optional)
-  - [ ] Hook objects: type (command/prompt), command/prompt fields, timeout
-- [ ] 2.3 Create `schemas/marketplace.schema.ts` with ArkType schema for marketplace.json
-  - [ ] Core fields: name, version, description, author
-  - [ ] Plugins array with name, path, description
-- [ ] 2.4 Create `schemas/skill-frontmatter.schema.ts` with ArkType schema for SKILL.md YAML
-  - [ ] Required: name, version, description
-  - [ ] Optional: category, tags, model, requires, triggers
+- [x] 2.1 Create `schemas/plugin.schema.ts` with ArkType schema for plugin.json
+  - [x] Core fields: name, version, description, author, license, keywords
+  - [x] Optional hooks field (inline object or string path)
+  - [x] Optional skills, commands, agents, subAgents arrays
+- [x] 2.2 Create `schemas/hooks.schema.ts` with ArkType schema for hooks.json
+  - [x] Event type keys: SessionStart, PreToolUse, PostToolUse, etc.
+  - [x] Hook group structure with matcher (optional)
+  - [x] Hook objects: type (command/prompt), command/prompt fields, timeout
+- [x] 2.3 Create `schemas/marketplace.schema.ts` with ArkType schema for marketplace.json
+  - [x] Core fields: name, version, description, author
+  - [x] Plugins array with name, path, description
+- [x] 2.4 Create `schemas/skill-frontmatter.schema.ts` with ArkType schema for SKILL.md YAML
+  - [x] Required: name, version, description
+  - [x] Optional: category, tags, model, requires, triggers
 
 ## 3. Validation CLI
 
-- [ ] 3.1 Create `scripts/validate-schemas.ts` main CLI
-  - [ ] Parse command-line arguments (--changed, --help, --verbose)
-  - [ ] Support file path filtering for git-changed files
-  - [ ] Exit codes: 0 (success), 1 (validation errors)
-- [ ] 3.2 Implement plugin.json validator
-  - [ ] Discover all plugins/\*/. claude-plugin/plugin.json files
-  - [ ] Validate each against plugin.schema.ts
-  - [ ] If hooks field is string path, validate hooks.json file
-  - [ ] If hooks field is inline object, validate inline structure
-- [ ] 3.3 Implement marketplace.json validator
-  - [ ] Validate .claude-plugin/marketplace.json
-  - [ ] Check plugin references match actual plugin paths
-- [ ] 3.4 Implement skill frontmatter validator
-  - [ ] Discover all plugins/_/skills/_/SKILL.md files
-  - [ ] Parse YAML frontmatter (between --- delimiters)
-  - [ ] Validate against skill-frontmatter.schema.ts
-- [ ] 3.5 Implement error message formatting
-  - [ ] File path with line numbers (if available)
-  - [ ] Show expected vs actual values
-  - [ ] Suggest fixes where possible
-  - [ ] Link to relevant Claude Code documentation
-- [ ] 3.6 Add colored terminal output
-  - [ ] Red for errors
-  - [ ] Green for success
-  - [ ] Yellow for warnings
+- [x] 3.1 Create `scripts/validate-schemas.ts` main CLI
+  - [x] Parse command-line arguments (--changed, --help, --verbose)
+  - [x] Support file path filtering for git-changed files
+  - [x] Exit codes: 0 (success), 1 (validation errors)
+- [x] 3.2 Implement plugin.json validator
+  - [x] Discover all plugins/\*/. claude-plugin/plugin.json files
+  - [x] Validate each against plugin.schema.ts
+  - [x] If hooks field is string path, validate hooks.json file
+  - [x] If hooks field is inline object, validate inline structure
+- [x] 3.3 Implement marketplace.json validator
+  - [x] Validate .claude-plugin/marketplace.json
+  - [x] Check plugin references match actual plugin paths
+- [x] 3.4 Implement skill frontmatter validator
+  - [x] Discover all plugins/_/skills/_/SKILL.md files
+  - [x] Parse YAML frontmatter (between --- delimiters)
+  - [x] Validate against skill-frontmatter.schema.ts
+- [x] 3.5 Implement error message formatting
+  - [x] File path with line numbers (if available)
+  - [x] Show expected vs actual values
+  - [x] Suggest fixes where possible
+  - [x] Link to relevant Claude Code documentation
+- [x] 3.6 Add colored terminal output
+  - [x] Red for errors
+  - [x] Green for success
+  - [x] Yellow for warnings
 
 ## 4. Git Hook Integration
 
@@ -68,9 +68,9 @@
 
 ## 5. NPM Scripts
 
-- [ ] 5.1 Add `validate` script to package.json: `bun run scripts/validate-schemas.ts`
-- [ ] 5.2 Add `validate:plugins` script: `bun run scripts/validate-schemas.ts --plugins-only`
-- [ ] 5.3 Add `validate:marketplace` script: `bun run scripts/validate-schemas.ts --marketplace-only`
+- [x] 5.1 Add `validate` script to package.json: `bun run scripts/validate-schemas.ts`
+- [x] 5.2 Add `validate:changed` script: `bun run scripts/validate-schemas.ts --changed`
+- [x] 5.3 Add `validate:verbose` script: `bun run scripts/validate-schemas.ts --verbose`
 - [ ] 5.4 Update README with validation commands
 
 ## 6. Fix Workflow Plugin (Immediate Blocker)
@@ -93,7 +93,7 @@
 
 ## 8. Testing
 
-- [ ] 8.1 Test validator with valid schemas (should pass)
+- [x] 8.1 Test validator with valid schemas (should pass)
 - [ ] 8.2 Test validator with invalid schemas (should fail with clear errors)
 - [ ] 8.3 Test `--changed` flag with git-staged files
 - [ ] 8.4 Test performance targets
@@ -112,5 +112,5 @@
 
 - [ ] 10.1 Run full validation suite on entire workspace
 - [ ] 10.2 Ensure all plugins pass validation
-- [ ] 10.3 Mark ADR-0011 as Accepted (move from Proposed)
+- [x] 10.3 Mark ADR-0011 as Accepted (move from Proposed)
 - [ ] 10.4 Archive OpenSpec proposal with `openspec archive add-schema-validation --skip-specs --yes`
