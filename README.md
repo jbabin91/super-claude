@@ -181,6 +181,88 @@ Use the skill-creator from meta plugin:
 
 See `docs/2025-10-22/brainstorm.md` for skill ideas.
 
+## ✅ Schema Validation
+
+All plugin manifests and skill frontmatter are automatically validated to prevent runtime errors.
+
+### Quick Commands
+
+```bash
+# Validate all schemas (fast, ~50ms)
+bun run validate
+
+# Validate only git-staged files
+bun run validate:changed
+
+# Show detailed validation output
+bun run validate:verbose
+```
+
+### Automated Git Hooks
+
+**Pre-commit** (runs automatically):
+
+- Validates staged plugin.json, marketplace.json, hooks.json, SKILL.md files
+- Catches invalid schemas before commit
+- Fast execution (~50ms for typical commits)
+
+**Pre-push** (runs automatically):
+
+- Enforces version bumps when plugin code changes
+- Ensures marketplace.json versions match plugin.json
+
+### Bypass Hooks (when needed)
+
+```bash
+# Skip all pre-commit hooks (use sparingly)
+git commit --no-verify
+
+# Skip pre-push hooks
+git push --no-verify
+```
+
+### Common Issues
+
+**"hooks field must be an object or string path, not an array"**
+
+Hooks cannot be a flat array. Use either:
+
+```json
+// Option 1: External file
+{ "hooks": "hooks.json" }
+
+// Option 2: Nested object
+{
+  "hooks": {
+    "hooks": {
+      "SessionStart": [
+        {
+          "hooks": [
+            { "type": "command", "command": "path/to/hook.ts" }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+**"No frontmatter found in SKILL.md"**
+
+Skills require YAML frontmatter between `---` delimiters:
+
+```markdown
+---
+name: skill-name
+version: 1.0.0
+description: What the skill does
+---
+
+# Skill content...
+```
+
+See [Claude Code Hooks Reference](https://code.claude.com/docs/en/hooks.md) for complete documentation.
+
 ## 🔧 Component File Structure
 
 ### UI Components (with Storybook)

@@ -131,6 +131,48 @@ bun run lint:fix
 - Import sorting
 - Code quality issues
 
+### Schema Validation
+
+```sh
+# Validate all schemas (plugin.json, marketplace.json, hooks.json, SKILL.md)
+bun run validate
+
+# Validate only git-staged files (faster)
+bun run validate:changed
+
+# Show detailed validation output
+bun run validate:verbose
+```
+
+**What it validates:**
+
+- `plugin.json` - Plugin manifests
+- `marketplace.json` - Marketplace manifest
+- `hooks.json` - Hooks configuration
+- `SKILL.md` - Skill YAML frontmatter
+
+**Common errors:**
+
+- Invalid hooks structure (array instead of object/string)
+- Missing YAML frontmatter in SKILL.md
+- Invalid version numbers
+- Required fields missing
+
+**Git hooks** (runs automatically):
+
+- **Pre-commit**: Validates staged schemas before commit
+- **Pre-push**: Enforces version bumps when plugin code changes
+
+**Bypass validation** (use sparingly):
+
+```sh
+# Skip pre-commit hooks
+git commit --no-verify
+
+# Skip pre-push hooks
+git push --no-verify
+```
+
 ### Pre-commit Checks
 
 **ALWAYS run before committing:**
@@ -138,6 +180,9 @@ bun run lint:fix
 ```sh
 # Format all files
 bun run format
+
+# Validate schemas
+bun run validate
 
 # Lint markdown
 bun run lint:md
@@ -149,6 +194,8 @@ bun run lint
 bun run lint:md:fix  # Markdown fixes
 bun run lint:fix     # TS/JS fixes
 ```
+
+**Note:** Schema validation and linting are also enforced by git hooks, but it's good practice to run them manually first.
 
 ## Creating Skills
 
@@ -543,6 +590,61 @@ cat .markdownlint-cli2.mjs
 bunx markdownlint-cli2 --fix "path/to/file.md"
 ```
 
+### Schema Validation Issues
+
+**"hooks field must be an object or string path, not an array"**
+
+Fix by using either external file or nested object:
+
+```sh
+# Option 1: Extract to external hooks.json
+# In plugin.json:
+{ "hooks": "hooks.json" }
+
+# Create hooks.json with proper structure
+cat > plugins/{plugin}/.claude-plugin/hooks.json << 'EOF'
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/my-hook.ts" }
+        ]
+      }
+    ]
+  }
+}
+EOF
+```
+
+**"No frontmatter found in SKILL.md"**
+
+Add YAML frontmatter between `---` delimiters:
+
+```sh
+# Edit SKILL.md
+cat > plugins/{plugin}/skills/{skill}/SKILL.md << 'EOF'
+---
+name: skill-name
+version: 1.0.0
+description: What this skill does
+---
+
+# Skill Content
+...
+EOF
+```
+
+**Bypass validation temporarily:**
+
+```sh
+# Skip pre-commit validation (use sparingly)
+git commit --no-verify
+
+# Validate specific file
+bun run scripts/validate-schemas.ts --help
+```
+
 ## Best Practices
 
 ### DO ✅
@@ -579,6 +681,7 @@ bunx markdownlint-cli2 --fix "path/to/file.md"
 │                                                     │
 │ Code Quality                                        │
 │   bun run format            - Format all files      │
+│   bun run validate          - Validate schemas      │
 │   bun run lint:md           - Lint markdown         │
 │   bun run lint              - Lint TypeScript/JS    │
 │   bun run lint:md:fix       - Auto-fix markdown     │
