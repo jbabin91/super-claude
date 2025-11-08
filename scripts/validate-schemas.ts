@@ -295,11 +295,9 @@ function parseYaml(yaml: string): unknown {
 function validatePlugin(filePath: string): ValidationResult {
   try {
     const content = readFileSync(filePath, 'utf8');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const data = JSON.parse(content);
+    const data = JSON.parse(content) as { hooks?: unknown };
 
     // Check for common mistakes: hooks field must not be an array
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (data.hooks && Array.isArray(data.hooks)) {
       return {
         valid: false,
@@ -339,8 +337,7 @@ function validatePlugin(filePath: string): ValidationResult {
 function validateMarketplace(filePath: string): ValidationResult {
   try {
     const content = readFileSync(filePath, 'utf8');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const data = JSON.parse(content);
+    const data = JSON.parse(content) as unknown;
     const result = marketplaceSchema(data);
 
     if (result instanceof Error) {
