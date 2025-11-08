@@ -12,7 +12,10 @@
     "lint:md": "markdownlint-cli2",
     "lint:md:fix": "markdownlint-cli2 --fix",
     "prepare": "lefthook install",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "validate": "bun run scripts/validate-schemas.ts",
+    "validate:changed": "bun run scripts/validate-schemas.ts --changed",
+    "validate:verbose": "bun run scripts/validate-schemas.ts --verbose"
   },
   "config": {
     "commitizen": {
@@ -25,6 +28,7 @@
     "@eslint/js": "^9.39.0",
     "@jbabin91/tsc-files": "^0.8.3",
     "@types/bun": "latest",
+    "arktype": "^2.1.25",
     "cz-git": "^1.12.0",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.8",
