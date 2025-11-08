@@ -11,6 +11,9 @@ pre-commit:
   commands:
     audit:
       run: bun audit --audit-level moderate
+    validate-schemas:
+      glob: '{*.json,*.md}'
+      run: bun run validate:changed
     typecheck:
       glob: '*.{ts,tsx}'
       run: bunx @jbabin91/tsc-files {staged_files}
@@ -34,5 +37,7 @@ commit-msg:
 
 pre-push:
   commands:
+    validate-all-schemas:
+      run: bun run validate
     check-versions:
       run: bash .lefthook/pre-push/check-plugin-versions.sh
