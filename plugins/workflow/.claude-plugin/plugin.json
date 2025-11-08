@@ -19,5 +19,5 @@
     "type-checking",
     "commit-guard"
   ],
-  "hooks": "hooks.json"
+  "hooks": "./hooks.json"
 }
