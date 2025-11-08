@@ -297,6 +297,20 @@ function validatePlugin(filePath: string): ValidationResult {
     const content = readFileSync(filePath, 'utf8');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const data = JSON.parse(content);
+
+    // Check for common mistakes: hooks field must not be an array
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (data.hooks && Array.isArray(data.hooks)) {
+      return {
+        valid: false,
+        file: filePath,
+        errors: [
+          'hooks field must be a string path to hooks.json OR an object with nested hooks structure, not an array.\n' +
+            'See https://code.claude.com/docs/en/hooks.md for correct format.',
+        ],
+      };
+    }
+
     const result = pluginSchema(data);
 
     if (result instanceof Error) {

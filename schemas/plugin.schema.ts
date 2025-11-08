@@ -1,5 +1,7 @@
 import { type } from 'arktype';
 
+import { hooksSchema } from './hooks.schema';
+
 /**
  * Author information schema
  */
@@ -34,8 +36,9 @@ export const pluginSchema = type({
   'skills?': 'string | string[]',
   'subAgents?': 'string | string[]',
 
-  // Hooks: can be string path or inline object
-  'hooks?': 'string | object',
+  // Hooks: can be string path to hooks.json OR inline hooks object
+  // When inline, must match hooksSchema structure
+  'hooks?': type('string').or(hooksSchema),
 
   // MCP servers: can be string path or inline object
   'mcpServers?': 'string | object',
