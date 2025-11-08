@@ -18,6 +18,11 @@ For guidance on when and how to write ADRs, see [README.md](README.md).
 - [ADR-0008: No Auto-Formatting Hooks](decisions/ADR-0008-no-auto-formatting-hooks.md)
 - [ADR-0009: Token-Efficient Skill Design](decisions/ADR-0009-token-efficient-skill-design.md)
 - [ADR-0010: Hook Type Selection](decisions/ADR-0010-hook-type-selection.md)
+- [ADR-0011: ArkType for Schema Validation](decisions/ADR-0011-schema-validation-arktype.md)
+
+### Proposed
+
+_None_
 
 ### Deprecated
 
@@ -54,6 +59,10 @@ _None_
 - [ADR-0009: Token-Efficient Skill Design with Progressive Disclosure](decisions/ADR-0009-token-efficient-skill-design.md) - 500-line limit for SKILL.md, 40-60% token savings
 - [ADR-0010: Hook Type Selection (Command vs Prompt)](decisions/ADR-0010-hook-type-selection.md) - Decision matrix for choosing hook execution types
 
+### Tooling & Infrastructure
+
+- [ADR-0011: ArkType for Schema Validation](decisions/ADR-0011-schema-validation-arktype.md) - Multi-layer validation system for plugin manifests and skill frontmatter
+
 ## By Date (Chronological)
 
 - **2025-10-22** - Strategic decisions documented (retroactively on 2025-11-04):
@@ -69,6 +78,9 @@ _None_
   - [ADR-0008: No Auto-Formatting Hooks](decisions/ADR-0008-no-auto-formatting-hooks.md)
   - [ADR-0009: Token-Efficient Skill Design](decisions/ADR-0009-token-efficient-skill-design.md)
   - [ADR-0010: Hook Type Selection](decisions/ADR-0010-hook-type-selection.md)
+
+- **2025-11-07** - Schema validation infrastructure to prevent runtime errors:
+  - [ADR-0011: ArkType for Schema Validation](decisions/ADR-0011-schema-validation-arktype.md)
 
 ## Quick Links
 

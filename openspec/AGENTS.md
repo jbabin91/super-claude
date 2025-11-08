@@ -183,41 +183,47 @@ openspec/
 
 ### ADR vs OpenSpec Decision Tree
 
-**Strategic Decision (affects project direction):**
+**For complete workflow guidance, see [docs/architecture/README.md](../docs/architecture/README.md#complete-development-workflow)**
+
+**Quick decision guide:**
 
 ```txt
-Is this a project-wide architectural or technology choice?
-├─ Choosing tech stack (Base UI vs Radix)? → Write ADR
-├─ Establishing standards (WCAG AAA vs AA)? → Write ADR
-├─ Setting conventions (no barrel exports)? → Write ADR
-├─ Architecture patterns (progressive disclosure)? → Write ADR
-└─ Will be referenced by multiple future changes? → Write ADR
+START: I need to work on something
+
+├─ Q1: Routine work? (bug fix, typo, docs, config)
+│  └─ YES → Implement directly ✓
+│
+├─ Q2: Strategic decision? (choosing alternatives, setting standards)
+│  └─ YES → ADR (Proposed) → Review → ADR (Accepted) → OpenSpec → Implement
+│
+└─ Q3: Capability change? (new feature, spec change, breaking change)
+   └─ YES → OpenSpec → Implement
 ```
-
-**Location:** `docs/architecture/decisions/ADR-NNNN-title.md`
-
-See [docs/architecture/README.md](../docs/architecture/README.md) for ADR workflow.
-
-**Implementation Change (building features):**
-
-```txt
-New request?
-├─ Bug fix restoring spec behavior? → Fix directly
-├─ Typo/format/comment? → Fix directly
-├─ New feature/capability? → Create OpenSpec proposal
-├─ Breaking change? → Create OpenSpec proposal
-├─ Architecture change? → Create OpenSpec proposal
-└─ Unclear? → Create OpenSpec proposal (safer)
-```
-
-**Location:** `openspec/changes/[change-id]/`
 
 **Workflow:**
 
-1. Check if strategic decision exists in `docs/architecture/INDEX.md`
-2. If not, create ADR first (if needed for project-wide decision)
-3. Create OpenSpec proposal (references ADRs in proposal.md)
-4. Add design.md if implementation needs technical decisions documented
+1. **Check for strategic decision:** Does this require choosing between alternatives or setting project-wide standards?
+   - YES → Write ADR, mark as **Accepted**, then continue
+   - NO → Continue to step 2
+
+2. **Check existing ADRs:** Is there an Accepted ADR covering the approach?
+   - Review `docs/architecture/INDEX.md`
+   - If strategic decision needed → Escalate to step 1
+
+3. **Create OpenSpec proposal:** (if capability changes)
+   - Reference any relevant Accepted ADRs in `proposal.md`
+   - Create `tasks.md` and spec deltas
+   - Validate with `openspec validate --strict`
+
+4. **Implement:** Follow tasks in order
+
+**Key principle:** ADRs are marked "Accepted" BEFORE OpenSpec is created. OpenSpec proposals should only reference Accepted ADRs.
+
+**Locations:**
+
+- ADRs: `docs/architecture/decisions/ADR-NNNN-title.md`
+- OpenSpec: `openspec/changes/[change-id]/`
+- See [Complete Development Workflow](../docs/architecture/README.md#complete-development-workflow) for detailed examples and edge cases
 
 ### Proposal Structure
 
