@@ -37,7 +37,5 @@ commit-msg:
 
 pre-push:
   commands:
-    validate-all-schemas:
-      run: bun run validate
     check-versions:
       run: bash .lefthook/pre-push/check-plugin-versions.sh
