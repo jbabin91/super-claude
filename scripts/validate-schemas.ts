@@ -309,18 +309,7 @@ function validatePlugin(filePath: string): ValidationResult {
       };
     }
 
-    // Check if hooks is a string path - must start with "./"
-    if (data.hooks && typeof data.hooks === 'string' && !data.hooks.startsWith('./')) {
-        return {
-          valid: false,
-          file: filePath,
-          errors: [
-            `hooks path must start with "./" (got: "${data.hooks}").\n` +
-              'Example: "./hooks.json" or "./hooks/index.json"',
-          ],
-        };
-      }
-
+    // Validate with ArkType schema (includes all pattern checks)
     const result = pluginSchema(data);
 
     if (result instanceof Error) {

@@ -1,6 +1,17 @@
 import { type } from 'arktype';
 
 /**
+ * Common patterns for skill frontmatter validation
+ */
+const patterns = {
+  // Skill name should be kebab-case
+  kebabCase: (s: string) => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(s),
+  // Semantic versioning
+  semver: (s: string) =>
+    /^\d+\.\d+\.\d+(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$/.test(s),
+};
+
+/**
  * Tool requirements schema
  */
 const requiresSchema = type({
@@ -30,8 +41,8 @@ const modelSchema = type('"sonnet" | "haiku" | "opus"');
  */
 export const skillFrontmatterSchema = type({
   // Required fields
-  name: 'string', // Skill identifier (kebab-case)
-  version: 'string', // Semantic versioning (e.g., "1.0.0")
+  name: type('string', ':', patterns.kebabCase),
+  version: type('string', ':', patterns.semver),
   description: 'string', // What the skill does, when to use it, activation triggers
 
   // Optional fields
