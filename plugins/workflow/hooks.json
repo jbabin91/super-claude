@@ -26,10 +26,14 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/git-commit-guard.ts"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/branch-name-validator.ts"
           }
         ]
       }
     ]
   },
-  "description": "Workflow plugin hooks for session checklists, type checking, and commit guards"
+  "description": "Workflow plugin hooks for session checklists, type checking, commit guards, and branch name validation"
 }
