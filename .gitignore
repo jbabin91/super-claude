@@ -20,6 +20,7 @@ openspec/active.json
 .DS_Store
 node_modules/
 .claude-cache/
+.skip-version-check
 
 # Editor
 .vscode/*

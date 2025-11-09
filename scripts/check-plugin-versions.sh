@@ -39,17 +39,50 @@ done
 
 if [ -n "$VERSION_WARNINGS" ]; then
   echo ""
-  echo "⚠️  Plugin version warnings:"
+  echo "❌ Plugin changes detected without version bump:"
   echo -e "$VERSION_WARNINGS"
   echo ""
-  echo "Consider updating versions in:"
-  echo "  - plugins/{plugin}/.claude-plugin/plugin.json"
-  echo "  - .claude-plugin/marketplace.json"
-  echo "  - CHANGELOG.md"
+  echo "Required actions:"
+  echo "  1. Bump version: ./scripts/bump-version.sh <plugin-name> <patch|minor|major>"
+  echo "  2. Update: .claude-plugin/marketplace.json"
+  echo "  3. Document: CHANGELOG.md"
   echo ""
-  echo "💡 Tip: Use ./scripts/bump-version.sh <plugin-name> <patch|minor|major>"
-  echo ""
-  # Always allow push - this is a reminder, not a blocker
+
+  # Check for bypass methods (in order of preference)
+  BYPASS_REASON=""
+
+  # Method 1: Environment variable (one-time bypass)
+  if [ "${SKIP_VERSION_CHECK}" = "true" ]; then
+    BYPASS_REASON="SKIP_VERSION_CHECK environment variable"
+  fi
+
+  # Method 2: Git config (persistent bypass)
+  if [ -z "$BYPASS_REASON" ] && [ "$(git config --get hooks.skipVersionCheck)" = "true" ]; then
+    BYPASS_REASON="git config hooks.skipVersionCheck=true"
+  fi
+
+  # Method 3: .skip-version-check file (project-level bypass)
+  if [ -z "$BYPASS_REASON" ] && [ -f ".skip-version-check" ]; then
+    BYPASS_REASON=".skip-version-check file present"
+  fi
+
+  if [ -n "$BYPASS_REASON" ]; then
+    echo "⚠️  Bypassing version check: $BYPASS_REASON"
+    echo ""
+  else
+    echo "To bypass this check (choose one method):"
+    echo ""
+    echo "  One-time bypass:"
+    echo "    SKIP_VERSION_CHECK=true git push"
+    echo ""
+    echo "  Persistent bypass (user-level):"
+    echo "    git config hooks.skipVersionCheck true"
+    echo ""
+    echo "  Project-level bypass (gitignored):"
+    echo "    touch .skip-version-check"
+    echo ""
+    exit 1
+  fi
 fi
 
 echo "✓ Plugin version check complete"
