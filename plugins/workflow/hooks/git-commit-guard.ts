@@ -166,11 +166,19 @@ async function main(): Promise<void> {
   try {
     const input = await parseStdin();
 
+    // DEBUG: Log hook execution
+    console.error('[DEBUG] git-commit-guard: Hook started');
+    console.error(`[DEBUG] tool_name: ${input.tool_name}`);
+    console.error(
+      `[DEBUG] transcript_path: ${input.transcript_path ?? 'NOT PROVIDED'}`,
+    );
+
     // Check if hook is enabled
     checkHookEnabled(input.cwd, 'gitCommitGuard');
 
     // Only run for Bash tool
     if (input.tool_name !== 'Bash') {
+      console.error('[DEBUG] Not a Bash tool, exiting');
       process.exit(0);
     }
 
@@ -179,42 +187,64 @@ async function main(): Promise<void> {
     const command = toolInput?.command as string | undefined;
 
     if (!command) {
+      console.error('[DEBUG] No command found, exiting');
       process.exit(0); // No command
     }
 
+    console.error(`[DEBUG] command: ${command}`);
+
     // Check if this is a git commit command
     if (!isGitCommit(command)) {
+      console.error('[DEBUG] Not a git commit command, exiting');
       process.exit(0); // Not a commit command
     }
+
+    console.error('[DEBUG] Git commit detected!');
 
     // Load transcript to check for commit intent
     const transcriptPath = input.transcript_path;
 
     if (!transcriptPath) {
       // No transcript available - allow commit (graceful degradation)
+      console.error(
+        '[DEBUG] No transcript_path provided, allowing commit (graceful degradation)',
+      );
       checkPerformance(startTime, 50, 'git-commit-guard');
       process.exit(0);
     }
+
+    console.error(`[DEBUG] Loading transcript from: ${transcriptPath}`);
 
     const transcript = loadTranscript(transcriptPath);
 
     if (!transcript) {
       // Failed to load transcript - allow commit (graceful degradation)
+      console.error(
+        '[DEBUG] Failed to load transcript, allowing commit (graceful degradation)',
+      );
       checkPerformance(startTime, 50, 'git-commit-guard');
       process.exit(0);
     }
 
+    console.error(
+      `[DEBUG] Transcript loaded with ${transcript.messages.length} messages`,
+    );
+
     // Check for explicit commit intent
     const hasIntent = hasExplicitCommitIntent(transcript.messages);
 
+    console.error(`[DEBUG] Explicit commit intent found: ${hasIntent}`);
+
     if (!hasIntent) {
       // No explicit intent - block commit
+      console.error('[DEBUG] BLOCKING commit - no explicit intent');
       console.error(formatBlockMessage());
       checkPerformance(startTime, 50, 'git-commit-guard');
       process.exit(2); // Block tool execution
     }
 
     // Explicit intent found - allow commit
+    console.error('[DEBUG] ALLOWING commit - explicit intent found');
     checkPerformance(startTime, 50, 'git-commit-guard');
     process.exit(0);
   } catch (error) {
