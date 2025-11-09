@@ -1,7 +1,7 @@
 {
   "name": "workflow",
-  "version": "0.2.0",
-  "description": "Development workflow enhancements including OpenSpec proposal management, skill auto-activation, and command hooks for session checklists, type checking, and commit guards.",
+  "version": "0.3.0",
+  "description": "Development workflow enhancements including OpenSpec proposal management, skill auto-activation, and command hooks for session checklists, type checking, commit guards, and branch name validation.",
   "author": {
     "name": "Jace Babin",
     "email": "jbabin91@gmail.com",

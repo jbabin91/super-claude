@@ -168,6 +168,15 @@ async function main(): Promise<void> {
       process.exit(0);
     }
 
+    // Check for bypass flag in command string
+    if (command.includes('SKIP_COMMIT_GUARD=true')) {
+      console.error(
+        '[DEBUG] SKIP_COMMIT_GUARD=true in command - bypassing guard',
+      );
+      checkPerformance(startTime, 50, 'git-commit-guard');
+      process.exit(0);
+    }
+
     // Only check git commit/push commands
     if (!isGitCommitOrPush(command)) {
       process.exit(0);
