@@ -47,21 +47,9 @@ if [ -n "$VERSION_WARNINGS" ]; then
   echo "  - .claude-plugin/marketplace.json"
   echo "  - CHANGELOG.md"
   echo ""
-
-  # Check if running in interactive mode (has a TTY)
-  if [ -t 0 ]; then
-    # Interactive mode - prompt user
-    read -p "Continue anyway? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-      exit 1
-    fi
-  else
-    # Non-interactive mode (CI/CD, Claude Code, etc.) - warn but allow
-    echo "⚠️  Non-interactive mode detected - allowing push with warnings"
-    echo "   Please bump versions in your next commit!"
-    echo ""
-  fi
+  echo "💡 Tip: Use ./scripts/bump-version.sh <plugin-name> <patch|minor|major>"
+  echo ""
+  # Always allow push - this is a reminder, not a blocker
 fi
 
 echo "✓ Plugin version check complete"
