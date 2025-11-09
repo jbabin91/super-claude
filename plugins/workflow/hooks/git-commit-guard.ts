@@ -238,9 +238,19 @@ async function main(): Promise<void> {
     if (!hasIntent) {
       // No explicit intent - block commit
       console.error('[DEBUG] BLOCKING commit - no explicit intent');
-      console.error(formatBlockMessage());
+
+      // Output hookSpecificOutput to block the tool use
+      const output = {
+        hookSpecificOutput: {
+          hookEventName: 'PreToolUse',
+          permissionDecision: 'deny',
+          permissionDecisionReason: formatBlockMessage(),
+        },
+      };
+
+      console.log(JSON.stringify(output));
       checkPerformance(startTime, 50, 'git-commit-guard');
-      process.exit(2); // Block tool execution
+      process.exit(0); // Exit 0 after blocking
     }
 
     // Explicit intent found - allow commit

@@ -172,9 +172,20 @@ async function main(): Promise<void> {
 
     if (!result.valid) {
       // Type errors found - block operation
-      console.error(formatTypeErrors(result.errors));
+      const errorMessage = formatTypeErrors(result.errors);
+
+      // Output hookSpecificOutput to block the tool use
+      const output = {
+        hookSpecificOutput: {
+          hookEventName: 'PreToolUse',
+          permissionDecision: 'deny',
+          permissionDecisionReason: errorMessage,
+        },
+      };
+
+      console.log(JSON.stringify(output));
       checkPerformance(startTime, 2000, 'type-checker');
-      process.exit(2); // Block tool execution
+      process.exit(0); // Exit 0 after blocking
     }
 
     // Types are valid - allow operation
