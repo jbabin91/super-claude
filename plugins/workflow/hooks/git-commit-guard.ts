@@ -3,17 +3,16 @@
 /**
  * Git Commit Guard Hook
  *
- * Prevents auto-committing without explicit user request.
- * Analyzes conversation context to detect commit intent.
- * Blocks commits when Claude initiates without being asked.
+ * Prevents direct commits/pushes to protected branches (main).
+ * Enforces feature branch workflow - commits should happen on feature branches.
+ * Use bypass environment variable for emergencies: SKIP_COMMIT_GUARD=true
  *
  * Performance target: <50ms (ADR-0010)
- * Exit code 2: Block tool execution
  *
  * @see {@link https://github.com/jbabin91/super-claude} for documentation
  */
 
-import { existsSync, readFileSync } from 'node:fs';
+import { execSync } from 'node:child_process';
 
 import {
   checkHookEnabled,
@@ -23,134 +22,114 @@ import {
 } from './utils/index.js';
 
 /**
- * Conversation message from transcript
+ * Protected branches that require feature branch workflow
  */
-type Message = {
-  role: 'user' | 'assistant';
-  content: string;
-  [key: string]: unknown;
-};
+const PROTECTED_BRANCHES = ['main', 'master'];
 
 /**
- * Transcript file schema
+ * Get current git branch
+ *
+ * @param cwd Current working directory
+ * @returns Current branch name or null if not in git repo
  */
-type Transcript = {
-  messages: Message[];
-  [key: string]: unknown;
-};
+function getCurrentBranch(cwd: string): string | null {
+  try {
+    const branch = execSync('git branch --show-current', {
+      cwd,
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'pipe'],
+    }).trim();
+    return branch || null;
+  } catch {
+    return null;
+  }
+}
 
 /**
- * Detect if Bash command is a git commit
+ * Detect if Bash command is a git commit or push
  *
  * @param command Bash command string
- * @returns true if commit command
+ * @returns true if commit/push command
  */
-function isGitCommit(command: string): boolean {
-  // Match git commit variants
+function isGitCommitOrPush(command: string): boolean {
   const patterns = [
     /\bgit\s+commit\b/i,
-    /\bgit\s+ci\b/i, // Common alias
+    /\bgit\s+push\b/i,
+    /\bgit\s+ci\b/i, // Common commit alias
   ];
 
   return patterns.some((pattern) => pattern.test(command));
 }
 
 /**
- * Load and parse transcript file
+ * Check if command targets a protected branch
  *
- * @param transcriptPath Path to transcript JSON
- * @returns Parsed transcript or null
+ * @param command Git command
+ * @param currentBranch Current branch name
+ * @returns true if targeting protected branch
  */
-function loadTranscript(transcriptPath: string): Transcript | null {
-  if (!existsSync(transcriptPath)) {
-    return null;
-  }
-
-  try {
-    const content = readFileSync(transcriptPath, 'utf8');
-    return JSON.parse(content) as Transcript;
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : 'Unknown error';
-    console.warn(`[WARNING] Failed to load transcript: ${msg}`);
-    return null;
-  }
-}
-
-/**
- * Check if user explicitly requested commit
- *
- * Looks for commit intent keywords in recent user messages.
- *
- * @param messages Conversation messages
- * @param lookback Number of recent messages to check
- * @returns true if explicit commit intent found
- */
-function hasExplicitCommitIntent(messages: Message[], lookback = 10): boolean {
-  // Get recent user messages
-  const recentMessages = messages.slice(-lookback);
-  const userMessages = recentMessages.filter((m) => m.role === 'user');
-
-  // Explicit commit keywords
-  const commitKeywords = [
-    /\bcommit\s+(these|this|the)\s+(changes?|files?)\b/i,
-    /\bcreate\s+a\s+commit\b/i,
-    /\bmake\s+a\s+commit\b/i,
-    /\bcommit\s+it\b/i,
-    /\bcommit\s+them\b/i,
-    /\blet'?s\s+commit\b/i,
-    /\bcan\s+you\s+commit\b/i,
-    /\bplease\s+commit\b/i,
-    /\bgit\s+commit\b/i,
-  ];
-
-  // Check each user message for explicit commit request
-  for (const message of userMessages) {
-    const content = message.content.toLowerCase();
-    if (commitKeywords.some((pattern) => pattern.test(content))) {
+function targetsProtectedBranch(
+  command: string,
+  currentBranch: string | null,
+): boolean {
+  // Check if push command explicitly targets protected branch
+  for (const branch of PROTECTED_BRANCHES) {
+    if (
+      command.includes(`origin ${branch}`) ||
+      command.includes(`origin/${branch}`)
+    ) {
       return true;
     }
+  }
+
+  // Check if current branch is protected
+  if (currentBranch && PROTECTED_BRANCHES.includes(currentBranch)) {
+    return true;
   }
 
   return false;
 }
 
 /**
- * Format blocking message for user
+ * Format blocking message
  *
- * @returns Formatted warning message
+ * @param currentBranch Current branch name
+ * @param command Git command that was blocked
+ * @returns Formatted error message
  */
-function formatBlockMessage(): string {
+function formatBlockMessage(
+  currentBranch: string | null,
+  command: string,
+): string {
   return [
     '',
     '═'.repeat(70),
-    '⚠️  COMMIT BLOCKED: No explicit commit request detected',
+    '⚠️  DIRECT COMMIT/PUSH TO PROTECTED BRANCH BLOCKED',
     '═'.repeat(70),
     '',
-    'This hook prevents auto-committing without your explicit request.',
+    `Protected branches: ${PROTECTED_BRANCHES.join(', ')}`,
+    `Current branch: ${currentBranch ?? 'unknown'}`,
+    `Blocked command: ${command}`,
     '',
-    'If you want to commit, please explicitly ask:',
-    '  • "commit these changes"',
-    '  • "create a commit with this"',
-    '  • "please commit this"',
+    'Feature Branch Workflow:',
     '',
-    'If this is a false positive or you want to disable this guard:',
+    '  1. Create a feature branch:',
+    '     git checkout -b feat/your-feature',
     '',
-    'Option 1: Add to .claude/settings.json (project-wide):',
-    '  {',
-    '    "customHooks": {',
-    '      "gitCommitGuard": { "enabled": false }',
-    '    }',
-    '  }',
+    '  2. Make commits on your feature branch:',
+    '     git commit -m "feat: add new feature"',
     '',
-    'Option 2: Add to .claude/settings.local.json (personal):',
-    '  {',
-    '    "customHooks": {',
-    '      "gitCommitGuard": { "enabled": false }',
-    '    }',
-    '  }',
+    '  3. Push feature branch:',
+    '     git push origin feat/your-feature',
     '',
-    'Option 3: Use environment variable:',
-    '  export CLAUDE_HOOK_GITCOMMITGUARD_ENABLED=false',
+    '  4. Create pull request:',
+    '     gh pr create',
+    '',
+    '  5. After approval, merge via PR',
+    '',
+    'To bypass this guard (emergencies only):',
+    '  SKIP_COMMIT_GUARD=true git commit -m "..."',
+    '  SKIP_COMMIT_GUARD=true git push',
     '',
     '═'.repeat(70),
     '',
@@ -166,19 +145,18 @@ async function main(): Promise<void> {
   try {
     const input = await parseStdin();
 
-    // DEBUG: Log hook execution
-    console.error('[DEBUG] git-commit-guard: Hook started');
-    console.error(`[DEBUG] tool_name: ${input.tool_name}`);
-    console.error(
-      `[DEBUG] transcript_path: ${input.transcript_path ?? 'NOT PROVIDED'}`,
-    );
-
     // Check if hook is enabled
     checkHookEnabled(input.cwd, 'gitCommitGuard');
 
+    // Check for bypass flag
+    if (process.env.SKIP_COMMIT_GUARD === 'true') {
+      console.error('[DEBUG] SKIP_COMMIT_GUARD=true - bypassing guard');
+      checkPerformance(startTime, 50, 'git-commit-guard');
+      process.exit(0);
+    }
+
     // Only run for Bash tool
     if (input.tool_name !== 'Bash') {
-      console.error('[DEBUG] Not a Bash tool, exiting');
       process.exit(0);
     }
 
@@ -187,74 +165,41 @@ async function main(): Promise<void> {
     const command = toolInput?.command as string | undefined;
 
     if (!command) {
-      console.error('[DEBUG] No command found, exiting');
-      process.exit(0); // No command
-    }
-
-    console.error(`[DEBUG] command: ${command}`);
-
-    // Check if this is a git commit command
-    if (!isGitCommit(command)) {
-      console.error('[DEBUG] Not a git commit command, exiting');
-      process.exit(0); // Not a commit command
-    }
-
-    console.error('[DEBUG] Git commit detected!');
-
-    // Load transcript to check for commit intent
-    const transcriptPath = input.transcript_path;
-
-    if (!transcriptPath) {
-      // No transcript available - allow commit (graceful degradation)
-      console.error(
-        '[DEBUG] No transcript_path provided, allowing commit (graceful degradation)',
-      );
-      checkPerformance(startTime, 50, 'git-commit-guard');
       process.exit(0);
     }
 
-    console.error(`[DEBUG] Loading transcript from: ${transcriptPath}`);
-
-    const transcript = loadTranscript(transcriptPath);
-
-    if (!transcript) {
-      // Failed to load transcript - allow commit (graceful degradation)
-      console.error(
-        '[DEBUG] Failed to load transcript, allowing commit (graceful degradation)',
-      );
-      checkPerformance(startTime, 50, 'git-commit-guard');
+    // Only check git commit/push commands
+    if (!isGitCommitOrPush(command)) {
       process.exit(0);
     }
 
-    console.error(
-      `[DEBUG] Transcript loaded with ${transcript.messages.length} messages`,
-    );
+    // Get current branch
+    const currentBranch = getCurrentBranch(input.cwd);
 
-    // Check for explicit commit intent
-    const hasIntent = hasExplicitCommitIntent(transcript.messages);
+    console.error('[DEBUG] git-commit-guard: Git operation detected');
+    console.error(`[DEBUG] Current branch: ${currentBranch}`);
+    console.error(`[DEBUG] Command: ${command}`);
 
-    console.error(`[DEBUG] Explicit commit intent found: ${hasIntent}`);
+    // Check if targeting protected branch
+    if (targetsProtectedBranch(command, currentBranch)) {
+      // Block the operation
+      console.error('[DEBUG] BLOCKING - targets protected branch');
 
-    if (!hasIntent) {
-      // No explicit intent - block commit
-      console.error('[DEBUG] BLOCKING commit - no explicit intent');
-
-      // Output hookSpecificOutput to block the tool use
       const output = {
         hookSpecificOutput: {
           hookEventName: 'PreToolUse',
           permissionDecision: 'deny',
-          permissionDecisionReason: formatBlockMessage(),
+          permissionDecisionReason: formatBlockMessage(currentBranch, command),
         },
       };
 
       console.log(JSON.stringify(output));
       checkPerformance(startTime, 50, 'git-commit-guard');
-      process.exit(0); // Exit 0 after blocking
+      process.exit(0);
     }
 
-    // Explicit intent found - allow commit
-    console.error('[DEBUG] ALLOWING commit - explicit intent found');
+    // Allow the operation - not targeting protected branch
+    console.error('[DEBUG] ALLOWING - not targeting protected branch');
     checkPerformance(startTime, 50, 'git-commit-guard');
     process.exit(0);
   } catch (error) {
