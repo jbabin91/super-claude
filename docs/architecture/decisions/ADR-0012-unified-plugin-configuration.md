@@ -1,7 +1,8 @@
 # ADR-0012: Unified Plugin Configuration System
 
-**Status:** Proposed
+**Status:** Accepted
 **Date:** 2025-01-09
+**Accepted:** 2025-01-10
 **Deciders:** Jace Babin
 **Tags:** configuration, plugins, architecture
 
