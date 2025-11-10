@@ -14,17 +14,11 @@
 
 import { execSync } from 'node:child_process';
 
+import { checkPerformance, formatError, parseStdin } from './utils/index.js';
 import {
   checkHookEnabled,
-  checkPerformance,
-  formatError,
-  parseStdin,
-} from './utils/index.js';
-
-/**
- * Protected branches that require feature branch workflow
- */
-const PROTECTED_BRANCHES = ['main', 'master'];
+  getHookConfig,
+} from './utils/super-claude-config-loader.js';
 
 /**
  * Get current git branch
@@ -66,14 +60,16 @@ function isGitCommitOrPush(command: string): boolean {
  *
  * @param command Git command
  * @param currentBranch Current branch name
+ * @param protectedBranches List of protected branches
  * @returns true if targeting protected branch
  */
 function targetsProtectedBranch(
   command: string,
   currentBranch: string | null,
+  protectedBranches: string[],
 ): boolean {
   // Check if push command explicitly targets protected branch
-  for (const branch of PROTECTED_BRANCHES) {
+  for (const branch of protectedBranches) {
     if (
       command.includes(`origin ${branch}`) ||
       command.includes(`origin/${branch}`)
@@ -83,7 +79,7 @@ function targetsProtectedBranch(
   }
 
   // Check if current branch is protected
-  if (currentBranch && PROTECTED_BRANCHES.includes(currentBranch)) {
+  if (currentBranch && protectedBranches.includes(currentBranch)) {
     return true;
   }
 
@@ -95,11 +91,13 @@ function targetsProtectedBranch(
  *
  * @param currentBranch Current branch name
  * @param command Git command that was blocked
+ * @param protectedBranches List of protected branches
  * @returns Formatted error message
  */
 function formatBlockMessage(
   currentBranch: string | null,
   command: string,
+  protectedBranches: string[],
 ): string {
   return [
     '',
@@ -107,7 +105,7 @@ function formatBlockMessage(
     '⚠️  DIRECT COMMIT/PUSH TO PROTECTED BRANCH BLOCKED',
     '═'.repeat(70),
     '',
-    `Protected branches: ${PROTECTED_BRANCHES.join(', ')}`,
+    `Protected branches: ${protectedBranches.join(', ')}`,
     `Current branch: ${currentBranch ?? 'unknown'}`,
     `Blocked command: ${command}`,
     '',
@@ -145,12 +143,20 @@ async function main(): Promise<void> {
   try {
     const input = await parseStdin();
 
-    // Check if hook is enabled
-    checkHookEnabled(input.cwd, 'gitCommitGuard');
+    // Check if hook is enabled and get config
+    checkHookEnabled(input.cwd, 'workflow', 'gitCommitGuard');
+
+    // Get hook configuration
+    const config = getHookConfig(input.cwd, 'workflow', 'gitCommitGuard');
+    const protectedBranches = (config.protectedBranches as string[]) ?? [
+      'main',
+      'master',
+    ];
+    const bypassEnvVar = (config.bypassEnvVar as string) ?? 'SKIP_COMMIT_GUARD';
 
     // Check for bypass flag
-    if (process.env.SKIP_COMMIT_GUARD === 'true') {
-      console.error('[DEBUG] SKIP_COMMIT_GUARD=true - bypassing guard');
+    if (process.env[bypassEnvVar] === 'true') {
+      console.error(`[DEBUG] ${bypassEnvVar}=true - bypassing guard`);
       checkPerformance(startTime, 50, 'git-commit-guard');
       process.exit(0);
     }
@@ -169,9 +175,9 @@ async function main(): Promise<void> {
     }
 
     // Check for bypass flag in command string
-    if (command.includes('SKIP_COMMIT_GUARD=true')) {
+    if (command.includes(`${bypassEnvVar}=true`)) {
       console.error(
-        '[DEBUG] SKIP_COMMIT_GUARD=true in command - bypassing guard',
+        `[DEBUG] ${bypassEnvVar}=true in command - bypassing guard`,
       );
       checkPerformance(startTime, 50, 'git-commit-guard');
       process.exit(0);
@@ -188,9 +194,12 @@ async function main(): Promise<void> {
     console.error('[DEBUG] git-commit-guard: Git operation detected');
     console.error(`[DEBUG] Current branch: ${currentBranch}`);
     console.error(`[DEBUG] Command: ${command}`);
+    console.error(
+      `[DEBUG] Protected branches: ${protectedBranches.join(', ')}`,
+    );
 
     // Check if targeting protected branch
-    if (targetsProtectedBranch(command, currentBranch)) {
+    if (targetsProtectedBranch(command, currentBranch, protectedBranches)) {
       // Block the operation
       console.error('[DEBUG] BLOCKING - targets protected branch');
 
@@ -198,7 +207,11 @@ async function main(): Promise<void> {
         hookSpecificOutput: {
           hookEventName: 'PreToolUse',
           permissionDecision: 'deny',
-          permissionDecisionReason: formatBlockMessage(currentBranch, command),
+          permissionDecisionReason: formatBlockMessage(
+            currentBranch,
+            command,
+            protectedBranches,
+          ),
         },
       };
 

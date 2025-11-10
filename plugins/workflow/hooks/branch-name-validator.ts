@@ -12,34 +12,11 @@
  * @see {@link https://github.com/jbabin91/super-claude} for documentation
  */
 
+import { checkPerformance, formatError, parseStdin } from './utils/index.js';
 import {
   checkHookEnabled,
-  checkPerformance,
-  formatError,
-  parseStdin,
-} from './utils/index.js';
-
-/**
- * Valid conventional commit types for branch naming
- */
-const VALID_PREFIXES = [
-  'feat', // New features
-  'fix', // Bug fixes
-  'docs', // Documentation
-  'style', // Code style (formatting, missing semicolons, etc.)
-  'refactor', // Code refactoring
-  'perf', // Performance improvements
-  'test', // Adding or updating tests
-  'build', // Build system or dependencies
-  'ci', // CI/CD changes
-  'chore', // Maintenance tasks
-  'revert', // Reverting changes
-];
-
-/**
- * Branches that are always allowed (protected branches)
- */
-const ALLOWED_BRANCHES = new Set(['main', 'master', 'develop']);
+  getHookConfig,
+} from './utils/super-claude-config-loader.js';
 
 /**
  * Extract branch name from git checkout command
@@ -57,16 +34,22 @@ function extractBranchName(command: string): string | null {
  * Validate branch name follows conventional commit pattern
  *
  * @param branchName Branch name to validate
+ * @param allowedPrefixes List of valid prefixes
+ * @param allowedBranches Set of branches allowed without prefix
  * @returns true if valid, false otherwise
  */
-function isValidBranchName(branchName: string): boolean {
+function isValidBranchName(
+  branchName: string,
+  allowedPrefixes: string[],
+  allowedBranches: Set<string>,
+): boolean {
   // Allow protected branches
-  if (ALLOWED_BRANCHES.has(branchName)) {
+  if (allowedBranches.has(branchName)) {
     return true;
   }
 
   // Check if follows pattern: <type>/<description>
-  const pattern = new RegExp(`^(${VALID_PREFIXES.join('|')})/[a-z0-9-]+$`);
+  const pattern = new RegExp(`^(${allowedPrefixes.join('|')})/[a-z0-9-]+$`);
   return pattern.test(branchName);
 }
 
@@ -74,11 +57,15 @@ function isValidBranchName(branchName: string): boolean {
  * Get suggested branch name from invalid name
  *
  * @param branchName Invalid branch name
+ * @param allowedPrefixes List of valid prefixes
  * @returns Suggested valid branch name
  */
-function suggestBranchName(branchName: string): string {
+function suggestBranchName(
+  branchName: string,
+  allowedPrefixes: string[],
+): string {
   // Try to extract a valid prefix if present
-  for (const prefix of VALID_PREFIXES) {
+  for (const prefix of allowedPrefixes) {
     if (branchName.toLowerCase().includes(prefix)) {
       const description = branchName
         .toLowerCase()
@@ -99,10 +86,14 @@ function suggestBranchName(branchName: string): string {
  * Format blocking message
  *
  * @param branchName Invalid branch name
+ * @param allowedPrefixes List of valid prefixes
  * @returns Formatted error message
  */
-function formatBlockMessage(branchName: string): string {
-  const suggested = suggestBranchName(branchName);
+function formatBlockMessage(
+  branchName: string,
+  allowedPrefixes: string[],
+): string {
+  const suggested = suggestBranchName(branchName, allowedPrefixes);
 
   return [
     '',
@@ -116,7 +107,7 @@ function formatBlockMessage(branchName: string): string {
     '  <type>/<description>',
     '',
     'Valid types:',
-    `  ${VALID_PREFIXES.join(', ')}`,
+    `  ${allowedPrefixes.join(', ')}`,
     '',
     'Description rules:',
     '  • Use kebab-case (lowercase with hyphens)',
@@ -153,7 +144,29 @@ async function main(): Promise<void> {
     const input = await parseStdin();
 
     // Check if hook is enabled
-    checkHookEnabled(input.cwd, 'branchNameValidator');
+    checkHookEnabled(input.cwd, 'workflow', 'branchNameValidator');
+
+    // Get hook configuration
+    const config = getHookConfig(input.cwd, 'workflow', 'branchNameValidator');
+    const allowedPrefixes = (config.allowedPrefixes as string[]) ?? [
+      'feat',
+      'fix',
+      'chore',
+      'docs',
+      'test',
+      'refactor',
+      'perf',
+      'build',
+      'ci',
+      'revert',
+      'style',
+    ];
+    const allowedBranchList = (config.allowedBranches as string[]) ?? [
+      'main',
+      'master',
+      'develop',
+    ];
+    const allowedBranches = new Set(allowedBranchList);
 
     // Only run for Bash tool
     if (input.tool_name !== 'Bash') {
@@ -182,9 +195,13 @@ async function main(): Promise<void> {
 
     console.error('[DEBUG] branch-name-validator: Checking branch name');
     console.error(`[DEBUG] Branch name: ${branchName}`);
+    console.error(`[DEBUG] Allowed prefixes: ${allowedPrefixes.join(', ')}`);
+    console.error(
+      `[DEBUG] Allowed branches: ${[...allowedBranches].join(', ')}`,
+    );
 
     // Validate branch name
-    if (!isValidBranchName(branchName)) {
+    if (!isValidBranchName(branchName, allowedPrefixes, allowedBranches)) {
       // Block the operation
       console.error('[DEBUG] BLOCKING - invalid branch name');
 
@@ -192,7 +209,10 @@ async function main(): Promise<void> {
         hookSpecificOutput: {
           hookEventName: 'PreToolUse',
           permissionDecision: 'deny',
-          permissionDecisionReason: formatBlockMessage(branchName),
+          permissionDecisionReason: formatBlockMessage(
+            branchName,
+            allowedPrefixes,
+          ),
         },
       };
 
