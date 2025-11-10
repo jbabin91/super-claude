@@ -1,0 +1,36 @@
+{
+  "$schema": "../../.claude-plugin/super-claude-config.schema.json",
+  "plugin": "workflow",
+  "skills": {},
+  "hooks": {
+    "gitCommitGuard": {
+      "enabled": true,
+      "protectedBranches": ["main", "master"],
+      "bypassEnvVar": "SKIP_COMMIT_GUARD"
+    },
+    "branchNameValidator": {
+      "enabled": true,
+      "allowedPrefixes": [
+        "feat",
+        "fix",
+        "chore",
+        "docs",
+        "test",
+        "refactor",
+        "perf",
+        "build",
+        "ci",
+        "revert",
+        "style"
+      ],
+      "allowedBranches": ["main", "master", "develop"]
+    },
+    "typeChecker": {
+      "enabled": true,
+      "timeout": 2000
+    },
+    "sessionChecklist": {
+      "enabled": true
+    }
+  }
+}

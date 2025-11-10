@@ -19,6 +19,7 @@ For guidance on when and how to write ADRs, see [README.md](README.md).
 - [ADR-0009: Token-Efficient Skill Design](decisions/ADR-0009-token-efficient-skill-design.md)
 - [ADR-0010: Hook Type Selection](decisions/ADR-0010-hook-type-selection.md)
 - [ADR-0011: ArkType for Schema Validation](decisions/ADR-0011-schema-validation-arktype.md)
+- [ADR-0012: Unified Plugin Configuration System](decisions/ADR-0012-unified-plugin-configuration.md)
 
 ### Proposed
 
@@ -62,6 +63,7 @@ _None_
 ### Tooling & Infrastructure
 
 - [ADR-0011: ArkType for Schema Validation](decisions/ADR-0011-schema-validation-arktype.md) - Multi-layer validation system for plugin manifests and skill frontmatter
+- [ADR-0012: Unified Plugin Configuration System](decisions/ADR-0012-unified-plugin-configuration.md) - Single configuration file for skills and hooks with priority-based overrides
 
 ## By Date (Chronological)
 
@@ -81,6 +83,9 @@ _None_
 
 - **2025-11-07** - Schema validation infrastructure to prevent runtime errors:
   - [ADR-0011: ArkType for Schema Validation](decisions/ADR-0011-schema-validation-arktype.md)
+
+- **2025-01-09** - Unified plugin configuration system accepted:
+  - [ADR-0012: Unified Plugin Configuration System](decisions/ADR-0012-unified-plugin-configuration.md)
 
 ## Quick Links
 

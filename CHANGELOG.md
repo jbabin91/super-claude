@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-11-09
+
+### Added
+
+- **Unified Plugin Configuration System** - Configure skills and hooks in one place (workflow plugin v0.4.0)
+  - JSON Schema validation (`.claude-plugin/super-claude-config.schema.json`)
+  - TypeScript types with extensible index signatures (`config-types.ts`)
+  - ArkType runtime validation with custom validation result types (`config-validation.ts`)
+  - Configuration loader with deep merge, caching, and priority system (`super-claude-config-loader.ts`)
+  - Plugin defaults: `plugins/*/super-claude-config.json`
+  - Project overrides: `.claude/super-claude-config.json`
+  - Configuration priority: Environment variables > Project overrides > Plugin defaults
+  - `/configure-activation` v2.0 command with smart migration using AskUserQuestion
+  - Backwards compatibility with legacy `skill-rules.json` format
+  - Comprehensive documentation (ADR-0012, `docs/guides/plugin-configuration.md`)
+  - meta plugin v0.4.0 with default configuration for 6 skills
+  - workflow plugin v0.4.0 with default configuration for 4 hooks
+  - bump-version script now supports --yes flag for non-interactive use
+
+### Changed
+
+- **git-commit-guard hook** - Now reads `protectedBranches` and `bypassEnvVar` from configuration
+- **branch-name-validator hook** - Now reads `allowedPrefixes` and `allowedBranches` from configuration
+
 ### Changed
 
 - **Plugin Naming Cleanup** - Removed `-tools` suffix for cleaner, more natural names

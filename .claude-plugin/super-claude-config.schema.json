@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/jbabin91/super-claude/blob/main/.claude-plugin/super-claude-config.schema.json",
+  "title": "Super Claude Plugin Configuration",
+  "description": "Configuration schema for super-claude plugins supporting skills and hooks",
+  "oneOf": [
+    {
+      "$ref": "#/definitions/PluginConfig"
+    },
+    {
+      "$ref": "#/definitions/ProjectConfig"
+    }
+  ],
+  "definitions": {
+    "PluginConfig": {
+      "type": "object",
+      "description": "Plugin-level configuration (plugins/{plugin}/super-claude-config.json)",
+      "required": ["plugin"],
+      "properties": {
+        "plugin": {
+          "type": "string",
+          "description": "Plugin identifier matching directory name",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "skills": {
+          "type": "object",
+          "description": "Skill configurations keyed by skill name",
+          "additionalProperties": {
+            "$ref": "#/definitions/SkillConfig"
+          }
+        },
+        "hooks": {
+          "type": "object",
+          "description": "Hook configurations keyed by hook name",
+          "additionalProperties": {
+            "$ref": "#/definitions/HookConfig"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ProjectConfig": {
+      "type": "object",
+      "description": "Project-level configuration (.claude/super-claude-config.json)",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "skills": {
+            "type": "object",
+            "description": "Skill overrides for this plugin",
+            "additionalProperties": {
+              "$ref": "#/definitions/SkillOverride"
+            }
+          },
+          "hooks": {
+            "type": "object",
+            "description": "Hook overrides for this plugin",
+            "additionalProperties": {
+              "$ref": "#/definitions/HookOverride"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "SkillConfig": {
+      "type": "object",
+      "description": "Complete skill configuration in plugin defaults",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether this skill is enabled",
+          "default": true
+        },
+        "triggers": {
+          "type": "object",
+          "description": "Auto-activation triggers",
+          "properties": {
+            "keywords": {
+              "type": "array",
+              "description": "Literal keywords for case-insensitive matching",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "default": []
+            },
+            "patterns": {
+              "type": "array",
+              "description": "Regex patterns for intent matching",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "default": []
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "SkillOverride": {
+      "type": "object",
+      "description": "Partial skill configuration for project overrides",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Override enabled state"
+        },
+        "triggers": {
+          "type": "object",
+          "description": "Override auto-activation triggers",
+          "properties": {
+            "keywords": {
+              "type": "array",
+              "description": "Replace keyword list",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "patterns": {
+              "type": "array",
+              "description": "Replace pattern list",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "HookConfig": {
+      "type": "object",
+      "description": "Hook configuration with plugin-specific settings",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether this hook is enabled",
+          "default": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "HookOverride": {
+      "type": "object",
+      "description": "Hook override with partial settings",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Override enabled state"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
