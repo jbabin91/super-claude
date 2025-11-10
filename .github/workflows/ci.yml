@@ -73,18 +73,47 @@ jobs:
     needs: [lint, type-check, validate-schemas]
     if: always()
     steps:
-      - name: Check all jobs succeeded
+      - name: Check Workflow Status
         run: |
-          # Check if any required job failed
-          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" ]]; then
-            echo "❌ One or more required checks failed"
-            exit 1
-          fi
+          # Helper function to fail on specific job results
+          exit_on_result() {
+            if [[ "$2" == "failure" ]]; then
+              echo "❌ Job '$1' failed"
+              exit 1
+            elif [[ "$2" == "cancelled" ]]; then
+              echo "🚫 Job '$1' was cancelled"
+              exit 1
+            fi
+          }
 
-          # Check if any required job was cancelled
-          if [[ "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
-            echo "❌ One or more required checks were cancelled"
-            exit 1
-          fi
+          # Create GitHub Step Summary
+          echo "## 📊 CI Status Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status | Required |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|----------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint | \`${{ needs.lint.result }}\` | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
+          echo "| Type Check | \`${{ needs.type-check.result }}\` | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
+          echo "| Validate Schemas | \`${{ needs.validate-schemas.result }}\` | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
 
-          echo "✅ All required checks passed"
+          echo "🔍 Checking CI job results..."
+          echo ""
+          echo "📊 Job Results:"
+          echo "  Lint: ${{ needs.lint.result }}"
+          echo "  Type Check: ${{ needs.type-check.result }}"
+          echo "  Validate Schemas: ${{ needs.validate-schemas.result }}"
+          echo ""
+
+          # Required jobs (must not fail or be cancelled)
+          exit_on_result "lint" "${{ needs.lint.result }}"
+          exit_on_result "type-check" "${{ needs.type-check.result }}"
+          exit_on_result "validate-schemas" "${{ needs.validate-schemas.result }}"
+
+          echo "✅ All checks passed - safe to merge"
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **All checks passed** - safe to merge" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**View full run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+
+          echo ""
+          echo "✅ Required checks passed - ready for merge"
