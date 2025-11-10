@@ -12,7 +12,7 @@ NC='\033[0m' # No Color
 
 show_help() {
   cat << EOF
-Usage: ./scripts/bump-version.sh <plugin-name> <bump-type>
+Usage: ./scripts/bump-version.sh <plugin-name> <bump-type> [--yes|-y]
 
 Bump plugin and marketplace versions for a plugin.
 
@@ -20,9 +20,12 @@ Arguments:
   plugin-name   Name of the plugin (e.g., workflow, meta)
   bump-type     Version bump type: patch, minor, or major
 
+Options:
+  --yes, -y     Skip confirmation prompt (for automation)
+
 Examples:
   ./scripts/bump-version.sh workflow minor
-  ./scripts/bump-version.sh meta patch
+  ./scripts/bump-version.sh meta patch --yes
 
 What each bump type means:
   patch (0.0.X)  Bug fixes, small updates
@@ -71,14 +74,27 @@ bump_semver() {
   echo "$major.$minor.$patch"
 }
 
-# Check arguments
-if [ $# -ne 2 ]; then
+# Parse arguments
+SKIP_CONFIRM=false
+
+# Check minimum arguments
+if [ $# -lt 2 ]; then
   show_help
   exit 1
 fi
 
 PLUGIN_NAME=$1
 BUMP_TYPE=$2
+
+# Check for --yes flag
+if [ $# -eq 3 ]; then
+  if [[ "$3" == "--yes" || "$3" == "-y" ]]; then
+    SKIP_CONFIRM=true
+  else
+    echo -e "${RED}Error: Invalid option '$3'. Use --yes or -y to skip confirmation.${NC}"
+    exit 1
+  fi
+fi
 
 # Validate bump type
 if [[ ! "$BUMP_TYPE" =~ ^(patch|minor|major)$ ]]; then
@@ -112,12 +128,14 @@ echo "  Plugin version:      $CURRENT_PLUGIN_VERSION → $NEW_PLUGIN_VERSION"
 echo "  Marketplace version: $CURRENT_MARKETPLACE_VERSION → $NEW_MARKETPLACE_VERSION"
 echo ""
 
-# Confirm
-read -p "Continue? (y/N) " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-  echo "Aborted"
-  exit 0
+# Confirm (unless --yes flag provided)
+if [ "$SKIP_CONFIRM" = false ]; then
+  read -p "Continue? (y/N) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Aborted"
+    exit 0
+  fi
 fi
 
 # Update plugin.json
