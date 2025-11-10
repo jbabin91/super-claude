@@ -21,6 +21,7 @@ Welcome to the super-claude documentation! This guide helps you find what you ne
 
 Step-by-step guides for creating Claude Code enhancements.
 
+- **[plugin-configuration.md](guides/plugin-configuration.md)** - Plugin configuration and customization guide
 - **[skill-activation.md](guides/skill-activation.md)** - Skill auto-activation system guide
 - [creating-skills.md](guides/creating-skills.md) - How to create new skills _(coming soon)_
 - [creating-plugins.md](guides/creating-plugins.md) - How to create new plugins _(coming soon)_
@@ -94,6 +95,7 @@ Architecture decisions and technical designs.
 
 **guides/**
 
+- ✅ plugin-configuration.md
 - ✅ skill-activation.md
 - 📝 creating-skills.md
 - 📝 creating-plugins.md

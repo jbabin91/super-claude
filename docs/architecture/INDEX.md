@@ -22,7 +22,7 @@ For guidance on when and how to write ADRs, see [README.md](README.md).
 
 ### Proposed
 
-_None_
+- [ADR-0012: Unified Plugin Configuration System](decisions/ADR-0012-unified-plugin-configuration.md)
 
 ### Deprecated
 
