@@ -17,6 +17,10 @@
       "description": "Plugin-level configuration (plugins/{plugin}/super-claude-config.json)",
       "required": ["plugin"],
       "properties": {
+        "$schema": {
+          "type": "string",
+          "description": "JSON Schema reference"
+        },
         "plugin": {
           "type": "string",
           "description": "Plugin identifier matching directory name",
@@ -42,26 +46,36 @@
     "ProjectConfig": {
       "type": "object",
       "description": "Project-level configuration (.claude/super-claude-config.json)",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "skills": {
-            "type": "object",
-            "description": "Skill overrides for this plugin",
-            "additionalProperties": {
-              "$ref": "#/definitions/SkillOverride"
+      "properties": {
+        "$schema": {
+          "type": "string",
+          "description": "JSON Schema reference"
+        }
+      },
+      "patternProperties": {
+        "^[a-z][a-z0-9-]*$": {
+          "type": "object",
+          "description": "Plugin-specific configuration",
+          "properties": {
+            "skills": {
+              "type": "object",
+              "description": "Skill overrides for this plugin",
+              "additionalProperties": {
+                "$ref": "#/definitions/SkillOverride"
+              }
+            },
+            "hooks": {
+              "type": "object",
+              "description": "Hook overrides for this plugin",
+              "additionalProperties": {
+                "$ref": "#/definitions/HookOverride"
+              }
             }
           },
-          "hooks": {
-            "type": "object",
-            "description": "Hook overrides for this plugin",
-            "additionalProperties": {
-              "$ref": "#/definitions/HookOverride"
-            }
-          }
-        },
-        "additionalProperties": false
-      }
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
     },
     "SkillConfig": {
       "type": "object",
