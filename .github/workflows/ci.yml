@@ -64,11 +64,11 @@ jobs:
       - name: Validate JSON schemas
         run: bun run validate
 
-  # Status check job that depends on all other jobs
+  # Summary job that depends on all other jobs
   # This provides a single check to require in branch protection
   # and prevents auto-merge from triggering while checks are in progress
-  status-check:
-    name: Status Check
+  summary:
+    name: Summary
     runs-on: ubuntu-latest
     needs: [lint, type-check, validate-schemas]
     if: always()
