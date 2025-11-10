@@ -22,8 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `/configure-activation` v2.0 command with smart migration using AskUserQuestion
   - Backwards compatibility with legacy `skill-rules.json` format
   - Comprehensive documentation (ADR-0012, `docs/guides/plugin-configuration.md`)
-  - meta plugin v0.3.0 with default configuration for 6 skills
+  - meta plugin v0.4.0 with default configuration for 6 skills
   - workflow plugin v0.4.0 with default configuration for 4 hooks
+  - bump-version script now supports --yes flag for non-interactive use
 
 ### Changed
 

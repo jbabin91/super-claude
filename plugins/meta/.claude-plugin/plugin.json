@@ -1,6 +1,6 @@
 {
   "name": "meta",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Meta-tools for creating and managing Claude Code components. Generate skills, commands, agents, hooks, and plugins with proper structure and validation.",
   "author": {
     "name": "Jace Babin",
