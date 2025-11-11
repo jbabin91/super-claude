@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD - created by archiving change add-unified-plugin-config. Update Purpose after archive.
+The purpose of the plugin-configuration specification is to define a unified, extensible, and validated configuration system for plugins. This capability standardizes how plugins declare their default settings, how users can override these settings at the project level, and how configuration is loaded and merged at runtime. It ensures that all plugin configurations follow a consistent file format and schema, enabling reliable validation, predictable behavior, and easier management of plugin features such as skills and hooks.
 
 ## Requirements
 
@@ -124,8 +124,9 @@ The system SHALL provide a command to generate project-level configuration templ
 
 - **WHEN** user runs `/configure-activation` slash command
 - **THEN** a `.claude/super-claude-config.json` template is created
-- **AND** the template includes current plugin defaults with comments
-- **AND** the template explains override behavior
+- **AND** the template includes current plugin defaults with JSON Schema reference (`$schema` property for IDE support)
+- **AND** interactive guidance is provided via the AskUserQuestion tool explaining override behavior
+- **AND** the user is directed to the Plugin Configuration Guide for complete documentation
 
 ### Requirement: Configuration Documentation
 
