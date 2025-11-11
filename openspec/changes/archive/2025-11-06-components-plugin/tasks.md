@@ -2,10 +2,10 @@
 
 ## 1. Plugin Setup
 
-- [ ] 1.1 Create `plugins/components/` directory
-- [ ] 1.2 Create `plugins/components/.claude-plugin/metadata.json`
-- [ ] 1.3 Create `plugins/components/skills/` directory
-- [ ] 1.4 Add plugin to `.claude-plugin/marketplace.json`
+- [x] 1.1 Create `plugins/components/` directory (completed as `plugins/design-system/`)
+- [x] 1.2 Create `plugins/components/.claude-plugin/metadata.json` (completed as `plugins/design-system/.claude-plugin/plugin.json`)
+- [x] 1.3 Create `plugins/components/skills/` directory (completed as `plugins/design-system/skills/`)
+- [x] 1.4 Add plugin to `.claude-plugin/marketplace.json` (completed, registered as "design-system")
 
 ## 2. Component Generator Skill
 
@@ -47,6 +47,6 @@
 
 ## 6. Documentation
 
-- [ ] 6.1 Update README.md with components plugin
-- [ ] 6.2 Add usage examples
-- [ ] 6.3 Add Base UI vs Radix UI guidance
+- [x] 6.1 Update README.md with components plugin (completed as `plugins/design-system/README.md`)
+- [ ] 6.2 Add usage examples (not completed - skills not implemented)
+- [ ] 6.3 Add Base UI vs Radix UI guidance (not completed - skills not implemented)
