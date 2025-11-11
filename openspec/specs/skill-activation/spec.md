@@ -39,58 +39,82 @@ The `skill-activation-prompt.ts` hook SHALL execute on every `user-prompt-submit
 
 ### Requirement: Plugin-Level Rule Discovery
 
-The hook SHALL discover and load all `skill-rules.json` files from installed plugins in `.claude/skills/*/skill-rules.json`.
+The hook SHALL discover and load all `super-claude-config.json` files from installed plugins, falling back to `skill-rules.json` for backwards compatibility.
 
-#### Scenario: Multiple plugins installed
+#### Scenario: Multiple plugins with super-claude-config.json
 
-- **GIVEN** user project has claude-tools and tanstack plugins installed
-- **AND** each plugin has its own skill-rules.json
+- **GIVEN** user project has meta and workflow plugins installed
+- **AND** each plugin has `plugins/{plugin}/super-claude-config.json`
 - **WHEN** hook executes
-- **THEN** both `skill-rules.json` files are discovered and loaded
-- **AND** rules from both plugins are available for matching
+- **THEN** both `super-claude-config.json` files are discovered and loaded
+- **AND** skill rules from the `skills` section of both configs are available for matching
 
-#### Scenario: Plugin without skill-rules.json
+#### Scenario: Plugin without configuration file
 
-- **GIVEN** user project has a plugin without skill-rules.json
+- **GIVEN** user project has a plugin without `super-claude-config.json`
 - **WHEN** hook executes
 - **THEN** plugin is skipped without error
-- **AND** other plugins with rules are still processed
+- **AND** other plugins with config are still processed
 
-#### Scenario: Malformed skill-rules.json
+#### Scenario: Malformed super-claude-config.json
 
-- **GIVEN** plugin with invalid JSON in skill-rules.json
+- **GIVEN** plugin with invalid JSON in super-claude-config.json
 - **WHEN** hook attempts to load the file
-- **THEN** hook logs warning: "⚠️ Invalid skill-rules.json in [plugin-name]"
+- **THEN** hook logs warning: "⚠️ Invalid super-claude-config.json in [plugin-name]"
 - **AND** continues processing other plugins without crashing
+
+#### Scenario: Backwards compatibility with skill-rules.json
+
+- **GIVEN** plugin only has `skill-rules.json` (no `super-claude-config.json`)
+- **WHEN** hook discovers plugin configurations
+- **THEN** `skill-rules.json` is read and parsed
+- **AND** skill rules are loaded successfully
+- **AND** deprecation warning is logged: "⚠️ [plugin-name] using deprecated skill-rules.json. Migrate to super-claude-config.json"
+
+#### Scenario: Both config formats present
+
+- **GIVEN** plugin has both `super-claude-config.json` and `skill-rules.json`
+- **WHEN** hook discovers plugin configurations
+- **THEN** `super-claude-config.json` takes precedence
+- **AND** `skill-rules.json` is ignored
+- **AND** no deprecation warning is logged
 
 ---
 
 ### Requirement: Project Override Support
 
-The hook SHALL support project-level overrides in `.claude/skills/skill-rules.json` with higher precedence than plugin rules.
+The hook SHALL support project-level overrides in `.claude/super-claude-config.json` with higher precedence than plugin defaults.
 
-#### Scenario: Override skill priority
+#### Scenario: Override skill triggers
 
-- **GIVEN** claude-tools defines skill-creator with priority "high"
-- **AND** project overrides define "claude/skill-creator" with priority "critical"
-- **WHEN** hook merges rules
-- **THEN** skill-creator has priority "critical"
-- **AND** appears first in suggestions
+- **GIVEN** workflow plugin defines skill with triggers in `super-claude-config.json`
+- **AND** project has `.claude/super-claude-config.json` with modified triggers for that skill
+- **WHEN** hook merges configuration
+- **THEN** project triggers override plugin triggers
+- **AND** skill matches based on project configuration
 
 #### Scenario: Disable specific skill
 
-- **GIVEN** plugin defines skill-creator
-- **AND** project overrides include "claude/skill-creator" in disabled array
-- **WHEN** hook processes rules
-- **THEN** skill-creator is excluded from matching
+- **GIVEN** plugin defines a skill in `super-claude-config.json`
+- **AND** project config includes `workflow.skills.skill-name.enabled = false`
+- **WHEN** hook processes configuration
+- **THEN** skill is excluded from matching
 - **AND** does not appear in suggestions even if prompt matches
 
-#### Scenario: Add custom keywords
+#### Scenario: Add custom keywords to existing skill
 
-- **GIVEN** plugin defines skill-creator with keywords ["create skill"]
-- **AND** project overrides add keywords ["scaffold skill"]
-- **WHEN** hook merges rules
-- **THEN** skill-creator matches both "create skill" AND "scaffold skill"
+- **GIVEN** plugin defines skill with keywords in `super-claude-config.json`
+- **AND** project config adds additional keywords for that skill
+- **WHEN** hook merges configuration
+- **THEN** skill matches against both plugin and project keywords
+
+#### Scenario: Deep merge behavior
+
+- **GIVEN** plugin config defines skill with `triggers.keywords` and `triggers.patterns`
+- **AND** project config only overrides `triggers.keywords`
+- **WHEN** hook merges configuration
+- **THEN** keywords are replaced with project values
+- **AND** patterns are preserved from plugin defaults
 
 ---
 
@@ -185,48 +209,74 @@ The hook SHALL execute in under 50ms for typical projects (<10 installed plugins
 
 ### Requirement: Configuration Commands
 
-The `/configure-activation` command SHALL generate `.claude/skills/skill-rules.json` template with commented examples.
+The `/configure-activation` command SHALL generate `.claude/super-claude-config.json` template with current plugin defaults and intelligent migration handling.
 
-#### Scenario: Generate project overrides
+#### Scenario: Generate unified configuration template
 
-- **GIVEN** user runs /configure-activation command
-- **AND** .claude/skills/skill-rules.json does not exist
+- **GIVEN** user has workflow and meta plugins installed
+- **AND** user runs `/configure-activation` slash command
+- **AND** `.claude/super-claude-config.json` does not exist
 - **WHEN** command executes
-- **THEN** file is created with template structure
-- **AND** includes commented examples for overrides
-- **AND** includes commented examples for disabled array
-- **AND** includes commented global configuration options
+- **THEN** file is created with structure organized by plugin name
+- **AND** includes current plugin defaults for all skills
+- **AND** includes examples for enabling/disabling skills
+- **AND** includes examples for modifying triggers
 
-#### Scenario: File already exists
+#### Scenario: Update existing configuration with new defaults
 
-- **GIVEN** user runs /configure-activation command
-- **AND** .claude/skills/skill-rules.json already exists
+- **GIVEN** user runs `/configure-activation` command
+- **AND** `.claude/super-claude-config.json` already exists
+- **AND** new plugin defaults are available
 - **WHEN** command executes
-- **THEN** command prompts: "File exists. Overwrite? (y/n)"
-- **AND** only overwrites if user confirms
+- **THEN** command prompts user to add new defaults
+- **AND** preserves all existing user customizations
+- **AND** only adds new plugins or new skills/hooks
+
+#### Scenario: Migrate from legacy skill-rules.json
+
+- **GIVEN** user has `.claude/skills/skill-rules.json`
+- **AND** user runs `/configure-activation` command
+- **WHEN** command executes
+- **THEN** command prompts for migration
+- **AND** creates backup of legacy file
+- **AND** converts to new format preserving customizations
 
 ---
 
 ### Requirement: Schema Validation
 
-All skill-rules.json files SHALL conform to defined TypeScript interfaces with required fields.
+All `super-claude-config.json` files SHALL conform to `.claude-plugin/super-claude-config.schema.json` schema with comprehensive validation.
 
-#### Scenario: Valid plugin rules
+#### Scenario: Valid plugin configuration
 
-- **GIVEN** plugin skill-rules.json with required fields (plugin, skills)
+- **GIVEN** plugin `super-claude-config.json` with required fields (plugin, skills, hooks)
 - **WHEN** hook loads the file
-- **THEN** file parses successfully
-- **AND** all skills are available for matching
+- **THEN** file passes schema validation
+- **AND** all skills and hooks are available for processing
 
-#### Scenario: Missing required field
+#### Scenario: Missing required field in plugin config
 
-- **GIVEN** plugin skill-rules.json without "plugin.namespace" field
+- **GIVEN** plugin `super-claude-config.json` without "plugin" field
 - **WHEN** hook loads the file
-- **THEN** hook logs warning: "⚠️ Invalid schema in [plugin-name]: missing namespace"
+- **THEN** hook logs warning: "⚠️ Invalid schema in [plugin-name]: missing 'plugin' field"
 - **AND** skips that plugin
 - **AND** continues processing other plugins
 
----
+#### Scenario: Invalid project override structure
+
+- **GIVEN** `.claude/super-claude-config.json` with invalid nested structure
+- **WHEN** hook loads the file
+- **THEN** hook logs warning: "⚠️ Invalid project configuration: [specific error]"
+- **AND** falls back to plugin defaults
+- **AND** continues execution without crashing
+
+#### Scenario: Allow $schema property
+
+- **GIVEN** configuration file includes `$schema` property
+- **WHEN** schema validation executes
+- **THEN** `$schema` property is recognized as valid string
+- **AND** validation passes without errors
+- **AND** IDE tooling can use schema for autocomplete
 
 ### Requirement: Namespace Conflict Prevention
 
@@ -291,5 +341,53 @@ Project overrides SHALL support global configuration affecting all skills.
 - **WHEN** hook filters results
 - **THEN** only high-priority skills are shown
 - **AND** medium-priority skills are excluded
+
+---
+
+### Requirement: Configuration File Format
+
+Skills configuration SHALL be nested under `skills` section in `super-claude-config.json`.
+
+#### Scenario: Plugin configuration structure
+
+- **GIVEN** plugin `super-claude-config.json`
+- **WHEN** defining skill activation rules
+- **THEN** skills are nested under `skills` object
+- **AND** each skill key matches the skill directory name
+- **AND** skill configuration includes `triggers` object with `keywords` and `patterns`
+
+```json
+{
+  "plugin": "workflow",
+  "skills": {
+    "skill-name": {
+      "triggers": {
+        "keywords": ["keyword1"],
+        "patterns": ["pattern1"]
+      }
+    }
+  },
+  "hooks": {}
+}
+```
+
+#### Scenario: Project override structure
+
+- **GIVEN** `.claude/super-claude-config.json`
+- **WHEN** overriding skill configuration
+- **THEN** skills are nested under `{plugin-name}.skills` path
+- **AND** only fields being overridden need to be specified
+
+```json
+{
+  "workflow": {
+    "skills": {
+      "skill-name": {
+        "enabled": false
+      }
+    }
+  }
+}
+```
 
 ---

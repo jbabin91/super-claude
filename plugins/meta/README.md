@@ -1,6 +1,6 @@
 # Meta Plugin
 
-**Version:** 0.3.0
+**Version:** 0.4.0
 **Category:** Meta-tools
 **Status:** ✅ Ready for use
 
@@ -103,29 +103,44 @@ Claude: *skill-creator activates automatically*
 
 ## Configuration
 
-### Customizing Activation
+### Unified Configuration System
 
-Create `.claude/skills/skill-rules.json` to customize activation behavior:
+The meta plugin supports project-level configuration overrides via `.claude/super-claude-config.json`:
 
 ```json
 {
-  "version": "1.0",
-  "overrides": {
-    "meta/skill-creator": {
-      "priority": "critical",
-      "promptTriggers": {
-        "keywords": ["create skill", "build skill", "scaffold skill"]
+  "$schema": "../.claude-plugin/super-claude-config.schema.json",
+  "meta": {
+    "skills": {
+      "skill-creator": {
+        "enabled": true,
+        "triggers": {
+          "keywords": ["create skill", "build skill", "scaffold skill"],
+          "patterns": ["(create|build|scaffold).*?skill"]
+        }
       }
     }
   }
 }
 ```
 
-Generate template:
+**Generate configuration template:**
 
 ```bash
 /configure-activation
 ```
+
+This command creates a template with current plugin defaults. You can then customize:
+
+- Skill activation triggers (keywords and patterns)
+- Enable/disable specific skills
+- Adjust skill priorities
+
+**Configuration priority:** Environment variables > Project overrides (`.claude/super-claude-config.json`) > Plugin defaults
+
+**See also:** [Plugin Configuration Guide](../../docs/guides/plugin-configuration.md) for complete documentation.
+
+**Legacy format:** The old `.claude/skills/skill-rules.json` format is still supported for backwards compatibility.
 
 ## Skill Naming Conventions
 

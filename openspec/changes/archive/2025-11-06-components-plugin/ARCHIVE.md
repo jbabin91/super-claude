@@ -2,7 +2,7 @@
 
 **Archived Date:** 2025-11-06
 **Original Proposal:** components-plugin
-**Status:** Never implemented (0/53 tasks)
+**Status:** Partially implemented (5/53 tasks) - Plugin scaffolding completed as "design-system", skills not implemented
 
 ## Why Archived
 

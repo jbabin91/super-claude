@@ -1,6 +1,6 @@
 # Workflow Plugin
 
-**Version:** 0.1.0
+**Version:** 0.4.0
 **Category:** Workflow automation
 **Status:** ✅ Ready for use
 
@@ -198,6 +198,75 @@ Comprehensive guides available:
 - OpenSpec CLI (`npm install -g @jsdocs-io/openspec`)
 - Bun (for hook execution)
 - Git (for OpenSpec workflow)
+
+## Configuration
+
+### Unified Configuration System
+
+The workflow plugin supports project-level configuration overrides via `.claude/super-claude-config.json`:
+
+```json
+{
+  "$schema": "../.claude-plugin/super-claude-config.schema.json",
+  "workflow": {
+    "hooks": {
+      "gitCommitGuard": {
+        "enabled": true,
+        "protectedBranches": ["main", "production"],
+        "bypassEnvVar": "SKIP_COMMIT_GUARD"
+      },
+      "branchNameValidator": {
+        "enabled": true,
+        "allowedPrefixes": [
+          "feat",
+          "fix",
+          "docs",
+          "style",
+          "refactor",
+          "test",
+          "chore",
+          "build",
+          "ci",
+          "perf",
+          "hotfix"
+        ],
+        "allowedBranches": ["main", "develop"]
+      },
+      "typeChecker": {
+        "enabled": true,
+        "timeout": 2000
+      }
+    }
+  }
+}
+```
+
+**Generate configuration template:**
+
+```bash
+/configure-activation
+```
+
+This command creates a template with current plugin defaults. You can then customize:
+
+- Hook behavior (enable/disable hooks)
+- Protected branches for commit guard
+- Branch name validation rules
+- Type checker timeout
+
+**Configuration priority:** Environment variables > Project overrides (`.claude/super-claude-config.json`) > Plugin defaults
+
+**Environment variable overrides:**
+
+```bash
+# Disable type checker for this session
+export CLAUDE_HOOK_TYPE_CHECKER_ENABLED=false
+
+# Bypass commit guard
+export SKIP_COMMIT_GUARD=true
+```
+
+**See also:** [Plugin Configuration Guide](../../docs/guides/plugin-configuration.md) for complete documentation.
 
 ## OpenSpec Workflow
 
