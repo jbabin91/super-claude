@@ -33,7 +33,17 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/skill-activation-prompt.ts"
+          }
+        ]
+      }
     ]
   },
-  "description": "Workflow plugin hooks for session checklists, type checking, commit guards, and branch name validation"
+  "description": "Workflow plugin hooks for session checklists, type checking, commit guards, branch name validation, and skill auto-activation"
 }

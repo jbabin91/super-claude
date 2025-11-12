@@ -1,12 +1,12 @@
 {
-  "name": "testing-tools",
+  "name": "testing",
   "version": "0.1.0",
-  "description": "Testing automation tools for Vitest integration, Playwright E2E, coverage analysis, and monorepo testing strategies",
+  "description": "Unit, integration, E2E testing with Vitest, Playwright, and runtime-agnostic patterns",
   "author": {
     "name": "Jace Babin",
     "email": "jbabin91@gmail.com",
     "url": "https://github.com/jbabin91"
   },
   "license": "MIT",
-  "keywords": ["testing", "vitest", "playwright", "coverage", "e2e", "monorepo"]
+  "keywords": ["testing", "vitest", "playwright", "e2e", "unit"]
 }
