@@ -443,6 +443,41 @@ bun run lint     # Lint TypeScript/JavaScript
 
 **For complete setup, commands, and troubleshooting, see [docs/workflows/development.md](docs/workflows/development.md)**
 
+## 📋 Pull Request Guidelines
+
+**IMPORTANT: Before creating pull requests, always read [.github/AGENTS.md](.github/AGENTS.md)**
+
+### Quick Reference
+
+**Keep PR descriptions concise:**
+
+
+- Target: ~50 lines total (scannable in 30 seconds)
+- Summary: 1-3 sentences maximum
+- Changes: Bullet list (5-10 items max)
+- Test plan: Checklist format
+
+
+**What NOT to include in PR descriptions:**
+
+- ❌ Implementation details (visible in code review)
+- ❌ Documentation (belongs in README/code)
+- ❌ Code examples (unless critical for understanding)
+- ❌ Multiple subsections with deep explanations
+
+
+**Where details belong:**
+
+- **PR description** - Brief summary and changes list
+- **Code review** - Implementation details and technical discussion
+- **README** - Documentation, usage examples, API references
+- **ADRs** - Architecture decisions and strategic choices
+- **OpenSpec** - Detailed proposals and specifications
+
+**Template location:** `.github/PULL_REQUEST_TEMPLATE.md`
+
+**Complete guidelines:** [.github/AGENTS.md](.github/AGENTS.md) - Includes examples, troubleshooting, and GitHub workflow
+
 ## 📝 Commit Conventions
 
 **Format:** `<type>(<scope>): <gitmoji> <description>`

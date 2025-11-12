@@ -28,12 +28,22 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 
 ### Git & GitHub Workflow
 
-When working with git commits, pull requests, or GitHub workflows, refer to @.github/AGENTS.md for:
+**IMPORTANT: Before creating any pull requests, always read @.github/AGENTS.md**
 
-- Commit message format (conventional commits + gitmoji)
-- Pull request guidelines
-- Branching strategy
-- One logical change rule
+This file contains critical guidelines for:
+
+- **Pull request descriptions** - Keep concise (~50 lines, scannable in 30 seconds)
+- **Commit message format** - Conventional commits + gitmoji
+- **Branching strategy** - GitHub Flow with protected main branch
+- **PR template usage** - What to include and what to avoid
+- **Where details belong** - Code review vs README vs ADRs vs OpenSpec
+
+**Quick PR checklist:**
+
+- Read `.github/PULL_REQUEST_TEMPLATE.md` before creating PR
+- Summary: 1-3 sentences maximum
+- Changes: Bullet list (5-10 items max)
+- Avoid: Implementation details, documentation, code examples in PR description
 
 ## Claude Code-Specific Notes
 
