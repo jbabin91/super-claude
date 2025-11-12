@@ -2,7 +2,7 @@
  * Hook Utilities
  *
  * Shared utilities for Claude Code command hooks.
- * Includes input parsing, configuration loading, and error handling.
+ * Includes input parsing, configuration loading, error handling, and runtime checks.
  */
 
 export {
@@ -16,3 +16,8 @@ export {
   type HookInput,
   parseStdin,
 } from './hook-input.js';
+export {
+  checkBunVersion,
+  ensureBunInstalled,
+  ensureToolsInstalled,
+} from './runtime-check.js';
