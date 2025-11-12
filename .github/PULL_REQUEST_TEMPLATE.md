@@ -1,6 +1,24 @@
+<!--
+IMPORTANT: Keep this PR description CONCISE (~50 lines total, scannable in 30 seconds)
+
+❌ DON'T include:
+- Implementation details (visible in code review)
+- Documentation (belongs in README/code)
+- Code examples (unless critical)
+- Multiple subsections with deep explanations
+
+✅ DO include:
+- Brief summary (1-3 sentences)
+- Bullet list of main changes (5-10 items max)
+- Test checklist
+- Key context in Additional Notes
+
+See .github/AGENTS.md for detailed PR guidelines.
+-->
+
 ## Summary
 
-<!-- Brief description of what this PR does (1-3 sentences) -->
+<!-- Brief description of what this PR does (1-3 sentences maximum) -->
 
 ## Related
 
@@ -12,7 +30,7 @@
 
 ## Changes
 
-<!-- List of main changes -->
+<!-- High-level bullet list (5-10 items max). What changed, not how it works. -->
 
 -
 -
