@@ -23,10 +23,11 @@ Instructions for AI assistants working with GitHub workflows, pull requests, and
 3. **Test Plan**: Checklist format
    - What you tested, not how you tested it
 
-4. **Additional Notes**: Optional context
-   - Performance notes
-   - Breaking changes
-   - Important caveats
+_Optional:_ Add an **Additional Notes** section after the standard template sections for extra context:
+
+- Performance notes
+- Breaking changes
+- Important caveats
 
 **What NOT to include:**
 

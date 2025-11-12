@@ -453,6 +453,7 @@ import { Dialog } from '@base-ui-components/react';
 
 **Quick reference:**
 
+
 - **Frontend:** React + TanStack Suite + Base UI + Tailwind + Vitest
 - **Backend:** Hono + Drizzle ORM (PostgreSQL/Turso/SQLite) + better-auth
 - **Fullstack:** TanStack Start (preferred)
@@ -484,6 +485,7 @@ bun run lint     # Lint TypeScript/JavaScript
 
 ### Quick Reference
 
+
 **Keep PR descriptions concise:**
 
 - Target: ~50 lines total (scannable in 30 seconds)
@@ -491,11 +493,13 @@ bun run lint     # Lint TypeScript/JavaScript
 - Changes: Bullet list (5-10 items max)
 - Test plan: Checklist format
 
+
 **What NOT to include in PR descriptions:**
 
 - ❌ Implementation details (visible in code review)
 - ❌ Documentation (belongs in README/code)
 - ❌ Code examples (unless critical for understanding)
+
 - ❌ Multiple subsections with deep explanations
 
 **Where details belong:**
