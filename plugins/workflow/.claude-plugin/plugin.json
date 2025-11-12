@@ -19,5 +19,8 @@
     "type-checking",
     "commit-guard"
   ],
+  "requirements": {
+    "runtime": "bun >= 1.0.0"
+  },
   "hooks": "./hooks.json"
 }

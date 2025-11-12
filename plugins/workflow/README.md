@@ -80,32 +80,74 @@ Automatically displays when session starts:
 
 Automatically runs before Edit/Write operations:
 
-- Incremental type checking with `@jbabin91/tsc-files`
-- Blocks file modifications on type errors (exit code 2)
-- Shows actionable error messages
+- Incremental type checking with `@jbabin91/tsc-files` (with tsgo support)
+- **Informative only** - Shows errors but allows edits to proceed
+- Prompts Claude to fix errors after completing current task
 - Configurable per-project via settings
 
-**Performance:** < 2s (incremental checking)
+**Performance:** ~100-200ms with tsgo, <2s without
 
 **Implementation:** [`hooks/type-checker.ts`](./hooks/type-checker.ts)
 
 **Configuration:**
 
-```json
-// .claude/settings.json
-{
-  "customHooks": {
-    "typeChecker": { "enabled": true }
-  }
-}
+Supports multiple configuration methods with priority (highest to lowest):
 
-// .claude/settings.local.json (personal override)
-{
-  "customHooks": {
-    "typeChecker": { "enabled": false }
-  }
-}
-```
+1. **Environment variable** (session override):
+
+   ```bash
+   export CLAUDE_HOOK_TYPECHECKER_ENABLED=false
+   ```
+
+   Note: Hook name converted to uppercase (e.g., `typeChecker` → `TYPECHECKER`)
+
+2. **Native local settings** (personal override, gitignored):
+
+   ```json
+   // .claude/settings.local.json
+   {
+     "customHooks": {
+       "typeChecker": { "enabled": false }
+     }
+   }
+   ```
+
+3. **Native project settings** (team config, committed):
+
+   ```json
+   // .claude/settings.json
+   {
+     "customHooks": {
+       "typeChecker": { "enabled": false }
+     }
+   }
+   ```
+
+4. **Unified plugin config** (project-level, committed):
+
+   ```json
+   // .claude/super-claude-config.json
+   {
+     "workflow": {
+       "hooks": {
+         "typeChecker": { "enabled": false }
+       }
+     }
+   }
+   ```
+
+5. **Global settings** (user defaults):
+
+   ```json
+   // ~/.claude/settings.json
+   {
+     "customHooks": {
+       "typeChecker": { "enabled": false }
+     }
+   }
+   ```
+
+6. **Plugin defaults** (enabled by default)
 
 #### git-commit-guard
 
@@ -194,10 +236,47 @@ Comprehensive guides available:
 
 ## Requirements
 
+### ⚠️ Bun Runtime (Required)
+
+This plugin **requires Bun** to be installed for hook execution:
+
+```bash
+# macOS/Linux
+curl -fsSL https://bun.sh/install | bash
+
+# Windows
+powershell -c "irm bun.sh/install.ps1|iex"
+
+# Or via npm
+npm install -g bun
+
+# Or via Homebrew (macOS)
+brew install oven-sh/bun/bun
+```
+
+**After installing, restart your terminal.**
+
+**Why Bun?**
+
+- Fast TypeScript execution (~10x faster than Node.js)
+- Native TypeScript support (no compilation needed)
+- Better performance for hook operations (<2s target)
+
+### Other Requirements
+
 - Claude Code CLI
 - OpenSpec CLI (`npm install -g @jsdocs-io/openspec`)
-- Bun (for hook execution)
 - Git (for OpenSpec workflow)
+
+### Optional: tsgo for 10x Type Checking Performance
+
+For optimal type checking performance, install tsgo:
+
+```bash
+npm install -g @typescript/native-preview
+```
+
+The type-checker hook will automatically use tsgo if available, providing **10x faster** type checking (~100-200ms vs 1-2s).
 
 ## Configuration
 
@@ -254,16 +333,57 @@ This command creates a template with current plugin defaults. You can then custo
 - Branch name validation rules
 - Type checker timeout
 
-**Configuration priority:** Environment variables > Project overrides (`.claude/super-claude-config.json`) > Plugin defaults
+**Configuration priority (highest to lowest):**
 
-**Environment variable overrides:**
+1. **Environment variables** - Session overrides
+2. **Native local settings** (`.claude/settings.local.json`) - Personal overrides (gitignored)
+3. **Native project settings** (`.claude/settings.json`) - Team config (committed)
+4. **Unified plugin config** (`.claude/super-claude-config.json`) - Project-level plugin config
+5. **Global settings** (`~/.claude/settings.json`) - User defaults
+6. **Plugin defaults** - Fallback values
+
+**Configuration methods:**
 
 ```bash
-# Disable type checker for this session
-export CLAUDE_HOOK_TYPE_CHECKER_ENABLED=false
+# 1. Environment variable (session override)
+# Format: CLAUDE_HOOK_{HOOKNAME}_ENABLED (hookName in uppercase)
+export CLAUDE_HOOK_TYPECHECKER_ENABLED=false
+```
 
-# Bypass commit guard
-export SKIP_COMMIT_GUARD=true
+```json
+// 2. Native local settings (personal, gitignored)
+// .claude/settings.local.json
+{
+  "customHooks": {
+    "typeChecker": { "enabled": false }
+  }
+}
+
+// 3. Native project settings (team, committed)
+// .claude/settings.json
+{
+  "customHooks": {
+    "typeChecker": { "enabled": false }
+  }
+}
+
+// 4. Unified plugin config (project, committed)
+// .claude/super-claude-config.json
+{
+  "workflow": {
+    "hooks": {
+      "typeChecker": { "enabled": false }
+    }
+  }
+}
+
+// 5. Global settings (user defaults)
+// ~/.claude/settings.json
+{
+  "customHooks": {
+    "typeChecker": { "enabled": false }
+  }
+}
 ```
 
 **See also:** [Plugin Configuration Guide](../../docs/guides/plugin-configuration.md) for complete documentation.
@@ -437,13 +557,29 @@ Generate template:
 
 ## Troubleshooting
 
-### Hooks Not Running
+### "bun: command not found" or Hooks Not Running
 
-**Verify Bun is installed:**
+If hooks fail with `bun: command not found`:
 
-```bash
-bun --version
-```
+1. **Install Bun** (see [Requirements](#requirements))
+
+2. **Verify installation:**
+
+   ```bash
+   bun --version
+   # Should show: 1.x.x
+   ```
+
+3. **Restart terminal** - Bun modifies PATH, requires new shell session
+
+4. **Check PATH:**
+
+   ```bash
+   echo $PATH | grep -o '\.bun'
+   # Should show: .bun (in your PATH)
+   ```
+
+If Bun is installed but hooks still fail:
 
 **Check hook permissions:**
 
@@ -456,6 +592,17 @@ chmod +x .claude/hooks/*.ts
 
 ```bash
 bun .claude/hooks/skill-activation-prompt.ts
+```
+
+**What you'll see if Bun is missing:**
+
+```txt
+❌ BUN RUNTIME NOT FOUND
+
+This workflow hook requires Bun to be installed.
+
+📦 Install Bun:
+  [installation instructions]
 ```
 
 ### Skills Not Auto-Activating

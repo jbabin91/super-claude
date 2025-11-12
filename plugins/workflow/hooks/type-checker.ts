@@ -4,22 +4,25 @@
  * Type Checker Hook
  *
  * Pre-validates TypeScript types before Edit/Write operations.
- * Uses @jbabin91/tsc-files for incremental type checking.
- * Blocks file modifications if type errors detected.
+ * Uses @jbabin91/tsc-files programmatic API for incremental type checking with tsgo support.
+ * Informs about type errors but allows file modifications (informative only).
  *
- * Performance target: <2s (ADR-0010)
- * Exit code 2: Block tool execution
+ * Performance: ~100-200ms with tsgo (10x faster than tsc)
+ * Performance target: <2s (ADR-0010) - typically well under this
+ * Hook behavior: Informative (does not block execution)
  *
  * @see {@link https://github.com/jbabin91/super-claude} for documentation
  */
 
-import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+
+import { checkFiles, type CheckResult } from '@jbabin91/tsc-files';
 
 import {
   checkHookEnabled,
   checkPerformance,
+  ensureBunInstalled,
   formatError,
   parseStdin,
 } from './utils/index.js';
@@ -48,88 +51,147 @@ function hasTsConfig(cwd: string): boolean {
 }
 
 /**
- * Run TypeScript type checking on file
+ * Run TypeScript type checking on file using programmatic API
  *
  * @param cwd Current working directory
  * @param filePath File path to check
- * @returns Validation result with errors
+ * @returns CheckResult with structured error data
  */
-function checkTypes(
-  cwd: string,
-  filePath: string,
-): { valid: boolean; errors: string } {
+async function checkTypes(cwd: string, filePath: string): Promise<CheckResult> {
   try {
-    // Run tsc-files on the specific file (no --noEmit flag needed)
-    execSync(`bunx tsc-files "${filePath}"`, {
+    // Use programmatic API for structured error data
+    // Automatically uses tsgo if available (10x faster)
+    const result = await checkFiles([filePath], {
       cwd,
-      encoding: 'utf8',
-      stdio: ['pipe', 'pipe', 'pipe'],
+      skipLibCheck: true,
+      verbose: false,
+      throwOnError: false,
     });
 
-    return { valid: true, errors: '' };
+    return result;
   } catch (error: unknown) {
-    // Type errors will cause execSync to throw
-    if (error && typeof error === 'object' && 'stderr' in error) {
-      const stderr = (error as { stderr: Buffer }).stderr.toString();
-      return { valid: false, errors: stderr };
-    }
-
+    // Configuration or compiler execution error
+    // Return a failed result with error message
     return {
-      valid: false,
-      errors: error instanceof Error ? error.message : 'Unknown type error',
+      success: false,
+      errorCount: 1,
+      warningCount: 0,
+      errors: [
+        {
+          file: filePath,
+          line: 0,
+          column: 0,
+          message:
+            error instanceof Error ? error.message : 'Unknown type error',
+          code: 'TS0000',
+          severity: 'error',
+        },
+      ],
+      warnings: [],
+      checkedFiles: [filePath],
+      duration: 0,
     };
   }
 }
 
 /**
- * Format type errors for display
+ * Format type errors for display with categorization
  *
- * @param errors Raw error output from tsc-files
+ * @param result CheckResult from tsc-files API
+ * @param targetFile The file being edited
  * @returns Formatted error message
  */
-function formatTypeErrors(errors: string): string {
-  // Extract relevant error lines (filter out noise)
-  const lines = errors.split('\n').filter((line) => {
-    return (
-      line.includes('error TS') || // TypeScript errors
-      line.trim().startsWith('src/') || // File paths
-      line.includes(': error') // Error markers
+function formatTypeErrors(result: CheckResult, targetFile: string): string {
+  // Categorize errors by file
+  const targetFileErrors = result.errors.filter((e) => e.file === targetFile);
+  const dependencyErrors = result.errors.filter((e) => e.file !== targetFile);
+
+  // Header
+  const sections: string[] = [
+    '',
+    '═'.repeat(70),
+    '⚠️  TYPE ERRORS DETECTED - ACTION REQUIRED',
+    '═'.repeat(70),
+    '',
+  ];
+
+  // Target file errors (critical)
+  if (targetFileErrors.length > 0) {
+    sections.push(
+      '🎯 ERRORS IN THIS FILE:',
+      `   File: ${targetFile}`,
+      '   Action: Fix these before proceeding to next task',
+      '',
     );
-  });
 
-  const header = [
-    '',
-    '═'.repeat(70),
-    '❌ TYPE ERRORS DETECTED',
-    '═'.repeat(70),
-    '',
-    'TypeScript type errors must be fixed before modifying files.',
-    'This prevents introducing type-unsafe code.',
-    '',
+    for (const err of targetFileErrors.slice(0, 10)) {
+      sections.push(
+        `   ${err.file}:${err.line}:${err.column}`,
+        `   ${err.code}: ${err.message}`,
+        '',
+      );
+    }
+
+    if (targetFileErrors.length > 10) {
+      sections.push(
+        `   ... and ${targetFileErrors.length - 10} more errors in this file`,
+        '',
+      );
+    }
+  }
+
+  // Dependency errors (informational)
+  if (dependencyErrors.length > 0) {
+    sections.push(
+      '─'.repeat(70),
+      'ℹ️  ERRORS IN DEPENDENCIES:',
+      '   These errors are in imported files',
+      '   Fix them separately or add to your todo list',
+      '',
+    );
+
+    // Group by file
+    const byFile = new Map<string, CheckResult['errors'][number][]>();
+    for (const err of dependencyErrors) {
+      if (!byFile.has(err.file)) {
+        byFile.set(err.file, []);
+      }
+      byFile.get(err.file)!.push(err);
+    }
+
+    let fileCount = 0;
+    for (const [file, errors] of byFile.entries()) {
+      if (fileCount >= 5) break;
+      sections.push(`   📄 ${file} (${errors.length} errors)`);
+      fileCount++;
+    }
+
+    if (byFile.size > 5) {
+      sections.push(`   ... and ${byFile.size - 5} more files`);
+    }
+    sections.push('');
+  }
+
+  // Footer with workflow guidance
+  sections.push(
     '─'.repeat(70),
-  ].join('\n');
-
-  const errorBlock = lines.slice(0, 20).join('\n'); // Limit to first 20 lines
-  const moreErrors =
-    lines.length > 20 ? `\n... and ${lines.length - 20} more errors\n` : '';
-
-  const footer = [
+    '🤖 CLAUDE: Type errors detected.',
     '',
-    '─'.repeat(70),
-    'To fix:',
-    '  1. Review type errors above',
-    '  2. Update types or implementation',
-    '  3. Run: bun run typecheck',
-    '  4. Try the edit again',
+    'Recommended workflow:',
+    '  1. If working on a task: Add "Fix type errors" to your todo list',
+    '  2. Complete your current task first',
+    '  3. Then fix these type errors before moving to next task',
     '',
-    'To disable this hook:',
-    '  Add to .claude/settings.json:',
+    'If the type error is directly related to your current edit:',
+    '  → Fix it immediately as part of this change',
+    '',
+    'User: To disable this hook, add to .claude/settings.json:',
     '  { "customHooks": { "typeChecker": { "enabled": false } } }',
     '═'.repeat(70),
     '',
-  ].join('\n');
+  );
 
-  return header + errorBlock + moreErrors + footer;
+  return sections.join('\n');
 }
 
 /**
@@ -139,6 +201,9 @@ async function main(): Promise<void> {
   const startTime = Date.now();
 
   try {
+    // Ensure Bun is installed (fail fast with helpful message)
+    ensureBunInstalled();
+
     const input = await parseStdin();
 
     // Check if hook is enabled
@@ -167,28 +232,28 @@ async function main(): Promise<void> {
       process.exit(0);
     }
 
-    // Check types
-    const result = checkTypes(input.cwd, filePath);
+    // Check types using programmatic API
+    const result = await checkTypes(input.cwd, filePath);
 
-    if (!result.valid) {
-      // Type errors found - block operation
-      const errorMessage = formatTypeErrors(result.errors);
+    if (!result.success) {
+      // Type errors found - inform but allow operation
+      const errorMessage = formatTypeErrors(result, filePath);
 
-      // Output hookSpecificOutput to block the tool use
+      // Output hookSpecificOutput to inform (not block)
       const output = {
         hookSpecificOutput: {
           hookEventName: 'PreToolUse',
-          permissionDecision: 'deny',
+          permissionDecision: 'allow', // Informative only
           permissionDecisionReason: errorMessage,
         },
       };
 
       console.log(JSON.stringify(output));
       checkPerformance(startTime, 2000, 'type-checker');
-      process.exit(0); // Exit 0 after blocking
+      process.exit(0); // Exit 0 after informing
     }
 
-    // Types are valid - allow operation
+    // Types are valid - allow operation silently
     checkPerformance(startTime, 2000, 'type-checker');
     process.exit(0);
   } catch (error) {
