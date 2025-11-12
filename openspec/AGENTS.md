@@ -70,33 +70,8 @@ After deployment, create separate PR to:
 
 - Move `changes/[name]/` → `changes/archive/YYYY-MM-DD-[name]/`
 - Update `specs/` if capabilities changed
-- **Update versions** if plugin code changed:
-  - Run `./scripts/bump-version.sh <plugin-name> <patch|minor|major>`
-  - Or manually update `plugins/{plugin}/.claude-plugin/plugin.json`
-  - And `.claude-plugin/marketplace.json`
-  - Bump types: patch (bug fixes), minor (new features), major (breaking changes)
-- **Add entry to CHANGELOG.md** under appropriate version and category:
-  - **Added** - New skills, features, or capabilities
-  - **Changed** - Modifications to existing functionality
-  - **Fixed** - Bug fixes and corrections
-  - Format: `- **skill-name** - Brief description of what was added/changed/fixed`
-  - Add under `[Unreleased]` section or create new version section if releasing
 - Use `openspec archive <change-id> --skip-specs --yes` for tooling-only changes (always pass the change ID explicitly)
 - Run `openspec validate --strict` to confirm the archived change passes checks
-
-**Changelog Example:**
-
-```markdown
-## [Unreleased]
-
-### Added
-
-- **smart-commit-skill** - Conventional commits with gitmoji automation for git-tools plugin
-
-### Changed
-
-- **skill-creator** - Updated to include official Claude Code field documentation
-```
 
 ## Before Any Task
 
@@ -105,7 +80,6 @@ After deployment, create separate PR to:
 - [ ] Read relevant specs in `specs/[capability]/spec.md`
 - [ ] Check pending changes in `changes/` for conflicts
 - [ ] Read `openspec/project.md` for conventions
-- [ ] **Check `docs/architecture/INDEX.md` for relevant ADRs** (strategic decisions)
 - [ ] Run `openspec list` to see active changes
 - [ ] Run `openspec list --specs` to see existing capabilities
 
@@ -181,49 +155,17 @@ openspec/
 
 ## Creating Change Proposals
 
-### ADR vs OpenSpec Decision Tree
-
-**For complete workflow guidance, see [docs/architecture/README.md](../docs/architecture/README.md#complete-development-workflow)**
-
-**Quick decision guide:**
+### Decision Tree
 
 ```txt
-START: I need to work on something
-
-├─ Q1: Routine work? (bug fix, typo, docs, config)
-│  └─ YES → Implement directly ✓
-│
-├─ Q2: Strategic decision? (choosing alternatives, setting standards)
-│  └─ YES → ADR (Proposed) → Review → ADR (Accepted) → OpenSpec → Implement
-│
-└─ Q3: Capability change? (new feature, spec change, breaking change)
-   └─ YES → OpenSpec → Implement
+New request?
+├─ Bug fix restoring spec behavior? → Fix directly
+├─ Typo/format/comment? → Fix directly
+├─ New feature/capability? → Create proposal
+├─ Breaking change? → Create proposal
+├─ Architecture change? → Create proposal
+└─ Unclear? → Create proposal (safer)
 ```
-
-**Workflow:**
-
-1. **Check for strategic decision:** Does this require choosing between alternatives or setting project-wide standards?
-   - YES → Write ADR, mark as **Accepted**, then continue
-   - NO → Continue to step 2
-
-2. **Check existing ADRs:** Is there an Accepted ADR covering the approach?
-   - Review `docs/architecture/INDEX.md`
-   - If strategic decision needed → Escalate to step 1
-
-3. **Create OpenSpec proposal:** (if capability changes)
-   - Reference any relevant Accepted ADRs in `proposal.md`
-   - Create `tasks.md` and spec deltas
-   - Validate with `openspec validate --strict`
-
-4. **Implement:** Follow tasks in order
-
-**Key principle:** ADRs are marked "Accepted" BEFORE OpenSpec is created. OpenSpec proposals should only reference Accepted ADRs.
-
-**Locations:**
-
-- ADRs: `docs/architecture/decisions/ADR-NNNN-title.md`
-- OpenSpec: `openspec/changes/[change-id]/`
-- See [Complete Development Workflow](../docs/architecture/README.md#complete-development-workflow) for detailed examples and edge cases
 
 ### Proposal Structure
 
@@ -243,17 +185,8 @@ START: I need to work on something
 
 ## Impact
 
-**Affected specs:**
-
-- [List capabilities]
-
-**Affected code:**
-
-- [Key files/systems]
-
-**Related ADRs:**
-
-- [ADR-NNNN: Title](../../docs/architecture/decisions/ADR-NNNN-title.md) - Brief why this ADR is relevant
+- Affected specs: [list capabilities]
+- Affected code: [key files/systems]
 ```
 
 3. **Create spec deltas:** `specs/[capability]/spec.md`

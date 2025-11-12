@@ -1,3 +1,127 @@
+<!-- OPENSPEC:START -->
+
+# OpenSpec Instructions
+
+These instructions are for AI assistants working in this project.
+
+Always open `@/openspec/AGENTS.md` when the request:
+
+- Mentions planning or proposals (words like proposal, spec, change, plan)
+- Introduces new capabilities, breaking changes, architecture shifts, or big performance/security work
+- Sounds ambiguous and you need the authoritative spec before coding
+
+Use `@/openspec/AGENTS.md` to learn:
+
+- How to create and apply change proposals
+- Spec format and conventions
+- Project structure and guidelines
+
+Keep this managed block so 'openspec update' can refresh the instructions.
+
+<!-- OPENSPEC:END -->
+
+<!-- GITHUB:START -->
+
+# GitHub Workflow Instructions
+
+These instructions are for AI assistants working with git and GitHub.
+
+Always open `@/.github/AGENTS.md` when the request involves:
+
+- Git operations (commit, push, pull, branch, merge, rebase)
+- Pull requests (create, update, review, description)
+- GitHub workflows (actions, CI/CD, releases)
+- Commit conventions (conventional commits, gitmoji)
+
+Use `@/.github/AGENTS.md` to learn:
+
+- Pull request guidelines and template usage
+- Commit message conventions
+- Branching strategy and GitHub Flow
+- GitHub CLI commands
+
+Keep this managed block for consistency with other workflow docs.
+
+<!-- GITHUB:END -->
+
+<!-- STANDARDS:START -->
+
+# Code & Documentation Standards
+
+These instructions are for formatting and documentation standards.
+
+Always open `@/docs/standards/markdown.md` when the request involves:
+
+- Writing or editing markdown files
+- Fixing markdown lint errors (MD040, MD032, etc.)
+- Creating documentation
+- Formatting issues in .md files
+- markdownlint warnings
+
+Use `@/docs/standards/markdown.md` to learn:
+
+- Markdown formatting rules
+- Code block requirements
+- List formatting standards
+- Heading conventions
+- Common linting errors and fixes
+
+Keep this managed block for consistency with other workflow docs.
+
+<!-- STANDARDS:END -->
+
+<!-- ARCHITECTURE:START -->
+
+# Architecture Decisions
+
+These instructions are for strategic technical decisions and ADR workflow.
+
+Always open `@/docs/architecture/INDEX.md` when the request involves:
+
+- Making strategic technical decisions
+- Understanding why we chose a technology
+- Evaluating alternatives or trade-offs
+- Creating ADRs (Architecture Decision Records)
+- Questions about "why" we do things a certain way
+- ADR vs OpenSpec workflow (when to use which)
+
+Use `@/docs/architecture/INDEX.md` to learn:
+
+- Existing architecture decisions
+- Technology choices and rationale
+- Strategic patterns and standards
+- ADR catalog and references
+- Complete ADR workflow and decision trees
+
+Keep this managed block for consistency with other workflow docs.
+
+<!-- ARCHITECTURE:END -->
+
+<!-- PROJECT:START -->
+
+# Project Release Workflow
+
+These instructions are for versioning, changelog, and release management.
+
+Always open `@/docs/workflows/project.md` when the request involves:
+
+- Versioning plugins (bump version, version conflicts)
+- Updating CHANGELOG.md
+- Archiving OpenSpec changes after deployment
+- Creating releases or tags
+- Questions about "how do I version", "update changelog"
+
+Use `@/docs/workflows/project.md` to learn:
+
+- Version bumping process and scripts
+- CHANGELOG format and categories
+- Archive workflow and checklist
+- Release process and GitHub releases
+
+Keep this managed block for consistency with other workflow docs.
+
+<!-- PROJECT:END -->
+
 # AGENTS.md
 
 This file provides guidance to AI assistants working with the super-claude repository.
@@ -24,124 +148,35 @@ Create a curated, well-documented collection of Claude Code enhancements that:
 
 This project uses a hierarchical instruction file system with `@` import syntax to avoid duplication:
 
-- **CLAUDE.md** - Claude Code-specific config, imports other files using `@filename` syntax (minimal content)
-- **AGENTS.md** (this file) - Main agent instructions, detailed content lives here
-- **`.github/AGENTS.md`** - GitHub workflow details (git, PRs, commits)
-- **`openspec/AGENTS.md`** - OpenSpec workflow details
+- **CLAUDE.md** - Claude Code-specific config, imports AGENTS.md only
+- **AGENTS.md** (this file) - Main agent instructions with managed blocks for specialized workflows
+- **`.github/AGENTS.md`** - GitHub workflow details - **loaded conditionally** (via GITHUB managed block)
+- **`openspec/AGENTS.md`** - OpenSpec workflow details - **loaded conditionally** (via OPENSPEC managed block)
 
 **Rule: Use `@filename` syntax to import, don't duplicate content between files.**
 
-**Good (import with reference):**
+**Import Strategy (3-tier token management):**
 
-```markdown
-See @.github/AGENTS.md for PR guidelines.
-```
+- **Core instructions** (AGENTS.md) - Always loaded, contains project context and managed blocks (~8-10k tokens)
+- **Conditional workflows** (managed blocks) - Load on-demand when keywords trigger (~2-4k tokens each)
+  - OPENSPEC block → loads `openspec/AGENTS.md` (proposal, spec, change, plan)
+  - GITHUB block → loads `.github/AGENTS.md` (commit, push, pr, branch)
+  - STANDARDS block → loads `docs/standards/markdown.md` (format, lint, documentation)
+  - ARCHITECTURE block → loads `docs/architecture/INDEX.md` (decisions, rationale, ADRs)
+  - PROJECT block → loads `docs/workflows/project.md` (version, changelog, archive, release)
+- **Reference-only docs** (markdown links) - Claude reads when explicitly needed (~0 tokens until referenced)
+  - `docs/workflows/development.md` - Development setup and common commands
+  - `docs/guides/*` - Skill activation, hooks, plugin configuration
 
-**Bad (duplicate content):**
+**Token efficiency examples:**
 
-```markdown
-PR guidelines:
-
-- Keep concise (~50 lines)
-- [repeating content from .github/AGENTS.md]
-```
-
-**Why this matters:**
-
-- Single source of truth for each topic
-- Changes happen in one place
-- Instructions stay consistent
-- Files remain focused and scannable
-
-## 🏗️ Architecture
-
-### Naming Conventions
-
-**ALWAYS follow these naming conventions when creating plugins, skills, agents, commands, and hooks:**
-
-#### Plugins
-
-- **Format:** `{category}` or `{category}-{purpose}` (no `-tools` suffix)
-- **Examples:** `tanstack`, `api`, `database`, `auth`, `design-system`, `testing`, `git`, `typescript`
-- **Special case:** `meta` (meta-tools for creating skills, commands, agents, hooks, plugins)
-
-#### Skills
-
-- **Format:** Descriptive kebab-case name (NO `-skill` suffix)
-- **Location:** `plugins/{plugin}/skills/{name}/SKILL.md`
-- **Examples:**
-  - `hono.md` (not `hono-skill.md`)
-  - `api.md` (not `api-skill.md`)
-  - `component-generator.md` (not `component-generator-skill.md`)
-  - `drizzle-maestro.md` (not `drizzle-maestro-skill.md`)
-
-#### Agents
-
-- **Format:** Descriptive kebab-case name (NO `-agent` suffix)
-- **Location:** `plugins/{plugin}/agents/{name}.md`
-- **Examples:**
-  - `hono.md` (not `hono-agent.md`)
-  - `api.md` (not `api-agent.md`)
-  - `component.md` (not `component-agent.md`)
-
-#### Commands
-
-- **Format:** Verb phrases in kebab-case (NO suffix)
-- **Location:** `plugins/{plugin}/commands/{name}.md`
-- **Examples:**
-  - `create-hono-api.md` (not `create-hono-api-command.md`)
-  - `generate-component.md`
-  - `setup-auth.md`
-
-#### Hooks
-
-- **Format:** Event-based or lifecycle names (NO suffix)
-- **Location:** `plugins/{plugin}/hooks/{name}.md`
-- **Examples:**
-  - `pre-commit.md` (not `pre-commit-hook.md`)
-  - `post-deploy.md`
-  - `on-error.md`
-
-**Rationale:** The directory structure already indicates the type (`skills/`, `agents/`, `commands/`, `hooks/`), so adding redundant suffixes like `-skill` or `-command` is unnecessary and verbose.
-
-### Directory Structure
-
-```sh
-super-claude/
-├── plugins/            # Plugin packages
-│   ├── meta/          # Meta-tools (ready)
-│   ├── design-system/ # Component libraries (ready)
-│   ├── testing/       # Testing automation (in dev)
-│   ├── typescript/    # TypeScript tools (in dev)
-│   ├── git/           # Git workflows (in dev)
-│   └── devops/        # DevOps (in dev)
-├── .claude-plugin/    # Marketplace configuration
-└── docs/              # Brainstorm sessions and decisions
-```
-
-### Key Files
-
-- **openspec/changes/** - Plugin proposals with detailed skill plans
-- **openspec/project.md** - Tech stack and project conventions
-- **.claude-plugin/marketplace.json** - Plugin marketplace manifest
-- **docs/PLUGIN_DISTRIBUTION_DESIGN.md** - Plugin architecture reference
-
-### Auto-Activation System
-
-**Status:** ✅ Implemented and ready to use
-
-Skills automatically activate based on prompt keywords and intent patterns. No manual invocation required.
-
-**Architecture:** Per-plugin `skill-rules.json` + project overrides + UserPromptSubmit hook (<50ms execution)
-
-**For complete guide, see [docs/guides/skill-activation.md](docs/guides/skill-activation.md)**
-
-**Quick start:**
-
-```bash
-# Generate project overrides template
-/configure-activation
-```
+- Exploration session (reading code): ~8-10k tokens (no blocks loaded)
+- Coding + commit session: ~10-12k tokens (GITHUB loaded)
+- Planning session: ~11-14k tokens (OPENSPEC loaded)
+- Formatting/docs session: ~12-15k tokens (STANDARDS loaded)
+- Architecture decisions: ~10-13k tokens (ARCHITECTURE loaded)
+- Release/archive session: ~11-14k tokens (PROJECT loaded)
+- Full workflow session: ~20-26k tokens (multiple blocks loaded)
 
 ## 🔒 Privacy & Security
 
@@ -158,95 +193,7 @@ For project-specific or work-related skills:
 - Install plugins from marketplace: `/plugin install <plugin-name>`
 - Create project-specific skills in: `<project>/.claude/skills/`
 
-## 🎨 Development Workflow
-
-### Creating New Skills
-
-**ALWAYS follow RED-GREEN-REFACTOR:**
-
-1. **RED Phase**
-   - Run scenarios WITHOUT the skill
-   - Document failures and agent rationalizations
-   - Identify specific problems to solve
-
-2. **GREEN Phase**
-   - Write minimal skill addressing failures
-   - Use skill-creator from meta plugin
-   - Test that Claude complies with skill
-
-3. **REFACTOR Phase**
-   - Identify new rationalizations
-   - Add explicit counters and guards
-   - Re-test until bulletproof
-
-**Never deploy untested skills!**
-
-### Skill File Format
-
-**Required YAML frontmatter:**
-
-```yaml
----
-name: skill-identifier # kebab-case
-version: 1.0.0 # semantic versioning
-description: |
-  What it does + when to use + activation triggers
-category: workflow-automation
-tags: [tag1, tag2]
-model: sonnet # sonnet | haiku | opus
-requires:
-  tools: [git, npm] # External dependencies
-triggers:
-  keywords: [keyword1, keyword2]
-  patterns: ['pattern1']
----
-```
-
-### Progressive Disclosure
-
-Keep skills token-efficient:
-
-- **SKILL.md**: < 500 lines (core instructions)
-- **API_REFERENCE.md**: Advanced topics (loaded on demand)
-- **Target**: < 500 words for frequently-loaded skills
-
-### Universal Executor Pattern
-
-For skills that generate and execute code (testing, CLI validation):
-
-```javascript
-// run.js - Universal executor
-export async function execute(code, context) {
-  // 1. Create temp file with proper module context
-  // 2. Set up environment with dependencies
-  // 3. Execute with proper module resolution
-  // 4. Parse results
-  // 5. Clean up without race conditions
-}
-```
-
-See `RESEARCH_FINDINGS.md` → "playwright-skill" section for complete pattern.
-
-### Markdown Formatting Standards
-
-**ALWAYS follow these markdownlint rules to avoid warnings.**
-
-**For complete rules and examples, see [docs/standards/markdown.md](docs/standards/markdown.md)**
-
-**Quick reference:**
-
-- ✅ Code blocks MUST have language identifier (MD040)
-- ✅ Blank line BEFORE lists (MD032)
-- ✅ Blank lines AROUND headings (MD022/MD023)
-- ✅ Use `sh` for terminal/CLI, `txt` when unsure
-
-**Before committing:**
-
-```sh
-bun run format   # Format all files
-bun run lint:md  # Lint markdown
-bun run lint     # Lint TypeScript/JavaScript
-```
+See **[Plugin Structure Standards](docs/standards/plugin-structure.md)** for naming conventions and organization.
 
 ## 📚 Documentation
 
@@ -316,7 +263,11 @@ bun run lint     # Lint TypeScript/JavaScript
 
 ## 🎯 Implementation Priorities
 
-**For detailed skill plans and priorities, see [openspec/changes/](openspec/changes/)**
+**For detailed skill plans and priorities, see:**
+
+- **[OpenSpec Changes](openspec/changes/)** - Active proposals and specifications
+- **[OpenSpec Workflow Guide](openspec/AGENTS.md)** - Complete proposal workflow
+- **[Project Workflow](docs/workflows/project.md)** - Versioning and archiving process
 
 ### Current Focus
 
@@ -347,112 +298,11 @@ See individual OpenSpec proposals in `openspec/changes/` for complete feature br
 - ❌ Untested skills
 - ❌ Multi-language dilution (focus on TS/JS/React)
 
-## 🎓 Key Development Principles
-
-### Skill Quality Standards
-
-1. **Progressive disclosure** - SKILL.md < 500 lines, advanced topics in API_REFERENCE.md
-2. **Universal executor pattern** - For test frameworks, CLI testing
-3. **RED-GREEN-REFACTOR** - Skill development methodology
-4. **Context-aware activation** - Auto-trigger via keywords/patterns
-5. **Token efficiency** - Keep frequently-loaded skills under 500 words
-
-### Testing Principles
-
-**Philosophy:** Testing first, but Storybook IS test infrastructure for components.
-
-**Component Testing:**
-
-- **Stories-based testing** - Tests live in `.stories.tsx` files (not separate test files)
-- **Storybook + Vitest integration** - Stories include embedded Vitest tests
-- **WCAG AAA accessibility validation** - Automated accessibility checks in stories
-- **Visual + functional testing** - Stories serve dual purpose (documentation + tests)
-
-**Domain Logic Testing:**
-
-- **Separate test files** - Functions/utilities get `.test.ts` files
-- **Priority order** - Unit → Integration → E2E
-- **Pure functions preferred** - Easier to test, better reliability
-
-**File Structure Examples:**
-
-**UI Components (use stories):**
-
-```txt
-src/components/ui/button/
-├── button.tsx              # Component implementation
-├── button.stories.tsx      # Storybook + Vitest tests combined
-└── index.ts                # Explicit exports only
-```
-
-**Utility Functions (use separate tests):**
-
-```txt
-src/utils/formatters/
-├── currency.ts             # Function implementation
-└── currency.test.ts        # Vitest unit tests
-```
-
-**File Generation Rules:**
-
-| Type             | Files to Generate                    | Testing Approach                              |
-| ---------------- | ------------------------------------ | --------------------------------------------- |
-| UI Component     | `.tsx` + `.stories.tsx` + `index.ts` | Stories with embedded Vitest tests            |
-| Function/Utility | `.ts` + `.test.ts`                   | Separate Vitest test file                     |
-| Hook             | `.ts` + `.test.ts`                   | Separate test file with React Testing Library |
-| API Endpoint     | `.ts` + `.test.ts`                   | Separate integration test file                |
-
-**Rationale:**
-
-- **Component library projects** benefit from Storybook as living documentation + test infrastructure
-- **Stories as tests** reduces duplication and ensures visual examples stay tested
-- **Separate test files** for domain logic keeps business logic tests focused
-- **No barrel exports** (use explicit exports in `index.ts`) for better tree-shaking
-
-### Code Organization
-
-**Explicit Exports (No Barrel Exports):**
-
-```typescript
-// ✅ Good
-export { Button } from './button';
-export type { ButtonProps } from './button';
-
-// ❌ Avoid
-export * from './button';
-```
-
-### Base UI vs Radix UI
-
-**New Components:**
-
-- Generate with Base UI only (`@base-ui-components/react`)
-- Single package installation (not individual component packages)
-- Focus on Base UI patterns and APIs
-
-**Existing Radix UI Code:**
-
-- Understand Radix patterns for migration support
-- Prefer single `radix-ui` package over individual packages
-- Suggest Base UI alternatives when asked about Radix
-- Provide migration paths via `radix-to-baseui-migrator` skill
-
-**Example:**
-
-```tsx
-// Understand this (Radix UI)
-import * as Dialog from '@radix-ui/react-dialog';
-
-// Generate this instead (Base UI)
-import { Dialog } from '@base-ui-components/react';
-```
-
 ## 💡 Tech Stack Focus
 
-**For complete tech stack details and rationale, see [openspec/project.md](openspec/project.md) and [docs/architecture/INDEX.md](docs/architecture/INDEX.md)**
+**For complete tech stack and conventions, see [openspec/project.md](openspec/project.md)**
 
 **Quick reference:**
-
 
 - **Frontend:** React + TanStack Suite + Base UI + Tailwind + Vitest
 - **Backend:** Hono + Drizzle ORM (PostgreSQL/Turso/SQLite) + better-auth
@@ -479,49 +329,6 @@ bun run lint     # Lint TypeScript/JavaScript
 
 **For complete setup, commands, and troubleshooting, see [docs/workflows/development.md](docs/workflows/development.md)**
 
-## 📋 Pull Request Guidelines
-
-**IMPORTANT: Before creating pull requests, always read [.github/AGENTS.md](.github/AGENTS.md)**
-
-### Quick Reference
-
-
-**Keep PR descriptions concise:**
-
-- Target: ~50 lines total (scannable in 30 seconds)
-- Summary: 1-3 sentences maximum
-- Changes: Bullet list (5-10 items max)
-- Test plan: Checklist format
-
-
-**What NOT to include in PR descriptions:**
-
-- ❌ Implementation details (visible in code review)
-- ❌ Documentation (belongs in README/code)
-- ❌ Code examples (unless critical for understanding)
-
-- ❌ Multiple subsections with deep explanations
-
-**Where details belong:**
-
-- **PR description** - Brief summary and changes list
-- **Code review** - Implementation details and technical discussion
-- **README** - Documentation, usage examples, API references
-- **ADRs** - Architecture decisions and strategic choices
-- **OpenSpec** - Detailed proposals and specifications
-
-**Template location:** `.github/PULL_REQUEST_TEMPLATE.md`
-
-**Complete guidelines:** [.github/AGENTS.md](.github/AGENTS.md) - Includes examples, troubleshooting, and GitHub workflow
-
-## 📝 Commit Conventions
-
-**Format:** `<type>(<scope>): <gitmoji> <description>`
-
-**Example:** `feat(meta): :sparkles: add skill-creator`
-
-**For complete conventions and gitmoji reference, see [docs/workflows/git/commit-conventions.md](docs/workflows/git/commit-conventions.md)**
-
 ## 🎯 Session Workflow
 
 ### Starting a New Session
@@ -544,10 +351,8 @@ bun run lint     # Lint TypeScript/JavaScript
 1. Verify skill works in Claude Code
 2. Check .gitignore (no personal configs)
 3. Update README if adding new skill
-4. Follow [commit conventions](docs/workflows/git/commit-conventions.md)
+4. Follow commit conventions (conventional commits + gitmoji)
 5. Run format and lint: `bun run format && bun run lint:md && bun run lint`
-
-**For complete git workflow, see [docs/workflows/git/github-flow.md](docs/workflows/git/github-flow.md)**
 
 ## 🚀 Quick Reference
 
@@ -555,18 +360,20 @@ bun run lint     # Lint TypeScript/JavaScript
 
 **Most Important Resources:**
 
-1. **[Architecture Decisions](docs/architecture/INDEX.md)** - Strategic ADRs (Base UI, PostgreSQL, WCAG AAA)
-2. **[OpenSpec Changes](openspec/changes/)** - Plugin proposals with detailed skill plans
-3. **[Project Conventions](openspec/project.md)** - Tech stack and coding standards
-4. **[GitHub Flow](docs/workflows/git/github-flow.md)** - Branching, PRs, and commit process
-5. **[Development Guide](docs/workflows/development.md)** - Setup and common commands
+1. **[OpenSpec Changes](openspec/changes/)** - Plugin proposals with detailed skill plans
+2. **[Project Conventions](openspec/project.md)** - Tech stack and coding standards
+3. **[Skill Development Guide](docs/guides/skill-development.md)** - RED-GREEN-REFACTOR, skill format, patterns
+4. **[Plugin Structure](docs/standards/plugin-structure.md)** - Naming conventions, directory structure
+5. **[Testing Standards](docs/standards/testing.md)** - Testing philosophy, file generation rules
+6. **[Project Workflow](docs/workflows/project.md)** - Versioning, changelog, archiving
+7. **[Development Guide](docs/workflows/development.md)** - Setup and common commands
 
-**Key Patterns:**
+**Key Patterns (see docs for details):**
 
-- **Progressive Disclosure** - SKILL.md (<500 lines) + API_REFERENCE.md (~2.5x token savings)
-- **RED-GREEN-REFACTOR** - Skill development methodology
+- **Progressive Disclosure** - SKILL.md (<500 lines) + API_REFERENCE.md
+- **RED-GREEN-REFACTOR** - Document failures → minimal fix → harden
 - **No Barrel Exports** - Explicit exports only (better tree-shaking)
-- **WCAG AAA** - Accessibility standard (AA minimum where AAA impractical)
+- **Stories = Tests** - Component tests live in .stories.tsx files
 - **Auto-Activation** - Skills activate based on prompt keywords/patterns
 
 **Quick Commands:**
