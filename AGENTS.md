@@ -18,6 +18,41 @@ Create a curated, well-documented collection of Claude Code enhancements that:
 - Support both personal and work projects (with privacy)
 - Provide reusable patterns for the TanStack/Base UI/Hono ecosystem
 
+## 📁 File Organization Pattern
+
+**IMPORTANT for AI assistants editing instruction files:**
+
+This project uses a hierarchical instruction file system with `@` import syntax to avoid duplication:
+
+- **CLAUDE.md** - Claude Code-specific config, imports other files using `@filename` syntax (minimal content)
+- **AGENTS.md** (this file) - Main agent instructions, detailed content lives here
+- **`.github/AGENTS.md`** - GitHub workflow details (git, PRs, commits)
+- **`openspec/AGENTS.md`** - OpenSpec workflow details
+
+**Rule: Use `@filename` syntax to import, don't duplicate content between files.**
+
+**Good (import with reference):**
+
+```markdown
+See @.github/AGENTS.md for PR guidelines.
+```
+
+**Bad (duplicate content):**
+
+```markdown
+PR guidelines:
+
+- Keep concise (~50 lines)
+- [repeating content from .github/AGENTS.md]
+```
+
+**Why this matters:**
+
+- Single source of truth for each topic
+- Changes happen in one place
+- Instructions stay consistent
+- Files remain focused and scannable
+
 ## 🏗️ Architecture
 
 ### Naming Conventions
@@ -451,12 +486,10 @@ bun run lint     # Lint TypeScript/JavaScript
 
 **Keep PR descriptions concise:**
 
-
 - Target: ~50 lines total (scannable in 30 seconds)
 - Summary: 1-3 sentences maximum
 - Changes: Bullet list (5-10 items max)
 - Test plan: Checklist format
-
 
 **What NOT to include in PR descriptions:**
 
@@ -464,7 +497,6 @@ bun run lint     # Lint TypeScript/JavaScript
 - ❌ Documentation (belongs in README/code)
 - ❌ Code examples (unless critical for understanding)
 - ❌ Multiple subsections with deep explanations
-
 
 **Where details belong:**
 
