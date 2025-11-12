@@ -43,3 +43,29 @@ Key topics covered:
 - Nested AGENTS.md files provide context-aware instructions for different workflows
 - Use `/plugin install meta` for plugin creation tools
 - Use `/configure-activation` to customize skill auto-activation for this project
+
+## File Organization Pattern
+
+**IMPORTANT for AI assistants editing these files:**
+
+- **CLAUDE.md** (this file) - References other files using `@` import syntax, minimal content
+- **AGENTS.md** - Main agent instructions, detailed content lives here
+- **`.github/AGENTS.md`** - GitHub workflow details (git, PRs, commits)
+- **`openspec/AGENTS.md`** - OpenSpec workflow details
+
+**Rule: Use `@filename` syntax to import, don't duplicate content between files.**
+
+Good:
+
+```markdown
+See @.github/AGENTS.md for PR guidelines.
+```
+
+Bad:
+
+```markdown
+PR guidelines:
+
+- Keep concise
+- [repeating content from .github/AGENTS.md]
+```
