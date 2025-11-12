@@ -23,7 +23,7 @@ Instructions for AI assistants working with GitHub workflows, pull requests, and
 3. **Test Plan**: Checklist format
    - What you tested, not how you tested it
 
-_Optional:_ If you have extra context (e.g., performance notes, breaking changes, important caveats), add an **Additional Notes** section **after** the standard template sections (Summary, Related, Changes, Test Plan):
+**Optional:** If you have extra context (e.g., performance notes, breaking changes, important caveats), add an **Additional Notes** section **after** the standard template sections (Summary, Related, Changes, Test Plan):
 
 - Performance considerations
 - Breaking changes

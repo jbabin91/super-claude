@@ -30,9 +30,9 @@ Step-by-step guides for creating Claude Code enhancements.
 
 Development process documentation.
 
-- **[project.md](workflows/project.md)** - Versioning, changelog, archiving, releases
 - **[development.md](workflows/development.md)** - Development commands and setup
 - **[openspec.md](workflows/openspec.md)** - OpenSpec workflow for proposals
+- **[project.md](workflows/project.md)** - Versioning, changelog, archiving, releases
 - **[git/github-flow.md](workflows/git/github-flow.md)** - Git workflow and branching strategy
 - **[git/commit-conventions.md](workflows/git/commit-conventions.md)** - Commit conventions (conventional commits + gitmoji)
 
