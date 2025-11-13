@@ -19,7 +19,7 @@ super-claude is a marketplace of modular plugins for Claude Code, focusing on:
 Each plugin is independently installable and usable:
 
 ```bash
-/plugin install claude-tools   # Core meta-tools
+/plugin install meta   # Core meta-tools
 /plugin install tanstack       # TanStack ecosystem
 /plugin install api            # Hono APIs
 ```
@@ -36,7 +36,7 @@ Plugins should:
 
 Plugins build on each other:
 
-- **claude-tools** - Foundation for creating/validating skills (install first)
+- **meta** - Foundation for creating/validating skills (install first)
 - **Feature plugins** - Extend Claude's capabilities for specific domains
 - **Auto-activation** - Skills activate based on context without manual invocation
 
@@ -51,7 +51,7 @@ super-claude/
 │   ├── marketplace.schema.json   # Marketplace JSON schema
 │   └── plugin.schema.json        # Plugin JSON schema
 ├── plugins/
-│   ├── claude-tools/             # Meta-tools (foundation)
+│   ├── meta/             # Meta-tools (foundation)
 │   ├── tanstack/                 # TanStack ecosystem
 │   ├── api/                      # Backend APIs
 │   ├── database/                 # Drizzle ORM
@@ -173,8 +173,8 @@ The root marketplace configuration:
   },
   "plugins": [
     {
-      "name": "claude-tools",
-      "source": "./plugins/claude-tools",
+      "name": "meta",
+      "source": "./plugins/meta",
       "description": "Meta-tools for creating and managing skills",
       "version": "0.1.0",
       "category": "meta",
@@ -195,7 +195,7 @@ Users install plugins from the marketplace:
 /plugin marketplace add jbabin91/super-claude
 
 # Install plugins (modular)
-/plugin install claude-tools   # Foundation
+/plugin install meta   # Foundation
 /plugin install tanstack       # TanStack support
 /plugin install api            # API development
 ```
@@ -218,13 +218,13 @@ After installation, the user's project has:
 .claude/
 ├── skills/
 │   ├── claude/
-│   │   └── claude-tools/        # From marketplace
+│   │   └── meta/        # From marketplace
 │   ├── tanstack/
 │   │   └── tanstack/            # From marketplace
 │   └── skill-rules.json         # Project overrides (optional)
 ├── commands/
 │   ├── openspec/                # OpenSpec commands
-│   └── configure-activation.md  # From claude-tools
+│   └── configure-activation.md  # From meta
 ├── hooks/
 │   └── skill-activation-prompt.ts
 ├── tsconfig.json                # Isolated TypeScript config
@@ -241,7 +241,7 @@ Each plugin defines activation rules in `skills/skill-rules.json`:
 ```json
 {
   "plugin": {
-    "name": "claude-tools",
+    "name": "meta",
     "version": "1.0.0",
     "namespace": "claude"
   },
@@ -386,7 +386,7 @@ This increments when:
 
 Each plugin versions independently:
 
-- `claude-tools: 0.2.0`
+- `meta: 0.2.0`
 - `tanstack: 0.1.0`
 - `api: 0.1.0`
 
@@ -410,7 +410,7 @@ Edit `.claude-plugin/marketplace.json`:
 {
   "plugins": [
     {
-      "name": "claude-tools",
+      "name": "meta",
       "version": "0.2.0", // Increment
       "description": "Updated description"
     }
@@ -433,7 +433,7 @@ bun run format     # Prettier
 
 ```bash
 git add .
-git commit -m "feat(claude-tools): add new skill-creator features"
+git commit -m "feat(meta): add new skill-creator features"
 git tag v0.2.0
 git push origin main --tags
 ```
@@ -469,7 +469,7 @@ Create a GitHub release:
 
 ### Meta (Foundation)
 
-- **claude-tools** - Skill/command/agent creation, validation, auto-activation
+- **meta** - Skill/command/agent creation, validation, auto-activation
 
 ### Fullstack
 
@@ -515,7 +515,7 @@ Add `dependencies` field to `plugin.json`:
 {
   "name": "tanstack",
   "dependencies": {
-    "claude-tools": ">=0.1.0"
+    "meta": ">=0.1.0"
   }
 }
 ```
@@ -528,7 +528,7 @@ Support `.claude/{plugin-name}.config.json` for user customization:
 
 ```json
 {
-  "claude-tools": {
+  "meta": {
     "defaultSkillPriority": "high",
     "autoActivation": true
   }
@@ -542,7 +542,7 @@ Allow plugins from different authors:
 ```txt
 .claude/skills/
 ├── jbabin91/
-│   └── claude-tools/
+│   └── meta/
 ├── anthropic/
 │   └── official-tools/
 └── community/
@@ -597,7 +597,7 @@ bun run typecheck
 
 ## References
 
-- **Naming Conventions**: `plugins/claude-tools/NAMING_CONVENTIONS.md`
+- **Naming Conventions**: `plugins/meta/NAMING_CONVENTIONS.md`
 - **Skill Activation Guide**: `docs/SKILL_ACTIVATION_GUIDE.md`
 - **OpenSpec Workflow**: `docs/OPENSPEC_WORKFLOW_GUIDE.md`
 - **Plugin Schema**: `.claude-plugin/plugin.schema.json`

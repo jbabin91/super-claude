@@ -1,19 +1,12 @@
 {
-  "name": "typescript-tools",
+  "name": "typescript",
   "version": "0.1.0",
-  "description": "TypeScript development tools including type checking (tsc-files-validation), refactoring, import management, and test generation",
+  "description": "TypeScript type checking, refactoring, import management, and type contracts",
   "author": {
     "name": "Jace Babin",
     "email": "jbabin91@gmail.com",
     "url": "https://github.com/jbabin91"
   },
   "license": "MIT",
-  "keywords": [
-    "typescript",
-    "type-checking",
-    "refactoring",
-    "testing",
-    "imports",
-    "tsc"
-  ]
+  "keywords": ["typescript", "types", "refactoring", "imports"]
 }

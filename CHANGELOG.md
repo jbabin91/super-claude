@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2025-01-12
+
+### Added
+
+- **GitHub Workflow Documentation** - Comprehensive PR guidelines for AI assistants and developers
+  - Added `.github/AGENTS.md` with detailed PR guidelines, commit conventions (conventional commits + gitmoji), branching strategy (GitHub Flow), and troubleshooting
+  - Enhanced `.github/PULL_REQUEST_TEMPLATE.md` with prominent comment block highlighting best practices for concise PR descriptions
+  - Documented target of ~50 lines for PR descriptions, scannable in ~30 seconds, with do/don't examples
+  - Added managed blocks to `AGENTS.md` for conditional loading of specialized workflows (GitHub, OpenSpec, Standards, Architecture, Project)
+
+### Fixed
+
+- **Plugin Schemas** - Comprehensive schema improvements for Claude Code compliance
+  - Removed invalid `skills` and `subAgents` fields from plugin.json schema (skills are auto-discovered from `skills/` directory)
+  - Added full MCP server configuration validation (command, args, env, cwd)
+  - Added GitHub/Git URL source format validation for marketplace.json
+  - Added all missing plugin entry fields to marketplace schema (author, homepage, repository, license, tags, commands, agents, hooks, mcpServers, strict)
+  - Made `author.name` required in plugin.json for consistency with marketplace `owner.name` requirement
+  - Added skill name length validation (max 64 chars per Claude Code spec)
+  - Added skill description length validation (max 1024 chars per Claude Code spec)
+  - Added `allowed-tools` field to skill frontmatter schema (Claude Code official field)
+  - Ensured JSON schemas (.claude-plugin/) and arktype schemas (schemas/) are fully in sync
+
+### Changed
+
+- **Validation** - Enhanced strict validation to match Claude Code runtime behavior
+  - Added `"additionalProperties": false` to JSON schemas to reject unknown properties
+  - Added `.onUndeclaredKey('reject')` to arktype schemas for runtime validation
+  - Fixed arktype error detection in validation script (now properly catches validation errors)
+  - Updated validation script to check for `'summary' in result` instead of `instanceof Error`
+  - Fixed invalid arktype union syntax in marketplace.schema.ts (`'string | string[]'` → `type('string').or(type('string[]'))`)
+  - Clarified that `version` field in skill frontmatter is optional (can be omitted for stable skills or initial versions)
+
 ## [0.5.0] - 2025-11-09
 
 ### Added
@@ -34,12 +67,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Plugin Naming Cleanup** - Removed `-tools` suffix for cleaner, more natural names
-  - Renamed `claude-tools/` → `plugins/meta/` (meta-tools for creating skills, commands, agents, hooks, plugins)
-  - Renamed `frontend-tools/` → `plugins/design-system/` (Base UI, shadcn/ui, design tokens, accessibility)
-  - Renamed `testing-tools/` → `plugins/testing/`
-  - Renamed `typescript-tools/` → `plugins/typescript/`
-  - Renamed `git-tools/` → `plugins/git/`
-  - Renamed `devops-tools/` → `plugins/devops/`
+  - **Before → After** format:
+    - `claude-tools` → `meta` (meta-tools for creating skills, commands, agents, hooks, plugins)
+    - `frontend-tools` → `design-system` (Base UI, shadcn/ui, design tokens, accessibility)
+    - `testing-tools` → `testing`
+    - `typescript-tools` → `typescript`
+    - `git-tools` → `git`
+    - `devops-tools` → `devops`
   - Updated `.claude-plugin/marketplace.json` to reflect new names
   - Updated all documentation (README.md, CLAUDE.md) with correct plugin names and installation examples
 
@@ -164,13 +198,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Plugin marketplace structure (`.claude-plugin/marketplace.json`)
-- 6 plugin categories with manifests:
-  - **skill-tools** - Meta-tools for creating skills, commands, hooks, agents, and plugins
-  - **typescript-tools** - TypeScript development utilities
-  - **testing-tools** - Testing automation
-  - **git-tools** - Git workflow automation
-  - **frontend-tools** - React/Frontend development
-  - **devops-tools** - DevOps automation
+- 6 plugin categories with manifests (renamed in v0.5.0):
+  - **skill-tools** (now **meta**) - Meta-tools for creating skills, commands, hooks, agents, and plugins
+  - **typescript-tools** (now **typescript**) - TypeScript development utilities
+  - **testing-tools** (now **testing**) - Testing automation
+  - **git-tools** (now **git**) - Git workflow automation
+  - **frontend-tools** (now **design-system**) - React/Frontend development
+  - **devops-tools** (now **devops**) - DevOps automation
 - **skill-creator** - Create new skills with proper structure and validation
 - **command-creator** - Generate slash commands
 - **hook-creator** - Create event-driven hooks

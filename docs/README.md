@@ -21,24 +21,27 @@ Welcome to the super-claude documentation! This guide helps you find what you ne
 
 Step-by-step guides for creating Claude Code enhancements.
 
-- **[plugin-configuration.md](guides/plugin-configuration.md)** - Plugin configuration and customization guide
+- **[skill-development.md](guides/skill-development.md)** - RED-GREEN-REFACTOR methodology, skill format, patterns
 - **[skill-activation.md](guides/skill-activation.md)** - Skill auto-activation system guide
-- [creating-skills.md](guides/creating-skills.md) - How to create new skills _(coming soon)_
+- **[plugin-configuration.md](guides/plugin-configuration.md)** - Plugin configuration and customization guide
 - [creating-plugins.md](guides/creating-plugins.md) - How to create new plugins _(coming soon)_
 
 ### workflows/
 
 Development process documentation.
 
-- **[openspec.md](workflows/openspec.md)** - OpenSpec workflow for proposals
-- **[git.md](workflows/git.md)** - Git workflow and branching strategy
-- **[commits.md](workflows/commits.md)** - Commit conventions (conventional commits + gitmoji)
 - **[development.md](workflows/development.md)** - Development commands and setup
+- **[openspec.md](workflows/openspec.md)** - OpenSpec workflow for proposals
+- **[project.md](workflows/project.md)** - Versioning, changelog, archiving, releases
+- **[git/github-flow.md](workflows/git/github-flow.md)** - Git workflow and branching strategy
+- **[git/commit-conventions.md](workflows/git/commit-conventions.md)** - Commit conventions (conventional commits + gitmoji)
 
 ### standards/
 
 Quality and coding standards.
 
+- **[plugin-structure.md](standards/plugin-structure.md)** - Naming conventions, directory structure, validation
+- **[testing.md](standards/testing.md)** - Testing philosophy, file generation rules, component testing
 - **[markdown.md](standards/markdown.md)** - Markdown formatting rules (MD040, MD032, etc.)
 - [coding.md](standards/coding.md) - TypeScript/JavaScript coding standards _(coming soon)_
 - [accessibility.md](standards/accessibility.md) - WCAG AAA guidelines _(coming soon)_
@@ -49,7 +52,7 @@ Architecture decisions and technical designs.
 
 - **[INDEX.md](architecture/INDEX.md)** - Architecture Decision Records (ADRs) catalog
 - **[README.md](architecture/README.md)** - ADR usage guide
-- **[decisions/](architecture/decisions/)** - Strategic architectural decisions (7 ADRs)
+- **[decisions/](architecture/decisions/)** - Strategic architectural decisions (ADR catalog)
 - **[designs/](architecture/designs/)** - Detailed technical design documents
 
 ## Key Resources by Topic
@@ -62,15 +65,18 @@ Architecture decisions and technical designs.
 
 ### Creating Skills
 
-1. Read [guides/skill-activation.md](guides/skill-activation.md) for auto-activation
-2. Use skill-creator from meta plugin to scaffold
-3. Follow [standards/markdown.md](standards/markdown.md) for documentation
+1. Read [guides/skill-development.md](guides/skill-development.md) for RED-GREEN-REFACTOR methodology
+2. Review [standards/plugin-structure.md](standards/plugin-structure.md) for naming conventions
+3. Check [guides/skill-activation.md](guides/skill-activation.md) for auto-activation
+4. Use skill-creator from meta plugin to scaffold
+5. Follow [standards/markdown.md](standards/markdown.md) for documentation
 
 ### Contributing
 
-1. Review [workflows/git.md](workflows/git.md) for branching strategy
-2. Follow [workflows/commits.md](workflows/commits.md) for commit format
+1. Review [workflows/git/github-flow.md](workflows/git/github-flow.md) for branching strategy
+2. Follow [workflows/git/commit-conventions.md](workflows/git/commit-conventions.md) for commit format
 3. Check [openspec/AGENTS.md](../openspec/AGENTS.md) for proposals
+4. See [workflows/project.md](workflows/project.md) for versioning and releases
 
 ### Architecture Decisions
 
@@ -95,27 +101,30 @@ Architecture decisions and technical designs.
 
 **guides/**
 
-- ✅ plugin-configuration.md
+- ✅ skill-development.md
 - ✅ skill-activation.md
-- 📝 creating-skills.md
+- ✅ plugin-configuration.md
 - 📝 creating-plugins.md
 
 **workflows/**
 
-- ✅ openspec.md
-- ✅ git.md
-- ✅ commits.md
+- ✅ project.md
 - ✅ development.md
+- ✅ openspec.md
+- ✅ git/github-flow.md
+- ✅ git/commit-conventions.md
 
 **standards/**
 
+- ✅ plugin-structure.md
+- ✅ testing.md
 - ✅ markdown.md
 - 📝 coding.md
 - 📝 accessibility.md
 
 **architecture/**
 
-- ✅ decisions/ (7 ADRs)
+- ✅ decisions/ (ADR catalog)
 - ✅ designs/plugin-distribution.md
 - ✅ INDEX.md
 - ✅ README.md

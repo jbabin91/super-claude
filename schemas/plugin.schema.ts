@@ -24,9 +24,10 @@ const patterns = {
 
 /**
  * Author information schema
+ * Name is required for consistency with marketplace owner requirement
  */
 const authorSchema = type({
-  name: 'string',
+  name: 'string', // Required
   'email?': type('string', ':', patterns.email),
   'url?': type('string', ':', patterns.url),
 });
@@ -39,10 +40,27 @@ const pathOrPaths = type('string', ':', patterns.relativePath).or(
 );
 
 /**
+ * MCP servers can be a path to .mcp.json OR inline server configurations
+ * When inline, it's an object where keys are server names and values are configs
+ *
+ * Note: Full nested validation would require Record<string, mcpServerConfigSchema>
+ * where mcpServerConfigSchema validates: { command: string, args?: string[], env?: Record<string, string>, cwd?: string }
+ * However, arktype doesn't support this nested pattern easily. The JSON schema handles full validation.
+ */
+const mcpServersSchema = type('string', ':', patterns.relativePath).or(
+  type('Record<string, object>'), // Record of server name to config
+);
+
+/**
  * Plugin manifest schema for .claude-plugin/plugin.json
  *
  * Based on .claude-plugin/plugin.schema.json
  * Reference: https://code.claude.com/docs/en/plugins-reference.md
+ *
+ * NOTE: This schema is STRICT - it rejects unknown properties to match
+ * Claude Code's runtime behavior. Uses .onUndeclaredKey("reject") to
+ * enforce strict validation.
+ * DO NOT add $schema to plugin.json - it will cause installation failures.
  */
 export const pluginSchema = type({
   // Required fields
@@ -58,17 +76,17 @@ export const pluginSchema = type({
   'keywords?': 'string[]',
 
   // Component path fields - must start with ./
+  // NOTE: Only 4 component paths are officially recognized by Claude Code.
+  // Skills are auto-discovered from skills/ directory - no manifest field needed.
   'commands?': pathOrPaths,
   'agents?': pathOrPaths,
-  'skills?': pathOrPaths,
-  'subAgents?': pathOrPaths,
 
   // Hooks: can be string path to hooks.json OR inline hooks object
   // When inline, must match hooksSchema structure
   'hooks?': type('string', ':', patterns.relativePath).or(hooksSchema),
 
   // MCP servers: can be string path or inline object
-  'mcpServers?': type('string', ':', patterns.relativePath).or(type('object')),
-});
+  'mcpServers?': mcpServersSchema,
+}).onUndeclaredKey('reject');
 
 export type PluginManifest = typeof pluginSchema.infer;

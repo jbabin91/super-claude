@@ -27,25 +27,25 @@ A comprehensive collection of Claude Code plugins for TanStack Start, Base UI, H
 #### Component Library Author
 
 ```bash
-/plugin install design-system   # Base UI, shadcn/ui, design tokens, WCAG AAA
-/plugin install testing         # Vitest, Playwright, E2E testing
+/plugin install workflow        # OpenSpec workflow, session automation
+# Additional plugins coming soon: design-system, testing
 ```
 
 #### Frontend App Developer
 
 ```bash
-/plugin install design-system   # UI component libraries (optional)
-# Additional plugins coming soon: frontend, tanstack
+/plugin install workflow        # Development workflow enhancements
+# Additional plugins coming soon: frontend, tanstack, design-system
 ```
 
 #### Plugin Creator / Power User
 
 ```bash
 /plugin install meta           # Create custom skills, commands, agents
-/plugin install design-system  # Your domain work
+/plugin install workflow       # OpenSpec, auto-activation, session hooks
 ```
 
-> **Note:** TanStack, API, Database, and Auth plugins are planned but not yet implemented. See Available Plugins below for current status.
+> **Note:** Design-system, TanStack, API, Database, and Auth plugins are planned but not yet fully implemented. See Available Plugins below for current status.
 
 ## 📦 Available Plugins
 
@@ -68,24 +68,26 @@ For plugin creators and power users extending Claude Code with custom capabiliti
 
 **Install:** `/plugin install meta`
 
-#### design-system
+#### workflow
 
-**Component libraries with Base UI, shadcn/ui, and design tokens**
+**Development workflow enhancements with OpenSpec and skill auto-activation**
 
-Build professional component libraries with accessibility, theming, and documentation.
+Enhance your development workflow with spec-driven proposals, session automation, and intelligent skill suggestions.
 
 **Features:**
 
-- Base UI component generation
-- shadcn/ui MCP integration
-- Design tokens and theming
-- WCAG AAA accessibility validation
-- Storybook integration
-- Radix UI migration support
+- OpenSpec proposal management - Spec-driven development workflow
+- Skill auto-activation system - Context-aware skill suggestions
+- Session automation hooks - Startup checklist, type checking, commit guards
+- Project configuration - Unified configuration system for all plugins
 
-**Install:** `/plugin install design-system`
+**Install:** `/plugin install workflow`
 
 ### 🚧 In Development (Scaffolding Only)
+
+#### design-system
+
+Component libraries with Base UI, shadcn/ui, design tokens, WCAG AAA accessibility, and Storybook integration.
 
 #### testing
 
@@ -107,7 +109,6 @@ CI/CD pipelines, GitHub Actions, Docker, and deployment automation.
 
 The following plugins are planned but not yet started:
 
-- **workflow** - Skill auto-activation, OpenSpec, session management (high priority)
 - **frontend** - App architecture, performance, build optimization
 - **tanstack** - TanStack Start, Router, Query, Form, Table
 - **api** - Hono and Elysia API development
@@ -122,13 +123,14 @@ The following plugins are planned but not yet started:
 super-claude/
 ├── plugins/            # Plugin packages
 │   ├── meta/          # Meta-tools (ready)
-│   ├── design-system/ # Component libraries (ready)
+│   ├── workflow/      # Development workflow (ready)
+│   ├── design-system/ # Component libraries (in dev)
 │   ├── testing/       # Testing automation (in dev)
 │   ├── typescript/    # TypeScript tools (in dev)
 │   ├── git/           # Git workflows (in dev)
 │   └── devops/        # DevOps (in dev)
 ├── .claude-plugin/    # Marketplace configuration
-└── docs/              # Brainstorm sessions and decisions
+└── docs/              # Documentation and guides
 ```
 
 ## 💡 Tech Stack Focus
@@ -178,8 +180,6 @@ Use the skill-creator from meta plugin:
 # - When to use and activation triggers
 # - Best practices and validation
 ```
-
-See `docs/2025-10-22/brainstorm.md` for skill ideas.
 
 ## ✅ Schema Validation
 
@@ -321,4 +321,4 @@ Inspired by:
 
 ---
 
-**Status**: 🚧 Active Development | **Version**: 0.3.0
+**Status**: 🚧 Active Development | **Version**: 0.5.0

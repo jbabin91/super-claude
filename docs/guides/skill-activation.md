@@ -40,7 +40,7 @@ The skill auto-activation system automatically suggests relevant skills when you
 **1. Install a plugin with auto-activation support:**
 
 ```sh
-/plugin install claude-tools
+/plugin install meta
 ```
 
 **2. Skills activate automatically:**
@@ -121,7 +121,7 @@ Claude sees augmented context with skill suggestions
 
 ```sh
 .claude/skills/
-├── claude-tools/
+├── meta/
 │   ├── skill-rules.json       # From plugin
 │   └── skills/...
 ├── tanstack-tools/
@@ -134,7 +134,7 @@ Claude sees augmented context with skill suggestions
 
 ```sh
 .claude/hooks/
-└── skill-activation-prompt.ts  # Installed with claude-tools
+└── skill-activation-prompt.ts  # Installed with meta
 ```
 
 ## Plugin-Level Rules
@@ -165,12 +165,12 @@ interface SkillConfig {
 }
 ```
 
-### Example: claude-tools
+### Example: meta
 
 ```json
 {
   "plugin": {
-    "name": "claude-tools",
+    "name": "meta",
     "version": "1.0.0",
     "namespace": "claude"
   },
@@ -461,7 +461,7 @@ how to.*?(create|add).*?skill          # Question format
 ```sh
 # Test your patterns
 echo '{"cwd":".","prompt":"I want to create a skill"}' | \
-  bun run plugins/claude-tools/hooks/skill-activation-prompt.ts
+  bun run plugins/meta/hooks/skill-activation-prompt.ts
 ```
 
 **4. Balance precision and recall:**
@@ -568,7 +568,7 @@ Install: <https://bun.sh>
 1. **Does plugin have skill-rules.json?**
 
    ```sh
-   cat .claude/skills/claude-tools/skill-rules.json
+   cat .claude/skills/meta/skill-rules.json
    ```
 
 2. **Do keywords match your prompt?**
@@ -629,7 +629,7 @@ Install: <https://bun.sh>
 Validate JSON:
 
 ```sh
-cat .claude/skills/claude-tools/skill-rules.json | jq .
+cat .claude/skills/meta/skill-rules.json | jq .
 ```
 
 Common issues:
@@ -657,7 +657,7 @@ triggers:
 ```json
 {
   "plugin": {
-    "name": "claude-tools",
+    "name": "meta",
     "version": "1.0.0",
     "namespace": "claude"
   },
@@ -749,10 +749,10 @@ echo '{"cwd":".","prompt":"your test prompt"}' | \
 
 - **OpenSpec Proposal:** `openspec/changes/add-skill-auto-activation/`
 - **Template Files:**
-  - Plugin: `plugins/claude-tools/templates/skill-rules.template.json`
-  - Project: `plugins/claude-tools/templates/project-overrides.template.json`
-- **Type Definitions:** `plugins/claude-tools/types/skill-rules.d.ts`
-- **Hook Implementation:** `plugins/claude-tools/hooks/skill-activation-prompt.ts`
+  - Plugin: `plugins/meta/templates/skill-rules.template.json`
+  - Project: `plugins/meta/templates/project-overrides.template.json`
+- **Type Definitions:** `plugins/meta/types/skill-rules.d.ts`
+- **Hook Implementation:** `plugins/meta/hooks/skill-activation-prompt.ts`
 - **CLAUDE.md:** Auto-Activation System section
 
 ## Support

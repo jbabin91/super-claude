@@ -1,12 +1,19 @@
 {
-  "name": "frontend-tools",
+  "name": "design-system",
   "version": "0.1.0",
-  "description": "Frontend development accelerators for React component generation, Tailwind utilities, and design pattern enforcement",
+  "description": "Component libraries with Base UI, shadcn/ui, design tokens, WCAG AAA accessibility, and Storybook integration",
   "author": {
     "name": "Jace Babin",
     "email": "jbabin91@gmail.com",
     "url": "https://github.com/jbabin91"
   },
   "license": "MIT",
-  "keywords": ["react", "frontend", "tailwind", "components", "design-patterns"]
+  "keywords": [
+    "base-ui",
+    "shadcn",
+    "design-system",
+    "accessibility",
+    "storybook",
+    "components"
+  ]
 }
