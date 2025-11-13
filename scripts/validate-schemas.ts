@@ -4,6 +4,7 @@ import { execSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
+import { hooksSchema } from '../schemas/hooks.schema';
 import { marketplaceSchema } from '../schemas/marketplace.schema';
 import { pluginSchema } from '../schemas/plugin.schema';
 import { skillFrontmatterSchema } from '../schemas/skill-frontmatter.schema';
@@ -290,6 +291,120 @@ function parseYaml(yaml: string): unknown {
 }
 
 /**
+ * Validate filesystem references in plugin manifest
+ * Checks if referenced files exist and validates their structure
+ */
+function validateFilesystemReferences(
+  manifestPath: string,
+  data: Record<string, unknown>,
+): string[] {
+  const errors: string[] = [];
+  const pluginDir = path.dirname(path.dirname(manifestPath)); // Go up from .claude-plugin/plugin.json
+
+  // Helper to resolve path relative to plugin root
+  const resolvePath = (refPath: string): string => {
+    // Remove leading ./ if present
+    const cleanPath = refPath.startsWith('./') ? refPath.slice(2) : refPath;
+    return path.join(pluginDir, cleanPath);
+  };
+
+  // Helper to check single path
+  const checkPath = (refPath: string, fieldName: string): void => {
+    const fullPath = resolvePath(refPath);
+    if (!existsSync(fullPath)) {
+      const relativePath = path.relative(pluginDir, fullPath);
+      errors.push(
+        `${fieldName} references missing file: "${relativePath}" (resolved to: ${fullPath})`,
+      );
+    }
+  };
+
+  // Helper to check path or array of paths
+  const checkPaths = (value: unknown, fieldName: string): void => {
+    if (typeof value === 'string') {
+      checkPath(value, fieldName);
+    } else if (Array.isArray(value)) {
+      for (const item of value) {
+        if (typeof item === 'string') {
+          checkPath(item, fieldName);
+        }
+      }
+    }
+  };
+
+  // Validate hooks field
+  if (data.hooks && typeof data.hooks === 'string') {
+    const hooksPath = resolvePath(data.hooks);
+    if (existsSync(hooksPath)) {
+      // Validate hooks.json structure
+      try {
+        const hooksContent = readFileSync(hooksPath, 'utf8');
+        const hooksData = JSON.parse(hooksContent) as unknown;
+        const result = hooksSchema(hooksData);
+        if ('summary' in result) {
+          errors.push(`hooks file has invalid structure: ${result.summary}`);
+        }
+      } catch (error) {
+        errors.push(
+          `hooks file is not valid JSON: ${error instanceof Error ? error.message : 'unknown error'}`,
+        );
+      }
+    } else {
+      const relativePath = path.relative(pluginDir, hooksPath);
+      errors.push(`hooks references missing file: "${relativePath}"`);
+    }
+  }
+  // Inline hooks objects are validated by pluginSchema already
+
+  // Validate mcpServers field
+  if (data.mcpServers && typeof data.mcpServers === 'string') {
+    const mcpPath = resolvePath(data.mcpServers);
+    if (existsSync(mcpPath)) {
+      // Validate .mcp.json structure (basic check)
+      try {
+        const mcpContent = readFileSync(mcpPath, 'utf8');
+        const mcpData = JSON.parse(mcpContent) as Record<string, unknown>;
+        // MCP files should have server configs at root level
+        if (Object.keys(mcpData).length === 0) {
+          errors.push('mcpServers file is empty');
+        }
+        // Each server config should have at least a command
+        for (const [serverName, config] of Object.entries(mcpData)) {
+          if (
+            typeof config !== 'object' ||
+            config === null ||
+            !('command' in config)
+          ) {
+            errors.push(
+              `mcpServers file: server "${serverName}" is missing required "command" field`,
+            );
+          }
+        }
+      } catch (error) {
+        errors.push(
+          `mcpServers file is not valid JSON: ${error instanceof Error ? error.message : 'unknown error'}`,
+        );
+      }
+    } else {
+      const relativePath = path.relative(pluginDir, mcpPath);
+      errors.push(`mcpServers references missing file: "${relativePath}"`);
+    }
+  }
+
+  // Validate commands field
+  if (data.commands) {
+    checkPaths(data.commands, 'commands');
+  }
+
+  // Validate agents field
+  if (data.agents) {
+    checkPaths(data.agents, 'agents');
+  }
+
+  return errors;
+}
+
+/**
  * Validate plugin.json file
  */
 function validatePlugin(filePath: string): ValidationResult {
@@ -318,6 +433,19 @@ function validatePlugin(filePath: string): ValidationResult {
         valid: false,
         file: filePath,
         errors: [result.summary],
+      };
+    }
+
+    // After schema validation passes, check filesystem references
+    const fsErrors = validateFilesystemReferences(
+      filePath,
+      data as Record<string, unknown>,
+    );
+    if (fsErrors.length > 0) {
+      return {
+        valid: false,
+        file: filePath,
+        errors: fsErrors,
       };
     }
 
