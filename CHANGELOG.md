@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2025-01-13
+
+### Fixed
+
+- **workflow plugin (v0.4.1)** - Fixed missing hooks.json file that caused plugin loading errors
+  - Moved `hooks/hooks.json` to correct location (was in `.claude-plugin/hooks/` but Claude Code looks for it relative to plugin root)
+  - Plugin now loads successfully without "hooks path not found" error
+
+### Added
+
+- **Validation** - Enhanced filesystem validation to prevent broken plugin references
+  - Added `validateFilesystemReferences()` function to validate-schemas.ts
+  - Checks that hooks.json, .mcp.json, commands, and agents paths exist
+  - Validates hooks.json structure with hooksSchema after file existence check
+  - Validates MCP server configs have required "command" field
+  - Catches missing files before plugin installation (example: `hooks references missing file: "hooks/hooks.json"`)
+
 ## [0.5.1] - 2025-01-12
 
 ### Added
