@@ -312,11 +312,12 @@ function validatePlugin(filePath: string): ValidationResult {
     // Validate with ArkType schema (includes all pattern checks)
     const result = pluginSchema(data);
 
-    if (result instanceof Error) {
+    // Check for arktype validation errors (has summary property)
+    if ('summary' in result) {
       return {
         valid: false,
         file: filePath,
-        errors: [result.message],
+        errors: [result.summary],
       };
     }
 
@@ -341,11 +342,12 @@ function validateMarketplace(filePath: string): ValidationResult {
     const data = JSON.parse(content) as unknown;
     const result = marketplaceSchema(data);
 
-    if (result instanceof Error) {
+    // Check for arktype validation errors (has summary property)
+    if ('summary' in result) {
       return {
         valid: false,
         file: filePath,
-        errors: [result.message],
+        errors: [result.summary],
       };
     }
 
@@ -378,11 +380,12 @@ function validateSkill(filePath: string): ValidationResult {
     const data = parseYaml(yaml);
     const result = skillFrontmatterSchema(data);
 
-    if (result instanceof Error) {
+    // Check for arktype validation errors (has summary property)
+    if ('summary' in result) {
       return {
         valid: false,
         file: filePath,
-        errors: [result.message],
+        errors: [result.summary],
       };
     }
 

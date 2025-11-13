@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2025-01-12
+
+### Fixed
+
+- **Plugin Schemas** - Comprehensive schema improvements for Claude Code compliance
+  - Removed invalid `skills` and `subAgents` fields from plugin.json schema (skills are auto-discovered from `skills/` directory)
+  - Added full MCP server configuration validation (command, args, env, cwd)
+  - Added GitHub/Git URL source format validation for marketplace.json
+  - Added all missing plugin entry fields to marketplace schema (author, homepage, repository, license, tags, commands, agents, hooks, mcpServers, strict)
+  - Made `author.name` required in plugin.json for consistency with marketplace `owner.name` requirement
+  - Added skill name length validation (max 64 chars per Claude Code spec)
+  - Added skill description length validation (max 1024 chars per Claude Code spec)
+  - Added `allowed-tools` field to skill frontmatter schema (Claude Code official field)
+  - Ensured JSON schemas (.claude-plugin/) and arktype schemas (schemas/) are fully in sync
+
+### Changed
+
+- **Validation** - Enhanced strict validation to match Claude Code runtime behavior
+  - Added `"additionalProperties": false` to JSON schemas to reject unknown properties
+  - Added `.onUndeclaredKey('reject')` to arktype schemas for runtime validation
+  - Fixed arktype error detection in validation script (now properly catches validation errors)
+  - Updated validation script to check for `'summary' in result` instead of `instanceof Error`
+
 ## [0.5.0] - 2025-11-09
 
 ### Added
