@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.1] - 2025-01-12
 
+### Added
+
+- **GitHub Workflow Documentation** - Comprehensive PR guidelines for AI assistants and developers
+  - Added `.github/AGENTS.md` with detailed PR guidelines, commit conventions (conventional commits + gitmoji), branching strategy (GitHub Flow), and troubleshooting
+  - Enhanced `.github/PULL_REQUEST_TEMPLATE.md` with prominent comment block highlighting best practices for concise PR descriptions
+  - Documented target of ~50 lines for PR descriptions, scannable in ~30 seconds, with do/don't examples
+  - Added managed blocks to `AGENTS.md` for conditional loading of specialized workflows (GitHub, OpenSpec, Standards, Architecture, Project)
+
 ### Fixed
 
 - **Plugin Schemas** - Comprehensive schema improvements for Claude Code compliance
@@ -29,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `.onUndeclaredKey('reject')` to arktype schemas for runtime validation
   - Fixed arktype error detection in validation script (now properly catches validation errors)
   - Updated validation script to check for `'summary' in result` instead of `instanceof Error`
+  - Fixed invalid arktype union syntax in marketplace.schema.ts (`'string | string[]'` → `type('string').or(type('string[]'))`)
+  - Clarified that `version` field in skill frontmatter is optional (can be omitted for stable skills or initial versions)
 
 ## [0.5.0] - 2025-11-09
 

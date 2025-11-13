@@ -80,10 +80,10 @@ const pluginEntrySchema = type({
   'license?': 'string',
 
   // Component paths (can override plugin.json)
-  'commands?': 'string | string[]',
-  'agents?': 'string | string[]',
-  'hooks?': 'string | object', // Path to hooks.json or inline
-  'mcpServers?': 'string | object', // Path to .mcp.json or inline
+  'commands?': type('string').or(type('string[]')),
+  'agents?': type('string').or(type('string[]')),
+  'hooks?': type('string').or(type('object')), // Path to hooks.json or inline
+  'mcpServers?': type('string').or(type('object')), // Path to .mcp.json or inline
 
   // Behavior control
   'strict?': 'boolean', // Require plugin.json in plugin folder (default: true)

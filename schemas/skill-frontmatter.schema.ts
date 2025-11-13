@@ -49,7 +49,7 @@ const modelSchema = type('"sonnet" | "haiku" | "opus"');
  * - allowed-tools (optional): restricts which tools Claude can access when skill is active
  *
  * EXTENDED FIELDS (not recognized by Claude Code, but useful for organization):
- * - version: track skill changes (our extension)
+ * - version: track significant skill changes (our extension) - optional; omit for stable skills or initial versions
  * - category: organize skills by type (our extension)
  * - tags: discovery and searchability (our extension)
  * - model: preferred model selection (our extension)
