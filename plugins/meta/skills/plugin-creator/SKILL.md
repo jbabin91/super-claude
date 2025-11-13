@@ -335,7 +335,7 @@ design-system-tools/
 
 ### Code Quality
 
-- testing-tools
+- testing
 - linting-tools
 - security-tools
 

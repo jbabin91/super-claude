@@ -170,8 +170,8 @@ Autonomous code review agent that provides comprehensive feedback on code qualit
 
 ## Skills Used
 
-- typescript-tools/tsc-validation: Type checking
-- testing-tools/coverage-improve: Coverage analysis
+- typescript/tsc-validation: Type checking
+- testing/coverage-improve: Coverage analysis
 - security-checker: Vulnerability scanning
 
 ## Tools Available
@@ -276,8 +276,8 @@ Generate comprehensive test suites for TypeScript/React code with focus on cover
 
 ## Skills Used
 
-- testing-tools/vitest-integration
-- typescript-tools/tsc-validation
+- testing/vitest-integration
+- typescript/tsc-validation
 - react-tools/component-testing
 
 ## Tools Available
@@ -393,8 +393,8 @@ Autonomous research agent for in-depth technical investigation and analysis.
 
 ## Skills Used
 
-- All skills from typescript-tools
-- All skills from testing-tools
+- All skills from typescript plugin
+- All skills from testing plugin
 - Documentation analysis skills
 
 ## Tools Available

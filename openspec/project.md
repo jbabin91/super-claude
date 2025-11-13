@@ -283,10 +283,10 @@ Research from 11 GitHub repositories and 200+ skills identified:
 
 ### Optional Tools (per skill)
 
-- **TypeScript Compiler (tsc)** - For typescript-tools skills
-- **Vitest** - For testing-tools skills
+- **TypeScript Compiler (tsc)** - For typescript plugin skills
+- **Vitest** - For testing plugin skills
 - **Playwright** - For E2E testing skills
-- **Docker/Docker Compose** - For devops-tools skills
+- **Docker/Docker Compose** - For devops plugin skills
 
 ### External Services
 

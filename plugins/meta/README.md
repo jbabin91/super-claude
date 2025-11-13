@@ -169,8 +169,8 @@ The meta plugin follows these naming conventions:
 
 **Agents:**
 
-- Format: Descriptive kebab-case (WITH `-agent` suffix)
-- Examples: `hono-agent`, `component-agent`
+- Format: Descriptive kebab-case (NO `-agent` suffix)
+- Examples: `hono`, `component`
 
 ## Development Workflow
 

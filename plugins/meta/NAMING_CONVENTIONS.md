@@ -6,9 +6,9 @@ This guide defines the naming conventions for creating plugins, skills, agents, 
 
 | Type        | Format                                    | Location                                    | Examples                                      |
 | ----------- | ----------------------------------------- | ------------------------------------------- | --------------------------------------------- |
-| **Plugin**  | `{category}` or `{category}-{purpose}`    | `plugins/{name}/`                           | `tanstack`, `api`, `claude-tools`             |
+| **Plugin**  | `{category}` or `{category}-{purpose}`    | `plugins/{name}/`                           | `tanstack`, `api`, `meta`                     |
 | **Skill**   | `{name}.md` (NO `-skill` suffix)          | `plugins/{plugin}/skills/{name}/SKILL.md`   | `hono.md`, `component-generator.md`           |
-| **Agent**   | `{name}-agent.md` (WITH `-agent` suffix)  | `plugins/{plugin}/agents/{name}-agent.md`   | `hono-agent.md`, `api-agent.md`               |
+| **Agent**   | `{name}.md` (NO `-agent` suffix)          | `plugins/{plugin}/agents/{name}.md`         | `hono.md`, `api.md`                           |
 | **Command** | `{verb-phrase}.md` (NO `-command` suffix) | `plugins/{plugin}/commands/{name}.md`       | `create-hono-api.md`, `setup-auth.md`         |
 | **Command** | `{namespace}/{command}.md` (namespaced)   | `.claude/commands/{namespace}/{command}.md` | `openspec/proposal.md` → `/openspec:proposal` |
 | **Hook**    | `{event-name}.md` (NO `-hook` suffix)     | `plugins/{plugin}/hooks/{name}.md`          | `pre-commit.md`, `post-deploy.md`             |
@@ -17,14 +17,14 @@ This guide defines the naming conventions for creating plugins, skills, agents, 
 
 ### Plugins
 
-**Format:** `{category}` or `{category}-{purpose}` (no `-tools` suffix except for claude-tools)
+**Format:** `{category}` or `{category}-{purpose}` (no `-tools` suffix)
 
 **Examples:**
 
 - ✅ `tanstack` (not `tanstack-tools`)
 - ✅ `api` (not `api-tools`)
 - ✅ `database` (not `database-tools`)
-- ✅ `claude-tools` (special case: meta-tools for creating other enhancements)
+- ✅ `meta` (special case: meta-tools for creating other enhancements)
 
 **Rationale:** Simple, descriptive names without redundant suffixes. The `-tools` suffix was removed to avoid verbosity.
 
@@ -84,21 +84,21 @@ plugins/api/skills/
 
 ### Agents
 
-**Format:** `{name}-agent.md` (WITH `-agent` suffix)
+**Format:** Descriptive kebab-case (NO `-agent` suffix)
 
-**Location:** `plugins/{plugin}/agents/{name}-agent.md`
+**Location:** `plugins/{plugin}/agents/{name}.md`
 
 **Examples:**
 
-- ✅ `hono-agent.md`
-- ✅ `api-agent.md`
-- ✅ `component-agent.md`
-- ✅ `drizzle-agent.md`
+- ✅ `hono.md`
+- ✅ `api.md`
+- ✅ `component.md`
+- ✅ `drizzle.md`
 
-**Rationale:** The `-agent` suffix helps distinguish agents from skills with similar names. For example:
+**Rationale:** The `agents/` directory already indicates the type, so the `-agent` suffix is redundant and verbose. For example:
 
 - `skills/hono/SKILL.md` - Provides guidance for Hono development
-- `agents/hono-agent.md` - Autonomous agent that generates Hono APIs
+- `agents/hono.md` - Autonomous agent that generates Hono APIs
 
 **When to create an agent:**
 
@@ -110,9 +110,9 @@ plugins/api/skills/
 
 ```txt
 plugins/api/agents/
-├── hono-agent.md
-├── api-agent.md
-└── openapi-agent.md
+├── hono.md
+├── api.md
+└── openapi.md
 ```
 
 ### Commands
@@ -224,7 +224,7 @@ plugins/utils/              # Avoid "utils" in names
 ```txt
 plugins/api/                # Specific: API development tools
 plugins/testing/            # Specific: Testing automation
-plugins/claude-tools/       # Specific: Meta-tools for creating skills
+plugins/meta/               # Specific: Meta-tools for creating skills
 ```
 
 ### ❌ Vague Skill Names
@@ -301,9 +301,9 @@ plugins/api/
 │   └── api/
 │       └── SKILL.md
 ├── agents/
-│   ├── hono-agent.md
-│   ├── elysia-agent.md
-│   └── api-agent.md
+│   ├── hono.md
+│   ├── elysia.md
+│   └── api.md
 └── commands/
     ├── create-hono-api.md
     ├── create-elysia-api.md
@@ -320,7 +320,7 @@ plugins/database/
 │   └── drizzle-maestro/
 │       └── SKILL.md
 ├── agents/
-│   └── drizzle-agent.md
+│   └── drizzle.md
 └── commands/
     ├── generate-schema.md
     ├── create-migration.md
@@ -390,9 +390,8 @@ For project-specific or workflow commands, use the `.claude/commands/{namespace}
 
 These naming conventions should be followed **99% of the time**. The only exceptions are:
 
-1. **claude-tools plugin** - Keeps the `-tools` suffix because it's meta-tools for creating other enhancements
+1. **Brand names** - If a tool/framework has a specific branding (e.g., TanStack is capitalized in prose but lowercase in file names)
 2. **Legacy compatibility** - If migrating from an existing plugin ecosystem with established names
-3. **Brand names** - If a tool/framework has a specific branding (e.g., TanStack is capitalized in prose but lowercase in file names)
 
 If you think you need to break a convention, document WHY in the plugin's README.md.
 
@@ -400,9 +399,9 @@ If you think you need to break a convention, document WHY in the plugin's README
 
 When creating a new plugin, ensure:
 
-- [ ] Plugin name is kebab-case without `-tools` suffix (unless it's claude-tools)
+- [ ] Plugin name is kebab-case without `-tools` suffix
 - [ ] Skills are in `skills/{name}/SKILL.md` without `-skill` suffix
-- [ ] Agents are in `agents/{name}-agent.md` with `-agent` suffix
+- [ ] Agents are in `agents/{name}.md` without `-agent` suffix
 - [ ] Commands are in `commands/{name}.md` with verb phrases, no `-command` suffix
 - [ ] Hooks are in `hooks/{name}.md` with lifecycle/event names, no `-hook` suffix
 - [ ] All file names use kebab-case consistently
@@ -413,4 +412,4 @@ When creating a new plugin, ensure:
 
 - **CLAUDE.md** - Project-level naming conventions
 - **openspec/project.md** - OpenSpec naming conventions
-- **plugins/claude-tools/** - Meta-tools for creating plugins with correct naming
+- **plugins/meta/** - Meta-tools for creating plugins with correct naming

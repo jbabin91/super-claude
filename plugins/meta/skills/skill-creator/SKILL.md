@@ -214,7 +214,7 @@ Declare requirements:
 ```yaml
 requires:
   tools: [git, npm, docker]
-  skills: [typescript-tools/tsc-validation]
+  skills: [typescript/tsc-validation]
   packages: ['@types/node']
 ```
 
@@ -368,7 +368,7 @@ Add skill-rules.json entries when:
 ```json
 {
   "plugin": {
-    "name": "claude-tools",
+    "name": "meta",
     "version": "1.0.0",
     "namespace": "claude"
   },

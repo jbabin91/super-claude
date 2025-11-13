@@ -34,12 +34,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Plugin Naming Cleanup** - Removed `-tools` suffix for cleaner, more natural names
-  - Renamed `claude-tools/` → `plugins/meta/` (meta-tools for creating skills, commands, agents, hooks, plugins)
-  - Renamed `frontend-tools/` → `plugins/design-system/` (Base UI, shadcn/ui, design tokens, accessibility)
-  - Renamed `testing-tools/` → `plugins/testing/`
-  - Renamed `typescript-tools/` → `plugins/typescript/`
-  - Renamed `git-tools/` → `plugins/git/`
-  - Renamed `devops-tools/` → `plugins/devops/`
+  - **Before → After** format:
+    - `claude-tools` → `meta` (meta-tools for creating skills, commands, agents, hooks, plugins)
+    - `frontend-tools` → `design-system` (Base UI, shadcn/ui, design tokens, accessibility)
+    - `testing-tools` → `testing`
+    - `typescript-tools` → `typescript`
+    - `git-tools` → `git`
+    - `devops-tools` → `devops`
   - Updated `.claude-plugin/marketplace.json` to reflect new names
   - Updated all documentation (README.md, CLAUDE.md) with correct plugin names and installation examples
 
@@ -164,13 +165,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Plugin marketplace structure (`.claude-plugin/marketplace.json`)
-- 6 plugin categories with manifests:
-  - **skill-tools** - Meta-tools for creating skills, commands, hooks, agents, and plugins
-  - **typescript-tools** - TypeScript development utilities
-  - **testing-tools** - Testing automation
-  - **git-tools** - Git workflow automation
-  - **frontend-tools** - React/Frontend development
-  - **devops-tools** - DevOps automation
+- 6 plugin categories with manifests (renamed in v0.5.0):
+  - **skill-tools** (now **meta**) - Meta-tools for creating skills, commands, hooks, agents, and plugins
+  - **typescript-tools** (now **typescript**) - TypeScript development utilities
+  - **testing-tools** (now **testing**) - Testing automation
+  - **git-tools** (now **git**) - Git workflow automation
+  - **frontend-tools** (now **design-system**) - React/Frontend development
+  - **devops-tools** (now **devops**) - DevOps automation
 - **skill-creator** - Create new skills with proper structure and validation
 - **command-creator** - Generate slash commands
 - **hook-creator** - Create event-driven hooks
