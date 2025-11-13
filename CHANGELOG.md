@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.3] - 2025-01-13
+
+### Fixed
+
+- **workflow plugin (v0.4.2)** - Fixed duplicate hooks loading error
+  - Removed `hooks` field from plugin.json (hooks/hooks.json is auto-discovered by Claude Code)
+  - Plugin now loads successfully without "Duplicate hooks file detected" error
+  - Updated schemas to document that hooks/hooks.json is auto-discovered (like skills/ directory)
+
+### Added
+
+- **Validation** - Enhanced to detect duplicate hooks/hooks.json references
+  - Validates that `hooks` field doesn't reference the standard `./hooks/hooks.json` path
+  - Warns: "hooks field references './hooks/hooks.json' which is auto-discovered by Claude Code"
+  - Prevents duplicate loading errors before plugin installation
+
 ## [0.5.2] - 2025-01-13
 
 ### Fixed
