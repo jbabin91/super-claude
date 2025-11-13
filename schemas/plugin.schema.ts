@@ -82,6 +82,7 @@ export const pluginSchema = type({
   'agents?': pathOrPaths,
 
   // Hooks: can be string path to hooks.json OR inline hooks object
+  // NOTE: hooks/hooks.json is auto-discovered - only use this field for additional or non-standard hook files
   // When inline, must match hooksSchema structure
   'hooks?': type('string', ':', patterns.relativePath).or(hooksSchema),
 

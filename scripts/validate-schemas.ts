@@ -335,7 +335,20 @@ function validateFilesystemReferences(
   // Validate hooks field
   if (data.hooks && typeof data.hooks === 'string') {
     const hooksPath = resolvePath(data.hooks);
-    if (existsSync(hooksPath)) {
+
+    // Check for duplicate: hooks/hooks.json is auto-discovered
+    const standardHooksPath = path.join(pluginDir, 'hooks', 'hooks.json');
+    if (
+      hooksPath === standardHooksPath &&
+      existsSync(standardHooksPath) &&
+      data.hooks === './hooks/hooks.json'
+    ) {
+      errors.push(
+        'hooks field references "./hooks/hooks.json" which is auto-discovered by Claude Code. ' +
+          'Remove the "hooks" field from plugin.json to avoid duplicate loading. ' +
+          'Only use "hooks" field for additional or non-standard hook files.',
+      );
+    } else if (existsSync(hooksPath)) {
       // Validate hooks.json structure
       try {
         const hooksContent = readFileSync(hooksPath, 'utf8');

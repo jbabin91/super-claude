@@ -18,6 +18,5 @@
     "claude-code",
     "type-checking",
     "commit-guard"
-  ],
-  "hooks": "./hooks/hooks.json"
+  ]
 }

@@ -103,11 +103,11 @@
       ]
     },
     "hooks": {
-      "description": "Event handler configuration - path to hooks file or inline config",
+      "description": "Event handler configuration - path to hooks file or inline config. NOTE: hooks/hooks.json is auto-discovered; only use this field for additional or non-standard hook files.",
       "oneOf": [
         {
           "type": "string",
-          "description": "Path to hooks configuration file (e.g., './hooks/hooks.json')",
+          "description": "Path to additional hooks configuration file (e.g., './custom-hooks.json'). Do NOT use './hooks/hooks.json' as it's auto-discovered.",
           "pattern": "^\\./.*"
         },
         {
