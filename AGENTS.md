@@ -157,30 +157,30 @@ This project uses a hierarchical instruction file system with `@` import syntax 
 
 **Import Strategy (3-tier token management):**
 
-- **Core instructions** (AGENTS.md) - Always loaded, contains project context and managed blocks (~8-10k tokens)
-- **Conditional workflows** (managed blocks) - AI assistants should read when keywords appear (~2-4k tokens each)
+- **Core instructions** (AGENTS.md) - Always loaded, contains project context and managed blocks
+- **Conditional workflows** (managed blocks) - AI assistants should read when keywords appear
   - OPENSPEC block → AI should read `openspec/AGENTS.md` (proposal, spec, change, plan)
   - GITHUB block → AI should read `.github/AGENTS.md` (commit, push, pr, branch)
   - STANDARDS block → AI should read `docs/standards/markdown.md` (format, lint, documentation)
   - ARCHITECTURE block → AI should read `docs/architecture/INDEX.md` (decisions, rationale, ADRs)
   - PROJECT block → AI should read `docs/workflows/project.md` (version, changelog, archive, release)
-- **Reference-only docs** (markdown links) - Claude reads when explicitly needed (~0 tokens until referenced)
+- **Reference-only docs** (markdown links) - Claude reads when explicitly needed (no tokens until referenced)
   - `docs/workflows/development.md` - Development setup and common commands
   - `docs/guides/*` - Skill activation, hooks, plugin configuration
 
 **What are tokens?**
 
-Token counts represent the input context size that Claude reads at the start of each session. Claude has a 200k token context window - these estimates show how much of that budget gets consumed by documentation. Lower token usage leaves more room for code, conversation history, and tool outputs. The managed block system keeps base documentation lean (~8-10k) while allowing targeted loading (2-4k per block) only when needed.
+Token counts represent the input context size that Claude reads at the start of each session. Claude has a 200k token context window - this is the budget available for documentation, code, conversation history, and tool outputs. The managed block system keeps base documentation lean while allowing targeted loading of specialized workflows only when needed.
 
-**Token efficiency examples:**
+**Token efficiency:**
 
-- Exploration session (reading code): ~8-10k tokens (no blocks loaded)
-- Coding + commit session: ~10-12k tokens (GITHUB loaded)
-- Planning session: ~11-14k tokens (OPENSPEC loaded)
-- Formatting/docs session: ~12-15k tokens (STANDARDS loaded)
-- Architecture decisions: ~10-13k tokens (ARCHITECTURE loaded)
-- Release/archive session: ~11-14k tokens (PROJECT loaded)
-- Full workflow session: ~20-26k tokens (multiple blocks loaded)
+- Exploration session (reading code): Base docs only, no blocks loaded
+- Coding + commit session: Base docs + GITHUB block
+- Planning session: Base docs + OPENSPEC block
+- Formatting/docs session: Base docs + STANDARDS block
+- Architecture decisions: Base docs + ARCHITECTURE block
+- Release/archive session: Base docs + PROJECT block
+- Full workflow session: Base docs + multiple blocks as needed
 
 ## 🔒 Privacy & Security
 
@@ -259,7 +259,7 @@ See **[Plugin Structure Standards](docs/standards/plugin-structure.md)** for nam
 
 ### Top Patterns to Use
 
-1. **Progressive Disclosure** - SKILL.md → API_REFERENCE.md (~2.5x token savings)
+1. **Progressive Disclosure** - SKILL.md → API_REFERENCE.md (significant token savings)
 2. **Universal Executor** - For test frameworks, CLI testing
 3. **RED-GREEN-REFACTOR** - Skill development methodology
 4. **Validation Framework** - Multi-layer validation (parameter, data, temporal, completeness)
