@@ -158,15 +158,19 @@ This project uses a hierarchical instruction file system with `@` import syntax 
 **Import Strategy (3-tier token management):**
 
 - **Core instructions** (AGENTS.md) - Always loaded, contains project context and managed blocks (~8-10k tokens)
-- **Conditional workflows** (managed blocks) - Load on-demand when keywords trigger (~2-4k tokens each)
-  - OPENSPEC block → loads `openspec/AGENTS.md` (proposal, spec, change, plan)
-  - GITHUB block → loads `.github/AGENTS.md` (commit, push, pr, branch)
-  - STANDARDS block → loads `docs/standards/markdown.md` (format, lint, documentation)
-  - ARCHITECTURE block → loads `docs/architecture/INDEX.md` (decisions, rationale, ADRs)
-  - PROJECT block → loads `docs/workflows/project.md` (version, changelog, archive, release)
+- **Conditional workflows** (managed blocks) - AI assistants should read when keywords appear (~2-4k tokens each)
+  - OPENSPEC block → AI should read `openspec/AGENTS.md` (proposal, spec, change, plan)
+  - GITHUB block → AI should read `.github/AGENTS.md` (commit, push, pr, branch)
+  - STANDARDS block → AI should read `docs/standards/markdown.md` (format, lint, documentation)
+  - ARCHITECTURE block → AI should read `docs/architecture/INDEX.md` (decisions, rationale, ADRs)
+  - PROJECT block → AI should read `docs/workflows/project.md` (version, changelog, archive, release)
 - **Reference-only docs** (markdown links) - Claude reads when explicitly needed (~0 tokens until referenced)
   - `docs/workflows/development.md` - Development setup and common commands
   - `docs/guides/*` - Skill activation, hooks, plugin configuration
+
+**What are tokens?**
+
+Token counts represent the input context size that Claude reads at the start of each session. Claude has a 200k token context window - these estimates show how much of that budget gets consumed by documentation. Lower token usage leaves more room for code, conversation history, and tool outputs. The managed block system keeps base documentation lean (~8-10k) while allowing targeted loading (2-4k per block) only when needed.
 
 **Token efficiency examples:**
 

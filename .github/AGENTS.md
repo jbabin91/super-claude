@@ -6,7 +6,7 @@ Instructions for AI assistants working with GitHub workflows, pull requests, and
 
 ### Keep PR Descriptions Concise
 
-**Goal:** PR descriptions should be **scannable in ~30 seconds**.
+**Goal:** PR descriptions should be **concise (~50 lines of content, scannable in ~30 seconds)**.
 
 **Template location:** `.github/PULL_REQUEST_TEMPLATE.md`
 
@@ -188,7 +188,7 @@ gh pr create  # Opens editor with template
 
 1. Read `.github/PULL_REQUEST_TEMPLATE.md`
 2. Read this file (`.github/AGENTS.md`)
-3. Rewrite following template structure (aim for ~50 lines max)
+3. Rewrite following template structure (aim for ~50 lines of content, scannable in ~30 seconds)
 
 **Remember:** Details belong in:
 

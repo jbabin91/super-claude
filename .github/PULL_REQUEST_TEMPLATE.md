@@ -1,5 +1,7 @@
 <!--
-IMPORTANT: Keep this PR description CONCISE (~50 lines total, scannable in 30 seconds)
+IMPORTANT: Keep this PR description CONCISE (aim for ~50 lines of content, scannable in 30 seconds)
+
+This is a target, not a hard limit. Complex or architectural changes may need more context—just keep explanations clear and focused. The ~50 lines refers to the content you add (summary, changes, notes), not the template or checklist items.
 
 ❌ DON'T include:
 - Implementation details (visible in code review)

@@ -52,7 +52,7 @@ Architecture decisions and technical designs.
 
 - **[INDEX.md](architecture/INDEX.md)** - Architecture Decision Records (ADRs) catalog
 - **[README.md](architecture/README.md)** - ADR usage guide
-- **[decisions/](architecture/decisions/)** - Strategic architectural decisions (7 ADRs)
+- **[decisions/](architecture/decisions/)** - Strategic architectural decisions (ADR catalog)
 - **[designs/](architecture/designs/)** - Detailed technical design documents
 
 ## Key Resources by Topic
@@ -124,7 +124,7 @@ Architecture decisions and technical designs.
 
 **architecture/**
 
-- ✅ decisions/ (13 ADRs)
+- ✅ decisions/ (ADR catalog)
 - ✅ designs/plugin-distribution.md
 - ✅ INDEX.md
 - ✅ README.md
