@@ -4,9 +4,6 @@
   "workspaces": {
     "": {
       "name": "super-claude",
-      "dependencies": {
-        "js-yaml": "^4.1.1",
-      },
       "devDependencies": {
         "@commitlint/cli": "^20.1.0",
         "@commitlint/config-conventional": "^20.0.0",
