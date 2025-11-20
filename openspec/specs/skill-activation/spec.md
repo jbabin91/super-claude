@@ -209,12 +209,12 @@ The hook SHALL execute in under 50ms for typical projects (<10 installed plugins
 
 ### Requirement: Configuration Commands
 
-The `/configure-activation` command SHALL generate `.claude/super-claude-config.json` template with current plugin defaults and intelligent migration handling.
+The `/workflow:configure` command SHALL generate `.claude/super-claude-config.json` template with current plugin defaults and intelligent migration handling.
 
 #### Scenario: Generate unified configuration template
 
 - **GIVEN** user has workflow and meta plugins installed
-- **AND** user runs `/configure-activation` slash command
+- **AND** user runs `/workflow:configure` slash command
 - **AND** `.claude/super-claude-config.json` does not exist
 - **WHEN** command executes
 - **THEN** file is created with structure organized by plugin name
@@ -224,7 +224,7 @@ The `/configure-activation` command SHALL generate `.claude/super-claude-config.
 
 #### Scenario: Update existing configuration with new defaults
 
-- **GIVEN** user runs `/configure-activation` command
+- **GIVEN** user runs `/workflow:configure` command
 - **AND** `.claude/super-claude-config.json` already exists
 - **AND** new plugin defaults are available
 - **WHEN** command executes
@@ -235,7 +235,7 @@ The `/configure-activation` command SHALL generate `.claude/super-claude-config.
 #### Scenario: Migrate from legacy skill-rules.json
 
 - **GIVEN** user has `.claude/skills/skill-rules.json`
-- **AND** user runs `/configure-activation` command
+- **AND** user runs `/workflow:configure` command
 - **WHEN** command executes
 - **THEN** command prompts for migration
 - **AND** creates backup of legacy file

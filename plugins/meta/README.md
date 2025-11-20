@@ -127,7 +127,7 @@ The meta plugin supports project-level configuration overrides via `.claude/supe
 **Generate configuration template:**
 
 ```bash
-/configure-activation
+/workflow:configure
 ```
 
 This command creates a template with current plugin defaults. You can then customize:

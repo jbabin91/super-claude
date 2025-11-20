@@ -57,7 +57,7 @@ ACTION: Use Skill tool BEFORE responding
 **3. (Optional) Customize for your project:**
 
 ```sh
-/configure-activation
+/workflow:configure
 ```
 
 Edit `.claude/skills/skill-rules.json` to customize triggers, priorities, or disable skills.
@@ -226,7 +226,7 @@ interface ProjectSkillRules {
 ### Generate Template
 
 ```sh
-/configure-activation
+/workflow:configure
 ```
 
 Creates `.claude/skills/skill-rules.json` with clean template.

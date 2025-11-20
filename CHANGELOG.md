@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2025-01-20
+
+### Changed
+
+- **workflow plugin (v0.5.0)** - Command renamed and hooks updated to opt-in
+  - Renamed `/configure-activation` → `/workflow:configure` for namespace consistency
+  - Blocking hooks now opt-in by default: `gitCommitGuard.enabled: false`, `branchNameValidator.enabled: false`
+  - Non-blocking hooks stay enabled: `typeChecker.enabled: true`, `sessionChecklist.enabled: true`
+  - Rationale: Blocking hooks change user workflows and should be intentional
+
+### Fixed
+
+- **type-checker hook** - Hardened dynamic import with better error handling
+  - Added defensive check that `checkFiles` function exists after import
+  - Better error messages for missing dependencies with install instructions
+  - Separate error formatting for hook configuration errors vs type errors
+  - Graceful handling of module-not-found errors
+
+### Added
+
+- **super-claude-config.schema.json** - Added `_comment` field support
+  - Allows string or array of strings for inline documentation
+  - Comments are ignored by schema validator but visible in JSON files
+
 ## [0.5.3] - 2025-01-13
 
 ### Fixed
@@ -85,7 +109,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Plugin defaults: `plugins/*/super-claude-config.json`
   - Project overrides: `.claude/super-claude-config.json`
   - Configuration priority: Environment variables > Project overrides > Plugin defaults
-  - `/configure-activation` v2.0 command with smart migration using AskUserQuestion
+  - `/workflow:configure` v2.0 command with smart migration using AskUserQuestion
   - Backwards compatibility with legacy `skill-rules.json` format
   - Comprehensive documentation (ADR-0012, `docs/guides/plugin-configuration.md`)
   - meta plugin v0.4.0 with default configuration for 6 skills
@@ -145,7 +169,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Rule discovery and merging (plugin + project overrides)
   - Priority-based matching (critical > high > medium > low)
   - Performance optimized (<50ms execution)
-  - `/configure-activation` command - Generate project overrides
+  - `/workflow:configure` command - Generate project overrides
   - `/generate-skill-rules` command - Migrate YAML triggers to JSON
   - Comprehensive documentation (SKILL_ACTIVATION_GUIDE.md)
   - meta plugin v0.2.0 with activation rules for all meta-tools

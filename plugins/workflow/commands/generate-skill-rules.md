@@ -157,4 +157,4 @@ triggers:
 - This is a maintainer tool for initial migration
 - After migration, maintain skill-rules.json directly
 - YAML triggers in SKILL.md can be removed after migration
-- Always validate generated JSON with `/configure-activation`
+- Always validate generated JSON with `/workflow:configure`

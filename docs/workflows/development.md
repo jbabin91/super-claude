@@ -496,7 +496,7 @@ Create `.claude/skills/skill-rules.json` for project customization:
 
 ```sh
 # Generate template
-/configure-activation
+/workflow:configure
 
 # Or create manually
 mkdir -p .claude/skills

@@ -8,7 +8,7 @@ Complete guide to customizing super-claude plugin behavior using `super-claude-c
 - [Quick Start](#quick-start)
 - [Configuration Structure](#configuration-structure)
 - [Configuration Priority](#configuration-priority)
-- [Using /configure-activation](#using-configure-activation)
+- [Using the Configure Command](#using-the-configure-command)
 - [Common Customizations](#common-customizations)
 - [Migration from Legacy Format](#migration-from-legacy-format)
 - [Advanced Usage](#advanced-usage)
@@ -42,10 +42,10 @@ Super-claude uses a unified configuration system that allows you to customize:
 
 ### Option 1: Generate Configuration (Recommended)
 
-Use the `/configure-activation` command:
+Use the `/workflow:configure` command:
 
 ```txt
-/configure-activation
+/workflow:configure
 ```
 
 This will:
@@ -157,14 +157,14 @@ Environment:    enabled = false
 Result: false ✓ (environment wins)
 ```
 
-## Using /configure-activation
+## Using the Configure Command
 
-The `/configure-activation` command intelligently handles different scenarios:
+The `/workflow:configure` command intelligently handles different scenarios:
 
 ### Scenario 1: No Configuration (Clean Slate)
 
 ```txt
-You: /configure-activation
+You: /workflow:configure
 
 Claude: ✓ Created .claude/super-claude-config.json
 
@@ -182,7 +182,7 @@ Next steps:
 ### Scenario 2: Legacy Config Exists
 
 ```txt
-You: /configure-activation
+You: /workflow:configure
 
 Claude: [Shows AskUserQuestion prompt]
   Question: "Found legacy skill-rules.json configuration. How should we handle it?"
@@ -208,7 +208,7 @@ Your customizations were preserved:
 ### Scenario 3: Updates Available
 
 ```txt
-You: /configure-activation
+You: /workflow:configure
 
 Claude: [Shows AskUserQuestion prompt]
   Question: "Found 3 new configuration options. Add them to your config?"
@@ -232,7 +232,7 @@ Your existing customizations were preserved.
 ### Scenario 4: Already Up to Date
 
 ```txt
-You: /configure-activation
+You: /workflow:configure
 
 Claude: ✓ Configuration is up to date
 
@@ -382,7 +382,7 @@ No new defaults available.
 1. **Automatic (Recommended):**
 
    ```txt
-   Run: /configure-activation
+   Run: /workflow:configure
    Select: "Migrate to new format"
    ```
 
@@ -620,7 +620,7 @@ ls -la .claude/skills/skill-rules.json
 **Run migration:**
 
 ```txt
-/configure-activation
+/workflow:configure
 Select: "Migrate to new format"
 ```
 
@@ -646,7 +646,7 @@ ls -la .claude/skills/skill-rules.json.bak
 ### ✅ Do
 
 - **Commit configuration** - Share settings with your team
-- **Use `/configure-activation`** - Easiest way to generate config
+- **Use `/workflow:configure`** - Easiest way to generate config
 - **Start minimal** - Only override what you need
 - **Add comments** - JSON comments aren't allowed, but use git commit messages
 - **Test changes** - Verify hooks behave as expected
@@ -656,7 +656,7 @@ ls -la .claude/skills/skill-rules.json.bak
 - **Hardcode secrets** - Never put tokens or passwords in config
 - **Override everything** - Only customize what differs from defaults
 - **Ignore validation errors** - Fix schema issues immediately
-- **Skip backups** - Always let `/configure-activation` create backups
+- **Skip backups** - Always let `/workflow:configure` create backups
 
 ## Further Reading
 

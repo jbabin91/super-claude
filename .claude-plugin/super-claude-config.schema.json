@@ -21,6 +21,13 @@
           "type": "string",
           "description": "JSON Schema reference"
         },
+        "_comment": {
+          "description": "Comments for documentation (ignored by schema validator)",
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        },
         "plugin": {
           "type": "string",
           "description": "Plugin identifier matching directory name",
@@ -50,6 +57,13 @@
         "$schema": {
           "type": "string",
           "description": "JSON Schema reference"
+        },
+        "_comment": {
+          "description": "Comments for documentation (ignored by schema validator)",
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
         }
       },
       "patternProperties": {

@@ -122,7 +122,7 @@ The system SHALL provide a command to generate project-level configuration templ
 
 #### Scenario: Generate configuration template
 
-- **WHEN** user runs `/configure-activation` slash command
+- **WHEN** user runs `/workflow:configure` slash command
 - **THEN** a `.claude/super-claude-config.json` template is created
 - **AND** the template includes current plugin defaults with JSON Schema reference (`$schema` property for IDE support)
 - **AND** interactive guidance is provided via the AskUserQuestion tool explaining override behavior

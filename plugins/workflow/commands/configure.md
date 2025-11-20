@@ -1,10 +1,10 @@
 ---
-name: configure-activation
+name: configure
 description: Generate or update project-level plugin configuration with smart migration
 version: 2.0.0
 ---
 
-# Configure Plugin Activation
+# Configure Plugin Settings
 
 This command helps you set up `.claude/super-claude-config.json` for customizing plugin behavior (skills and hooks).
 
@@ -99,7 +99,7 @@ If new defaults found, use AskUserQuestion:
         },
         {
           "label": "Skip for now",
-          "description": "Don't update (you can run /configure-activation again later)"
+          "description": "Don't update (you can run /workflow:configure again later)"
         }
       ]
     }
@@ -263,45 +263,84 @@ function addNewDefaults(
 
 **Discover all plugin defaults:**
 
-```typescript
-function discoverPluginDefaults(): Record<string, PluginConfig> {
-  const plugins = {};
-  const pluginDirs = fs.readdirSync('plugins');
+1. Find all `plugins/*/super-claude-config.json` files in the repository
+2. Extract `skills` and `hooks` from each plugin's config
+3. Build a map of plugin-name → { skills, hooks }
 
-  for (const pluginName of pluginDirs) {
-    const configPath = `plugins/${pluginName}/super-claude-config.json`;
+**Generate the configuration file:**
 
-    if (fs.existsSync(configPath)) {
-      const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-
-      // Extract skills and hooks for project-level format
-      plugins[pluginName] = {
-        skills: config.skills || {},
-        hooks: config.hooks || {},
-      };
-    }
-  }
-
-  return plugins;
-}
-```
-
-**Write with helpful comments:**
+Use this EXACT template structure - do NOT modify the `$schema` path or repo URL:
 
 ```json
 {
   "$schema": "../../.claude-plugin/super-claude-config.schema.json",
+  "_comment": [
+    "Super Claude Plugin Configuration",
+    "",
+    "This file controls plugin behavior for this project.",
+    "Configuration priority: this file > plugin defaults > environment variables",
+    "",
+    "Common customizations:",
+    "  • Disable a skill: Set 'enabled': false",
+    "  • Change protected branches: Modify workflow.hooks.gitCommitGuard.protectedBranches",
+    "  • Add branch prefixes: Modify workflow.hooks.branchNameValidator.allowedPrefixes",
+    "  • Customize triggers: Add/modify 'keywords' or 'patterns' arrays",
+    "",
+    "Changes take effect immediately (no restart needed).",
+    "Documentation: https://github.com/jbabin91/super-claude"
+  ],
+  "workflow": {
+    "skills": {},
+    "hooks": {}
+  },
+  "meta": {
+    "skills": {},
+    "hooks": {}
+  }
+}
+```
 
+**CRITICAL: Merge discovered defaults into this template structure:**
+
+1. For each plugin discovered, add a top-level key with that plugin's name
+2. Populate `skills` and `hooks` from the discovered defaults
+3. Keep the `$schema` and `_comment` exactly as shown above
+4. Format with Prettier using these rules:
+   - **NO blank lines between object properties**
+   - 2-space indentation
+   - Double quotes for strings
+   - Trailing commas where allowed
+
+**Example after merging (if testing plugin discovered):**
+
+```json
+{
+  "$schema": "../../.claude-plugin/super-claude-config.schema.json",
+  "_comment": [
+    "Super Claude Plugin Configuration",
+    "",
+    "This file controls plugin behavior for this project.",
+    "Configuration priority: this file > plugin defaults > environment variables",
+    "",
+    "Common customizations:",
+    "  • Disable a skill: Set 'enabled': false",
+    "  • Change protected branches: Modify workflow.hooks.gitCommitGuard.protectedBranches",
+    "  • Add branch prefixes: Modify workflow.hooks.branchNameValidator.allowedPrefixes",
+    "  • Customize triggers: Add/modify 'keywords' or 'patterns' arrays",
+    "",
+    "Changes take effect immediately (no restart needed).",
+    "Documentation: https://github.com/jbabin91/super-claude"
+  ],
   "workflow": {
     "skills": {},
     "hooks": {
       "gitCommitGuard": {
-        "enabled": true,
+        "enabled": false,
         "protectedBranches": ["main", "master"],
         "bypassEnvVar": "SKIP_COMMIT_GUARD"
       },
       "branchNameValidator": {
-        "enabled": true,
+        "enabled": false,
         "allowedPrefixes": [
           "feat",
           "fix",
@@ -316,25 +355,49 @@ function discoverPluginDefaults(): Record<string, PluginConfig> {
           "style"
         ],
         "allowedBranches": ["main", "master", "develop"]
+      },
+      "typeChecker": {
+        "enabled": true,
+        "timeout": 2000
+      },
+      "sessionChecklist": {
+        "enabled": true
       }
     }
   },
-
   "meta": {
     "skills": {
-      "skill-creator": { "enabled": true },
-      "hook-creator": { "enabled": true }
+      "skill-creator": {
+        "enabled": true,
+        "triggers": {
+          "keywords": ["create skill", "new skill", "skill development"],
+          "patterns": ["(create|add|generate|build).*?skill"]
+        }
+      },
+      "hook-creator": {
+        "enabled": true,
+        "triggers": {
+          "keywords": ["create hook", "new hook", "hook development"],
+          "patterns": ["(create|add|generate|build).*?hook"]
+        }
+      }
+    },
+    "hooks": {}
+  },
+  "testing": {
+    "skills": {
+      "test-runner": {
+        "enabled": true,
+        "triggers": {
+          "keywords": ["run tests", "test"],
+          "patterns": ["(run|execute).*?tests?"]
+        }
+      }
     },
     "hooks": {}
   }
 }
 ```
-
-Add helpful header comments explaining:
-
-- Configuration priority: this file > plugin defaults > environment variables
-- How to customize (set `enabled: false`, change arrays, add fields)
-- Link to documentation
 
 ### Step 5: Show Summary
 

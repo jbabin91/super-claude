@@ -512,7 +512,7 @@ Users can customize activation in their projects via `.claude/skills/skill-rules
 }
 ```
 
-**Command for users:** `/configure-activation`
+**Command for users:** `/workflow:configure`
 
 ## Example: Creating a Project-Specific Skill
 

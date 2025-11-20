@@ -4,12 +4,12 @@
   "skills": {},
   "hooks": {
     "gitCommitGuard": {
-      "enabled": true,
+      "enabled": false,
       "protectedBranches": ["main", "master"],
       "bypassEnvVar": "SKIP_COMMIT_GUARD"
     },
     "branchNameValidator": {
-      "enabled": true,
+      "enabled": false,
       "allowedPrefixes": [
         "feat",
         "fix",

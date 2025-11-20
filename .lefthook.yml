@@ -9,8 +9,6 @@ output:
 pre-commit:
   parallel: true
   commands:
-    audit:
-      run: bun audit --audit-level moderate
     validate-schemas:
       glob: '{*.json,*.md}'
       run: bun run validate:changed

@@ -7,6 +7,11 @@
  * Uses @jbabin91/tsc-files programmatic API for incremental type checking with tsgo support.
  * Informs about type errors but allows file modifications (informative only).
  *
+ * Smart behavior:
+ * - Skips non-TypeScript files (no performance impact)
+ * - Skips projects without tsconfig.json
+ * - Dynamically imports type checker only when needed
+ *
  * Performance: ~100-200ms with tsgo (10x faster than tsc)
  * Performance target: <2s (ADR-0010) - typically well under this
  * Hook behavior: Informative (does not block execution)
@@ -17,7 +22,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
-import { checkFiles, type CheckResult } from '@jbabin91/tsc-files';
+import type { CheckResult } from '@jbabin91/tsc-files';
 
 import {
   checkHookEnabled,
@@ -59,6 +64,21 @@ function hasTsConfig(cwd: string): boolean {
  */
 async function checkTypes(cwd: string, filePath: string): Promise<CheckResult> {
   try {
+    // Dynamically import checkFiles only when needed
+    // This prevents loading TypeScript dependencies for non-TS files
+    const module = await import('@jbabin91/tsc-files');
+
+    // Defensive check: ensure checkFiles exists after import
+    if (!module.checkFiles || typeof module.checkFiles !== 'function') {
+      throw new Error(
+        'Type checker module loaded but checkFiles function not found. ' +
+          'This may indicate a version mismatch. ' +
+          'Try: bun install @jbabin91/tsc-files@latest',
+      );
+    }
+
+    const { checkFiles } = module;
+
     // Use programmatic API for structured error data
     // Automatically uses tsgo if available (10x faster)
     const result = await checkFiles([filePath], {
@@ -70,8 +90,27 @@ async function checkTypes(cwd: string, filePath: string): Promise<CheckResult> {
 
     return result;
   } catch (error: unknown) {
-    // Configuration or compiler execution error
-    // Return a failed result with error message
+    // Handle different error scenarios with helpful messages
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    // Check if this is a module not found error
+    const isModuleNotFound =
+      errorMessage.includes('Cannot find package') ||
+      errorMessage.includes('Cannot find module') ||
+      errorMessage.includes('@jbabin91/tsc-files');
+
+    let helpfulMessage = errorMessage;
+    if (isModuleNotFound) {
+      helpfulMessage =
+        'Type checker dependency not installed.\n\n' +
+        'To enable type checking, install the required package:\n' +
+        '  bun install @jbabin91/tsc-files\n\n' +
+        'Or disable this hook in .claude/super-claude-config.json:\n' +
+        '  "workflow": { "hooks": { "typeChecker": { "enabled": false } } }\n\n' +
+        `Original error: ${errorMessage}`;
+    }
+
+    // Return a failed result with helpful error message
     return {
       success: false,
       errorCount: 1,
@@ -81,9 +120,8 @@ async function checkTypes(cwd: string, filePath: string): Promise<CheckResult> {
           file: filePath,
           line: 0,
           column: 0,
-          message:
-            error instanceof Error ? error.message : 'Unknown type error',
-          code: 'TS0000',
+          message: helpfulMessage,
+          code: isModuleNotFound ? 'HOOK_ERROR' : 'TS0000',
           severity: 'error',
         },
       ],
@@ -102,6 +140,25 @@ async function checkTypes(cwd: string, filePath: string): Promise<CheckResult> {
  * @returns Formatted error message
  */
 function formatTypeErrors(result: CheckResult, targetFile: string): string {
+  // Check if this is a hook error (not a type error)
+  const hasHookError = result.errors.some((e) => e.code === 'HOOK_ERROR');
+
+  if (hasHookError) {
+    // Format hook configuration errors differently
+    const hookError = result.errors.find((e) => e.code === 'HOOK_ERROR');
+    return [
+      '',
+      '═'.repeat(70),
+      '⚠️  TYPE CHECKER HOOK ERROR',
+      '═'.repeat(70),
+      '',
+      hookError?.message ?? 'Unknown hook error',
+      '',
+      '═'.repeat(70),
+      '',
+    ].join('\n');
+  }
+
   // Categorize errors by file
   const targetFileErrors = result.errors.filter((e) => e.file === targetFile);
   const dependencyErrors = result.errors.filter((e) => e.file !== targetFile);
