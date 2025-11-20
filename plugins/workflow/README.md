@@ -1,6 +1,6 @@
 # Workflow Plugin
 
-**Version:** 0.4.0
+**Version:** 0.5.0
 **Category:** Workflow automation
 **Status:** ✅ Ready for use
 
@@ -50,7 +50,7 @@ All OpenSpec commands use the `/openspec:*` namespace for consistency.
 
 #### Skill Configuration Commands
 
-- `/configure-activation` - Generate project-specific skill activation overrides
+- `/workflow:configure` - Generate project-specific skill activation overrides
 - `/generate-skill-rules` - Generate skill-rules.json from SKILL.md YAML frontmatter
 
 ### Hooks
@@ -323,7 +323,7 @@ The workflow plugin supports project-level configuration overrides via `.claude/
 **Generate configuration template:**
 
 ```bash
-/configure-activation
+/workflow:configure
 ```
 
 This command creates a template with current plugin defaults. You can then customize:
@@ -509,7 +509,7 @@ Claude sees suggestion and uses skill-creator
 Generate template:
 
 ```bash
-/configure-activation
+/workflow:configure
 ```
 
 ### Customization Example

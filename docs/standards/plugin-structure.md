@@ -108,7 +108,7 @@ Skills automatically activate based on prompt keywords and intent patterns. No m
 
 ```bash
 # Generate project overrides template
-/configure-activation
+/workflow:configure
 ```
 
 ## Privacy & Security

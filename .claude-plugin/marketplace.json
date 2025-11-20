@@ -7,7 +7,7 @@
     "url": "https://github.com/jbabin91"
   },
   "metadata": {
-    "version": "0.5.3",
+    "version": "0.6.0",
     "description": "A comprehensive marketplace of Claude Code plugins for TanStack Start, Base UI, Hono, and modern TypeScript development. Install individual plugins or mix and match based on your project needs.",
     "repository": "https://github.com/jbabin91/super-claude",
     "homepage": "https://github.com/jbabin91/super-claude",
@@ -32,7 +32,7 @@
       "name": "workflow",
       "source": "./plugins/workflow",
       "description": "Development workflow enhancements including OpenSpec proposal management and skill auto-activation system.",
-      "version": "0.4.2",
+      "version": "0.5.0",
       "category": "workflow",
       "keywords": [
         "workflow",

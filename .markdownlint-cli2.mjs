@@ -32,6 +32,8 @@ export default {
     MD046: {
       style: 'fenced',
     },
+    // MD060: Table styles
+    MD060: false,
   },
   // Files to process
   globs: ['**/*.{md,mdx}'],
