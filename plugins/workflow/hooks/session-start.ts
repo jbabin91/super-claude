@@ -249,10 +249,11 @@ function formatContext(active: ActiveChange, cwd: string): string {
  *
  * Workflow:
  * 1. Parse stdin
- * 2. Load active change
- * 3. If active, load context files
- * 4. Format and output context
- * 5. Exit cleanly
+ * 2. Check if project has openspec directory (exit early if not)
+ * 3. Check if hook is enabled
+ * 4. Load active change
+ * 5. If active, format and output context
+ * 6. Exit cleanly
  */
 async function main(): Promise<void> {
   const startTime = Date.now();
