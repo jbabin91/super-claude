@@ -48,7 +48,8 @@ export function ensureBunInstalled(): void {
     ].join('\n');
 
     console.error(errorMessage);
-    process.exit(1);
+    // Exit 0 to not block user workflow on hook error
+    process.exit(0);
   }
 }
 
@@ -141,6 +142,7 @@ export function ensureToolsInstalled(tools: string[]): void {
     ].join('\n');
 
     console.error(errorMessage);
-    process.exit(1);
+    // Exit 0 to not block user workflow on hook error
+    process.exit(0);
   }
 }

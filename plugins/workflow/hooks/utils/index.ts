@@ -2,14 +2,11 @@
  * Hook Utilities
  *
  * Shared utilities for Claude Code command hooks.
- * Includes input parsing, configuration loading, error handling, and runtime checks.
+ * Includes input parsing, error handling, and runtime checks.
+ *
+ * For configuration loading, use super-claude-config-loader.js directly.
  */
 
-export {
-  checkHookEnabled,
-  type HookConfig,
-  loadHookConfig,
-} from './config-loader.js';
 export {
   checkPerformance,
   formatError,

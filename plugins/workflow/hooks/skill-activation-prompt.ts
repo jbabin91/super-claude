@@ -37,7 +37,8 @@ function checkBunRuntime(): void {
   if (typeof Bun === 'undefined') {
     console.error('[WARNING] Bun required for skill activation');
     console.error('Install: https://bun.sh');
-    process.exit(1);
+    // Exit 0 to not block user workflow on hook error
+    process.exit(0);
   }
 }
 
@@ -310,7 +311,10 @@ function matchSkills(
     const [namespace, name] = skillId.split('/');
 
     // Try keyword matching
-    const keywordMatch = matchKeywords(prompt, config.promptTriggers.keywords);
+    const keywordMatch = matchKeywords(
+      prompt,
+      config.promptTriggers?.keywords ?? [],
+    );
     if (keywordMatch) {
       matches.push({
         id: skillId,
@@ -326,7 +330,7 @@ function matchSkills(
     // Try intent pattern matching
     const patternMatch = matchIntentPatterns(
       prompt,
-      config.promptTriggers.intentPatterns,
+      config.promptTriggers?.intentPatterns ?? [],
     );
     if (patternMatch) {
       matches.push({
@@ -510,7 +514,8 @@ async function main(): Promise<void> {
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Unknown error';
     console.error('[ERROR] Hook error: ' + msg);
-    process.exit(1);
+    // Exit 0 to not block user workflow on hook error
+    process.exit(0);
   }
 }
 

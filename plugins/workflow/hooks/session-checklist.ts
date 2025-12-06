@@ -18,6 +18,7 @@ import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
 import { checkPerformance, formatError, parseStdin } from './utils/index.js';
+import { checkHookEnabled } from './utils/super-claude-config-loader.js';
 
 /**
  * Get git status information
@@ -70,13 +71,16 @@ function getGitStatus(cwd: string): {
  * Get recent commits
  *
  * @param cwd Current working directory
- * @param count Number of commits to fetch
+ * @param count Number of commits to fetch (validated to 1-100 range)
  * @returns Array of commit summaries
  */
 function getRecentCommits(cwd: string, count = 3): string[] {
+  // Validate count to prevent command injection
+  const safeCount = Math.min(Math.max(Math.floor(Number(count) || 3), 1), 100);
+
   try {
     const log = execSync(
-      `git log -n ${count} --pretty=format:"%h %s" --no-decorate`,
+      `git log -n ${safeCount} --pretty=format:"%h %s" --no-decorate`,
       { cwd, encoding: 'utf8' },
     );
     return log.split('\n').filter((line) => line.trim());
@@ -183,6 +187,9 @@ async function main(): Promise<void> {
 
   try {
     const input = await parseStdin();
+
+    // Check if hook is enabled
+    checkHookEnabled(input.cwd, 'workflow', 'sessionChecklist');
 
     // Output checklist
     const checklist = formatChecklist(input.cwd);

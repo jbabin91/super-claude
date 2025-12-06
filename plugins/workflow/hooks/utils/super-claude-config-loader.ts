@@ -330,7 +330,7 @@ export function loadPluginConfig(
         pluginOverrides.skills,
       )) {
         const defaultSkill = resolved.skills[skillName] ?? {
-          enabled: true,
+          enabled: false,
           triggers: { keywords: [], patterns: [] },
         };
         resolved.skills[skillName] = deepMerge(defaultSkill, skillOverride);
@@ -341,7 +341,7 @@ export function loadPluginConfig(
       for (const [hookName, hookOverride] of Object.entries(
         pluginOverrides.hooks,
       )) {
-        const defaultHook = resolved.hooks[hookName] ?? { enabled: true };
+        const defaultHook = resolved.hooks[hookName] ?? { enabled: false };
         resolved.hooks[hookName] = deepMerge(defaultHook, hookOverride);
       }
     }
@@ -370,7 +370,7 @@ export function getHookConfig(
   hookName: string,
 ): HookConfig {
   const config = loadPluginConfig(cwd, pluginName);
-  return config.hooks[hookName] ?? { enabled: true };
+  return config.hooks[hookName] ?? { enabled: false };
 }
 
 /**
@@ -389,7 +389,7 @@ export function getSkillConfig(
   const config = loadPluginConfig(cwd, pluginName);
   return (
     config.skills[skillName] ?? {
-      enabled: true,
+      enabled: false,
       triggers: { keywords: [], patterns: [] },
     }
   );
