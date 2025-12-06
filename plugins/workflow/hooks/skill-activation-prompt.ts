@@ -19,7 +19,6 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import type {
-  HookInput,
   MatchedSkill,
   PluginSkillRules,
   Priority,
@@ -29,22 +28,31 @@ import type {
 import { parseStdin as parseStdinBase } from './utils/index.js';
 
 /**
+ * UserPromptSubmit hook input with required prompt field
+ */
+type PromptHookInput = {
+  cwd: string;
+  prompt: string;
+  [key: string]: unknown;
+};
+
+/**
  * Parse hook input from stdin with prompt validation.
  *
  * Extends base parseStdin with prompt field validation required for this hook.
  *
- * @returns Parsed HookInput object with prompt field
+ * @returns Parsed hook input with validated prompt field
  * @throws Error if stdin is empty, invalid JSON, or missing prompt
  */
-async function parseStdin(): Promise<HookInput> {
-  const input = (await parseStdinBase()) as HookInput;
+async function parseStdin(): Promise<PromptHookInput> {
+  const input = await parseStdinBase();
 
-  // Validate prompt field (required for this hook)
+  // Validate prompt field (required for UserPromptSubmit hooks)
   if (!input.prompt || typeof input.prompt !== 'string') {
     throw new Error('Invalid input: missing or invalid prompt field');
   }
 
-  return input;
+  return input as PromptHookInput;
 }
 
 /**

@@ -192,7 +192,11 @@ function extractFrontmatter(filePath: string): string | null {
  */
 function parseYaml(yamlContent: string): unknown {
   try {
-    return yaml.load(yamlContent);
+    const result = yaml.load(yamlContent);
+    if (result === null || result === undefined) {
+      throw new Error('Empty or invalid YAML document');
+    }
+    return result;
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Unknown error';
     throw new Error(`YAML parsing error: ${msg}`);
