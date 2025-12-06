@@ -25,7 +25,10 @@ import type {
   ProjectSkillRules,
   SkillConfig,
 } from '../types/skill-rules.d.ts';
-import { parseStdin as parseStdinBase } from './utils/index.js';
+import {
+  checkPerformance,
+  parseStdin as parseStdinBase,
+} from './utils/index.js';
 
 /**
  * UserPromptSubmit hook input with required prompt field
@@ -476,10 +479,7 @@ async function main(): Promise<void> {
     }
 
     // Performance monitoring
-    const duration = Date.now() - startTime;
-    if (duration > 50) {
-      console.warn('[WARNING]  Slow hook execution: ' + duration + 'ms');
-    }
+    checkPerformance(startTime, 50, 'skill-activation-prompt');
 
     process.exit(0);
   } catch (error) {
