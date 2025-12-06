@@ -538,6 +538,97 @@ git config commit.gpgsign true
 git config init.defaultBranch main
 ```
 
+### Claude Code Permissions
+
+Configure permissions to reduce permission prompts while maintaining safety.
+
+#### Settings Hierarchy
+
+**Precedence** (highest to lowest):
+
+1. Enterprise managed settings
+2. CLI arguments
+3. `.claude/settings.local.json` (gitignored, personal)
+4. `.claude/settings.json` (project, committed)
+5. `~/.claude/settings.json` (global)
+6. Default
+
+#### Permission Patterns
+
+**Use prefix wildcards** for command families:
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(git:*)", "Bash(bun:*)", "Bash(npm:*)", "Bash(docker:*)"]
+  }
+}
+```
+
+**WebFetch requires explicit domains** (wildcards don't work):
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:docs.python.org)"
+    ]
+  }
+}
+```
+
+**MCP patterns per-server:**
+
+```json
+{
+  "permissions": {
+    "allow": ["mcp__github_github-mcp-server__*", "mcp__upstash_context7__*"]
+  }
+}
+```
+
+#### Deny Rules
+
+**Deny takes precedence over allow.** Be specific to avoid blocking safe operations:
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(git:*)"],
+    "deny": [
+      "Bash(git push -f:*)",
+      "Bash(git push --force origin:*)",
+      "Bash(git push --force upstream:*)",
+      "Bash(rm -rf /)",
+      "Bash(sudo rm -rf /)"
+    ]
+  }
+}
+```
+
+**Note:** `git push --force-with-lease` still works because we deny specific `--force` patterns.
+
+#### Auto-Approve File Edits
+
+Skip confirmation for file edits:
+
+```json
+{
+  "permissions": {
+    "defaultMode": "acceptEdits"
+  }
+}
+```
+
+#### Project vs Global Settings
+
+- **Project settings** (`.claude/settings.local.json`) - Project-specific overrides
+- **Global settings** (`~/.claude/settings.json`) - Tools you use across all projects
+
+Consolidate repetitive patterns to global settings to reduce per-project configuration.
+
 ## Troubleshooting
 
 ### Bun Issues

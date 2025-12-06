@@ -186,20 +186,28 @@ async function main() {
 
 ## Performance Monitoring
 
-### Built-in Utility
+### Built-in Utilities
 
 ```typescript
-import { checkPerformance } from './utils/index.js';
+import { checkPerformance, createLogger } from './utils/index.js';
+
+const log = createLogger('hook-name');
 
 async function main() {
   const startTime = Date.now();
 
+  log.debug('Starting hook execution');
   // Hook logic...
 
   checkPerformance(startTime, 50, 'hook-name');
   // Logs warning if > 50ms
 }
 ```
+
+**Available utilities:**
+
+- `checkPerformance(startTime, targetMs, hookName)` - Logs warning if execution exceeds target
+- `createLogger(hookName)` - Structured logging with debug/info/warn/error levels
 
 ### Custom Monitoring
 
@@ -546,6 +554,7 @@ Before deploying a hook, verify:
 
 ## Further Reading
 
+- [Hook Development Standards](../../standards/hook-development.md) - Code quality and shared utilities
 - [Anti-Patterns Guide](./anti-patterns.md) - What to avoid
 - [Placement Guide](./placement-guide.md) - Choosing the right hook
 - [Lifecycle Diagram](./lifecycle.md) - Execution order and guarantees
