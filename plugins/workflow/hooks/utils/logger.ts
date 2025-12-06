@@ -58,21 +58,3 @@ export function createLogger(hookName: string) {
     },
   };
 }
-
-/**
- * Log performance warning if execution exceeds threshold
- *
- * @param hookName Name of the hook
- * @param startTime Start timestamp from Date.now()
- * @param thresholdMs Threshold in milliseconds (default: 50ms)
- */
-export function logPerformance(
-  hookName: string,
-  startTime: number,
-  thresholdMs = 50,
-): void {
-  const duration = Date.now() - startTime;
-  if (duration > thresholdMs) {
-    console.error(`[WARNING] ${hookName}: Slow execution (${duration}ms)`);
-  }
-}
