@@ -107,7 +107,14 @@ What do you need?
 ```typescript
 #!/usr/bin/env bun
 
-import { parseStdin, checkPerformance, formatError } from './utils/index.js';
+import {
+  checkPerformance,
+  createLogger,
+  formatError,
+  parseStdin,
+} from './utils/index.js';
+
+const log = createLogger('hook-name');
 
 async function main(): Promise<void> {
   const startTime = Date.now();
@@ -507,9 +514,12 @@ cat plugins/workflow/.claude-plugin/plugin.json | jq '.hooks'
 
 ```typescript
 // Add performance monitoring
-import { checkPerformance } from './utils/index.js';
+import { checkPerformance, createLogger } from './utils/index.js';
 
+const log = createLogger('hook-name');
 const startTime = Date.now();
+
+log.debug('Starting...');
 // ... your logic
 checkPerformance(startTime, 50, 'hook-name');
 ```
@@ -530,6 +540,7 @@ checkPerformance(startTime, 50, 'hook-name');
 
 ### Related Guides
 
+- [Hook Development Standards](../../standards/hook-development.md) - Code quality and shared utilities
 - [Skill Activation Guide](../skill-activation.md) - UserPromptSubmit hook usage
 - [OpenSpec Workflow](../../workflows/openspec.md) - Spec-driven development
 

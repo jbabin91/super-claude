@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **workflow plugin (v0.5.1)** - Comprehensive hooks audit and bug fixes
+- **workflow plugin (v0.5.2)** - Comprehensive hooks audit and bug fixes
   - Hooks and skills now default to disabled when no config found (opt-in behavior)
   - Fixed null access in `skill-activation-prompt.ts` when `promptTriggers` properties undefined
   - Fixed silent git failure in `git-commit-guard.ts` - now logs warning and validates git repo
@@ -17,14 +17,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed command injection risk in `session-checklist.ts` - validates count parameter
   - Standardized exit codes to 0 across all hooks (don't block user workflow on errors)
   - Added `checkHookEnabled()` to `session-start.ts` - can now be disabled via config
+  - Fixed dead `checkBunRuntime()` call in `skill-activation-prompt.ts`
 
 ### Changed
 
-- **workflow plugin (v0.5.1)** - Migrated all hooks to unified config loader
+- **workflow plugin (v0.5.2)** - Migrated all hooks to unified config loader
   - `type-checker`, `session-checklist`, and `session-start` now use `super-claude-config-loader.ts`
   - Removed deprecated `config-loader.ts` and updated `utils/index.ts` exports
   - All hooks now consistently default to disabled when no config found
   - Added `sessionStart` hook to plugin config defaults
+
+- **Code quality improvements** - Deduplication and validation hardening
+  - Replaced 89-line custom YAML parser with `js-yaml` library in `validate-schemas.ts`
+  - Extracted duplicate `PRIORITY_ORDER` map to shared constant in `skill-activation-prompt.ts`
+  - Consolidated duplicate `parseStdin()` functions to use shared utility
+  - Added proper schema validation for `validateProjectConfig()` using ArkType
+  - Removed duplicate `session-start.ts` hook from `.claude/hooks/`
 
 ## [0.6.0] - 2025-01-20
 

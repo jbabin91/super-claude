@@ -19,64 +19,55 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import type {
-  HookInput,
   MatchedSkill,
   PluginSkillRules,
   Priority,
   ProjectSkillRules,
   SkillConfig,
 } from '../types/skill-rules.d.ts';
+import {
+  checkPerformance,
+  parseStdin as parseStdinBase,
+} from './utils/index.js';
 
 /**
- * Check if Bun runtime is available.
- * This function is mainly for documentation - if we're executing, Bun is available.
+ * UserPromptSubmit hook input with required prompt field
  */
-function checkBunRuntime(): void {
-  // If this script is running, Bun is available (shebang ensures it)
-  // This check is here for clarity and future enhancement
-  if (typeof Bun === 'undefined') {
-    console.error('[WARNING] Bun required for skill activation');
-    console.error('Install: https://bun.sh');
-    // Exit 0 to not block user workflow on hook error
-    process.exit(0);
+type PromptHookInput = {
+  cwd: string;
+  prompt: string;
+  [key: string]: unknown;
+};
+
+/**
+ * Parse hook input from stdin with prompt validation.
+ *
+ * Extends base parseStdin with prompt field validation required for this hook.
+ *
+ * @returns Parsed hook input with validated prompt field
+ * @throws Error if stdin is empty, invalid JSON, or missing prompt
+ */
+async function parseStdin(): Promise<PromptHookInput> {
+  const input = await parseStdinBase();
+
+  // Validate prompt field (required for UserPromptSubmit hooks)
+  if (!input.prompt || typeof input.prompt !== 'string') {
+    throw new Error('Invalid input: missing or invalid prompt field');
   }
+
+  return input as PromptHookInput;
 }
 
 /**
- * Parse hook input from stdin.
- *
- * Claude Code passes hook context as JSON via stdin.
- *
- * @returns Parsed HookInput object
- * @throws Error if stdin is empty or invalid JSON
+ * Priority order for sorting and filtering skills.
+ * Lower number = higher priority.
  */
-async function parseStdin(): Promise<HookInput> {
-  const stdin = await Bun.stdin.text();
-
-  if (!stdin || stdin.trim() === '') {
-    throw new Error('No input received from stdin');
-  }
-
-  try {
-    const input = JSON.parse(stdin) as HookInput;
-
-    // Validate required fields
-    if (!input.prompt || typeof input.prompt !== 'string') {
-      throw new Error('Invalid input: missing or invalid prompt field');
-    }
-
-    if (!input.cwd || typeof input.cwd !== 'string') {
-      throw new Error('Invalid input: missing or invalid cwd field');
-    }
-
-    return input;
-  } catch (error) {
-    if (error instanceof SyntaxError) {
-      throw new Error('Invalid JSON from stdin: ' + error.message);
-    }
-    throw error;
-  }
-}
+const PRIORITY_ORDER: Record<Priority, number> = {
+  critical: 0,
+  high: 1,
+  medium: 2,
+  low: 3,
+};
 
 /**
  * Discover all skill-rules.json files from installed plugins.
@@ -347,30 +338,16 @@ function matchSkills(
   // Apply priority threshold filter
   let filtered = matches;
   if (globalConfig?.priorityThreshold) {
-    const priorityOrder: Record<Priority, number> = {
-      critical: 0,
-      high: 1,
-      medium: 2,
-      low: 3,
-    };
-    const threshold = priorityOrder[globalConfig.priorityThreshold];
-
+    const threshold = PRIORITY_ORDER[globalConfig.priorityThreshold];
     filtered = matches.filter(
-      (match) => priorityOrder[match.config.priority] <= threshold,
+      (match) => PRIORITY_ORDER[match.config.priority] <= threshold,
     );
   }
 
   // Sort by priority (critical > high > medium > low)
-  const priorityOrder: Record<Priority, number> = {
-    critical: 0,
-    high: 1,
-    medium: 2,
-    low: 3,
-  };
-
   filtered.sort(
     (a, b) =>
-      priorityOrder[a.config.priority] - priorityOrder[b.config.priority],
+      PRIORITY_ORDER[a.config.priority] - PRIORITY_ORDER[b.config.priority],
   );
 
   // Apply maxSkillsPerPrompt limit
@@ -476,39 +453,33 @@ async function main(): Promise<void> {
   const startTime = Date.now();
 
   try {
-    // 1. Check runtime
-    checkBunRuntime();
-
-    // 2. Parse input
+    // 1. Parse input
     const input = await parseStdin();
 
-    // 3. Discover plugin rules
+    // 2. Discover plugin rules
     const pluginRules = discoverPluginRules(input.cwd);
 
-    // 4. Load project overrides
+    // 3. Load project overrides
     const projectOverrides = loadProjectOverrides(input.cwd);
 
-    // 5. Merge rules
+    // 4. Merge rules
     const mergedSkills = mergeRules(pluginRules, projectOverrides);
 
-    // 6. Match skills
+    // 5. Match skills
     const matches = matchSkills(
       input.prompt,
       mergedSkills,
       projectOverrides?.global,
     );
 
-    // 7. Format and output
+    // 6. Format and output
     const output = formatOutput(matches);
     if (output) {
       console.log(output);
     }
 
     // Performance monitoring
-    const duration = Date.now() - startTime;
-    if (duration > 50) {
-      console.warn('[WARNING]  Slow hook execution: ' + duration + 'ms');
-    }
+    checkPerformance(startTime, 50, 'skill-activation-prompt');
 
     process.exit(0);
   } catch (error) {

@@ -18,6 +18,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
+import { checkPerformance, parseStdin } from './utils/index.js';
 import { checkHookEnabled } from './utils/super-claude-config-loader.js';
 
 /**
@@ -28,43 +29,6 @@ type ActiveChange = {
   started: string; // ISO 8601 timestamp
   lastCheckpoint: string; // ISO 8601 timestamp
 };
-
-/**
- * Hook input from Claude Code (via stdin)
- */
-type HookInput = {
-  cwd: string; // Current working directory
-  [key: string]: unknown; // Other potential fields
-};
-
-/**
- * Parse hook input from stdin.
- *
- * @returns Parsed HookInput object
- * @throws Error if stdin is invalid
- */
-async function parseStdin(): Promise<HookInput> {
-  const stdin = await Bun.stdin.text();
-
-  if (!stdin || stdin.trim() === '') {
-    throw new Error('No input received from stdin');
-  }
-
-  try {
-    const input = JSON.parse(stdin) as HookInput;
-
-    if (!input.cwd || typeof input.cwd !== 'string') {
-      throw new Error('Invalid input: missing or invalid cwd field');
-    }
-
-    return input;
-  } catch (error) {
-    if (error instanceof SyntaxError) {
-      throw new Error('Invalid JSON from stdin: ' + error.message);
-    }
-    throw error;
-  }
-}
 
 /**
  * Load active change from openspec/active.json
@@ -313,10 +277,7 @@ async function main(): Promise<void> {
     console.log(context);
 
     // Performance monitoring
-    const duration = Date.now() - startTime;
-    if (duration > 100) {
-      console.warn('[WARNING] Slow SessionStart hook: ' + duration + 'ms');
-    }
+    checkPerformance(startTime, 100, 'session-start');
 
     process.exit(0);
   } catch (error) {

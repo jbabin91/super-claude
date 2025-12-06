@@ -4,6 +4,8 @@ import { execSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
+import yaml from 'js-yaml';
+
 import { hooksSchema } from '../schemas/hooks.schema';
 import { marketplaceSchema } from '../schemas/marketplace.schema';
 import { pluginSchema } from '../schemas/plugin.schema';
@@ -183,111 +185,28 @@ function extractFrontmatter(filePath: string): string | null {
 }
 
 /**
- * Parse YAML frontmatter (basic parser, assumes valid YAML)
+ * Parse YAML frontmatter using js-yaml library
+ *
+ * Uses `js-yaml.load()` to parse the provided YAML string. If the YAML is
+ * malformed (syntax errors), js-yaml will throw. If the YAML is syntactically
+ * valid but empty or evaluates to null/undefined, throws "Empty or invalid
+ * YAML document" error.
+ *
+ * @param yamlContent YAML string to parse
+ * @returns Parsed YAML object
+ * @throws {Error} If YAML is malformed or empty/invalid
  */
-function parseYaml(yaml: string): unknown {
-  // This is a simple YAML parser for our use case
-  // For production, consider using a library like 'yaml' or 'js-yaml'
-  const lines = yaml.split('\n');
-  const result: Record<string, unknown> = {};
-  let currentKey = '';
-  let _inArray = false;
-  let inMultiline = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    // Skip empty lines and comments
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    // Handle array items
-    if (trimmed.startsWith('-')) {
-      const value = trimmed.slice(1).trim();
-      if (Array.isArray(result[currentKey])) {
-        (result[currentKey] as unknown[]).push(
-          value.replaceAll(/^['"]|['"]$/g, ''),
-        );
-      }
-      continue;
+function parseYaml(yamlContent: string): unknown {
+  try {
+    const result = yaml.load(yamlContent);
+    if (result === null || result === undefined) {
+      throw new Error('Empty or invalid YAML document');
     }
-
-    // Handle key-value pairs
-    const colonIndex = trimmed.indexOf(':');
-    if (colonIndex !== -1) {
-      const key = trimmed.slice(0, colonIndex).trim();
-      let value: unknown = trimmed.slice(colonIndex + 1).trim();
-
-      // Handle multiline strings (|)
-      if (value === '|') {
-        inMultiline = true;
-        currentKey = key;
-        result[key] = '';
-        continue;
-      }
-
-      // Handle arrays ([...])
-      if (
-        typeof value === 'string' &&
-        value.startsWith('[') &&
-        value.endsWith(']')
-      ) {
-        value = value
-          .slice(1, -1)
-          .split(',')
-          .map((v: string) => v.trim().replaceAll(/^['"]|['"]$/g, ''));
-      }
-      // Handle nested objects
-      else if (value === '' || value === '{}') {
-        value = {};
-        currentKey = key;
-        _inArray = false;
-      }
-      // Handle simple values
-      else if (typeof value === 'string') {
-        value = value.replaceAll(/^['"]|['"]$/g, '');
-      }
-
-      result[key] = value;
-      currentKey = key;
-      continue;
-    }
-
-    // Handle multiline string continuation
-    if (inMultiline) {
-      if (/^\w+:/.test(trimmed)) {
-        inMultiline = false;
-      } else {
-        result[currentKey] =
-          `${result[currentKey]}\n${line.replace(/^\s{2}/, '')}`;
-      }
-    }
-
-    // Handle nested object properties
-    if (currentKey && typeof result[currentKey] === 'object' && trimmed) {
-      const nestedMatch = /^(\w+):\s*(.*)$/.exec(trimmed);
-      if (nestedMatch) {
-        const [, nestedKey, nestedValue] = nestedMatch;
-        let value: unknown = nestedValue;
-
-        // Handle nested arrays
-        if (nestedValue.startsWith('[') && nestedValue.endsWith(']')) {
-          value = nestedValue
-            .slice(1, -1)
-            .split(',')
-            .map((v: string) => v.trim().replaceAll(/^['"]|['"]$/g, ''));
-        } else if (nestedValue === '' || trimmed.endsWith(':')) {
-          value = [];
-          _inArray = true;
-        } else {
-          value = nestedValue.replaceAll(/^['"]|['"]$/g, '');
-        }
-
-        (result[currentKey] as Record<string, unknown>)[nestedKey] = value;
-      }
-    }
+    return result;
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(`YAML parsing error: ${msg}`);
   }
-
-  return result;
 }
 
 /**

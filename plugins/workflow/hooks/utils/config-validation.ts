@@ -55,6 +55,15 @@ export const legacySkillRulesSchema = type({
 });
 
 /**
+ * Plugin override entry validation schema
+ * Structure: { skills?: Record<string, ...>, hooks?: Record<string, ...> }
+ */
+export const pluginOverrideEntrySchema = type({
+  'skills?': 'object',
+  'hooks?': 'object',
+});
+
+/**
  * Validation result type
  */
 export type ValidationResult<T> =
@@ -99,6 +108,22 @@ export function validateProjectConfig(
     return {
       success: false,
       errors: 'Project configuration must be an object',
+    };
+  }
+
+  // Validate each plugin entry
+  const errors: string[] = [];
+  for (const [pluginName, pluginOverride] of Object.entries(data)) {
+    const result = pluginOverrideEntrySchema(pluginOverride);
+    if (result instanceof type.errors) {
+      errors.push(`${pluginName}: ${result.summary}`);
+    }
+  }
+
+  if (errors.length > 0) {
+    return {
+      success: false,
+      errors: errors.join('\n'),
     };
   }
 
