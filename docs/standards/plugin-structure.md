@@ -73,8 +73,7 @@ Each plugin follows this structure:
 ```sh
 plugins/{plugin-name}/
 ├── .claude-plugin/
-│   ├── plugin.json           # Plugin manifest
-│   └── hooks.json            # Hook definitions (if any)
+│   └── plugin.json           # Plugin manifest (ONLY file in this directory)
 ├── skills/
 │   └── {skill-name}/
 │       ├── SKILL.md          # Main skill instructions
@@ -84,8 +83,13 @@ plugins/{plugin-name}/
 ├── commands/
 │   └── {command-name}.md     # Slash command implementations
 └── hooks/
-    └── {hook-name}.ts        # Hook implementations
+    ├── hooks.json            # Hook configuration (NOT in .claude-plugin/)
+    └── {hook-name}.ts        # Hook script implementations
 ```
+
+> **IMPORTANT:** The `.claude-plugin/` directory should ONLY contain `plugin.json`.
+> All other directories (commands/, agents/, skills/, hooks/) must be at the plugin root.
+> Skills, agents, and commands are auto-discovered from their directories.
 
 ## Key Files
 
@@ -128,39 +132,75 @@ For project-specific or work-related skills:
 
 ## Plugin Manifest Schema
 
-### plugin.json
+### plugin.json (minimal required)
 
 ```json
 {
   "name": "plugin-name",
   "version": "1.0.0",
   "description": "What the plugin does",
-  "author": "Your Name",
-  "repository": "https://github.com/user/repo",
-  "skills": ["skills/skill-name/SKILL.md"],
-  "agents": ["agents/agent-name.md"],
-  "commands": [
-    {
-      "name": "command-name",
-      "description": "What it does",
-      "path": "commands/command-name.md"
-    }
-  ],
-  "hooks": "hooks.json"
+  "author": {
+    "name": "Your Name",
+    "email": "you@example.com",
+    "url": "https://github.com/username"
+  },
+  "license": "MIT",
+  "keywords": ["keyword1", "keyword2"]
 }
 ```
 
-### hooks.json
+> **Note:** Skills, agents, and commands are auto-discovered from their directories.
+> You do NOT need to list them explicitly in plugin.json.
+> Hooks at `hooks/hooks.json` are also auto-discovered.
+
+### plugin.json (with optional explicit references)
 
 ```json
 {
+  "name": "plugin-name",
+  "version": "1.0.0",
+  "description": "What the plugin does",
+  "homepage": "https://github.com/user/repo/tree/main/plugins/plugin-name",
+  "repository": "https://github.com/user/repo",
+  "hooks": "./hooks/hooks.json"
+}
+```
+
+### hooks.json (at hooks/hooks.json)
+
+```json
+{
+  "description": "Hook descriptions for this plugin",
   "hooks": {
-    "UserPromptSubmit": [
+    "SessionStart": [
       {
+        "matcher": "startup",
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/pre-submit.ts"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.ts",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/type-checker.ts"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Check if all tasks are complete: $ARGUMENTS"
           }
         ]
       }
@@ -168,6 +208,24 @@ For project-specific or work-related skills:
   }
 }
 ```
+
+**Hook Types:**
+
+- `command` - Execute bash scripts (default timeout: 60s)
+- `prompt` - LLM-based evaluation (default timeout: 30s, mainly for Stop/SubagentStop)
+
+**Environment Variables:**
+
+- `${CLAUDE_PLUGIN_ROOT}` - Absolute path to plugin directory
+- `$CLAUDE_PROJECT_DIR` - Project root directory
+- `$CLAUDE_ENV_FILE` - (SessionStart only) File path to persist environment variables
+
+**Matcher Values by Event:**
+
+- `PreToolUse/PostToolUse/PermissionRequest` - Tool names: `Edit`, `Write`, `Bash`, `Read`, etc.
+- `Notification` - `permission_prompt`, `idle_prompt`, `auth_success`, `elicitation_dialog`
+- `SessionStart` - `startup`, `resume`, `clear`, `compact`
+- `PreCompact` - `manual`, `auto`
 
 ## Validation
 

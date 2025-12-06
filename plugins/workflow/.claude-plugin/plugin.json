@@ -7,6 +7,8 @@
     "email": "jbabin91@gmail.com",
     "url": "https://github.com/jbabin91"
   },
+  "homepage": "https://github.com/jbabin91/super-claude/tree/main/plugins/workflow",
+  "repository": "https://github.com/jbabin91/super-claude",
   "license": "MIT",
   "keywords": [
     "workflow",

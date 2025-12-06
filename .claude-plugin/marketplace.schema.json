@@ -212,7 +212,7 @@
             ]
           },
           "hooks": {
-            "description": "Hooks configuration - path to hooks file or inline config",
+            "description": "Hooks configuration - path to hooks file or inline config. NOTE: hooks/hooks.json is auto-discovered.",
             "oneOf": [
               {
                 "type": "string",
@@ -220,37 +220,20 @@
               },
               {
                 "type": "object",
-                "description": "Inline hooks configuration",
-                "additionalProperties": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "matcher": {
-                        "type": "string",
-                        "description": "Pattern to match tool names or events"
-                      },
-                      "hooks": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "required": ["type"],
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "enum": ["command"],
-                              "description": "Type of hook action (currently only 'command' is supported)"
-                            },
-                            "command": {
-                              "type": "string",
-                              "description": "Command to execute (can use ${CLAUDE_PLUGIN_ROOT})"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+                "description": "Inline hooks configuration. Valid events: PreToolUse, PostToolUse, PermissionRequest, UserPromptSubmit, Notification, Stop, SubagentStop, SessionStart, SessionEnd, PreCompact",
+                "properties": {
+                  "PreToolUse": { "$ref": "#/$defs/hookEventArray" },
+                  "PostToolUse": { "$ref": "#/$defs/hookEventArray" },
+                  "PermissionRequest": { "$ref": "#/$defs/hookEventArray" },
+                  "UserPromptSubmit": { "$ref": "#/$defs/hookEventArray" },
+                  "Notification": { "$ref": "#/$defs/hookEventArray" },
+                  "Stop": { "$ref": "#/$defs/hookEventArray" },
+                  "SubagentStop": { "$ref": "#/$defs/hookEventArray" },
+                  "SessionStart": { "$ref": "#/$defs/hookEventArray" },
+                  "SessionEnd": { "$ref": "#/$defs/hookEventArray" },
+                  "PreCompact": { "$ref": "#/$defs/hookEventArray" }
+                },
+                "additionalProperties": false
               }
             ]
           },
@@ -299,5 +282,48 @@
       }
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "hookEventArray": {
+      "type": "array",
+      "description": "Array of hook configurations for an event",
+      "items": {
+        "type": "object",
+        "properties": {
+          "matcher": {
+            "type": "string",
+            "description": "Regex pattern to match tool names (e.g., 'Edit|Write', 'Bash'). Required for PreToolUse/PostToolUse/PermissionRequest. For Notification: 'permission_prompt', 'idle_prompt', etc. For SessionStart: 'startup', 'resume', 'clear', 'compact'. For PreCompact: 'manual', 'auto'."
+          },
+          "hooks": {
+            "type": "array",
+            "description": "Array of hook actions to execute",
+            "items": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["command", "prompt"],
+                  "description": "Type of hook: 'command' (execute bash script) or 'prompt' (LLM-based evaluation)"
+                },
+                "command": {
+                  "type": "string",
+                  "description": "For type='command': script to execute. Use ${CLAUDE_PLUGIN_ROOT} for plugin paths."
+                },
+                "prompt": {
+                  "type": "string",
+                  "description": "For type='prompt': prompt text to send to LLM. Use $ARGUMENTS as placeholder for hook input JSON."
+                },
+                "timeout": {
+                  "type": "number",
+                  "description": "Timeout in seconds for this hook (default: 60 for command, 30 for prompt)"
+                }
+              }
+            }
+          }
+        },
+        "required": ["hooks"]
+      }
+    }
+  }
 }
