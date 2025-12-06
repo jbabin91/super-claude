@@ -187,8 +187,14 @@ function extractFrontmatter(filePath: string): string | null {
 /**
  * Parse YAML frontmatter using js-yaml library
  *
+ * Uses `js-yaml.load()` to parse the provided YAML string. If the YAML is
+ * malformed (syntax errors), js-yaml will throw. If the YAML is syntactically
+ * valid but empty or evaluates to null/undefined, throws "Empty or invalid
+ * YAML document" error.
+ *
  * @param yamlContent YAML string to parse
  * @returns Parsed YAML object
+ * @throws {Error} If YAML is malformed or empty/invalid
  */
 function parseYaml(yamlContent: string): unknown {
   try {
