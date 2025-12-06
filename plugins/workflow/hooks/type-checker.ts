@@ -25,12 +25,12 @@ import path from 'node:path';
 import type { CheckResult } from '@jbabin91/tsc-files';
 
 import {
-  checkHookEnabled,
   checkPerformance,
   ensureBunInstalled,
   formatError,
   parseStdin,
 } from './utils/index.js';
+import { checkHookEnabled } from './utils/super-claude-config-loader.js';
 
 /**
  * Check if file is TypeScript
@@ -264,7 +264,7 @@ async function main(): Promise<void> {
     const input = await parseStdin();
 
     // Check if hook is enabled
-    checkHookEnabled(input.cwd, 'typeChecker');
+    checkHookEnabled(input.cwd, 'workflow', 'typeChecker');
 
     // Only run for Edit and Write tools
     if (input.tool_name !== 'Edit' && input.tool_name !== 'Write') {
@@ -272,8 +272,11 @@ async function main(): Promise<void> {
     }
 
     // Extract file path from tool input
-    const toolInput = input.tool_input!;
-    const filePath = toolInput?.file_path as string | undefined;
+    const toolInput = input.tool_input;
+    if (!toolInput) {
+      process.exit(0);
+    }
+    const filePath = toolInput.file_path as string | undefined;
 
     if (!filePath) {
       process.exit(0); // No file path

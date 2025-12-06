@@ -174,8 +174,11 @@ async function main(): Promise<void> {
     }
 
     // Extract command from tool input
-    const toolInput = input.tool_input!;
-    const command = toolInput?.command as string | undefined;
+    const toolInput = input.tool_input;
+    if (!toolInput) {
+      process.exit(0);
+    }
+    const command = toolInput.command as string | undefined;
 
     if (!command) {
       process.exit(0);

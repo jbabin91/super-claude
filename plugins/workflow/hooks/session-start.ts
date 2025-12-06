@@ -18,6 +18,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
+import { checkHookEnabled } from './utils/super-claude-config-loader.js';
+
 /**
  * Active change tracker schema
  */
@@ -295,7 +297,10 @@ async function main(): Promise<void> {
     // 1. Parse input
     const input = await parseStdin();
 
-    // 2. Load active change
+    // 2. Check if hook is enabled
+    checkHookEnabled(input.cwd, 'workflow', 'sessionStart');
+
+    // 3. Load active change
     const active = loadActiveChange(input.cwd);
 
     // If no active change, exit silently (no output)

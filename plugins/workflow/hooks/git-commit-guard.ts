@@ -21,10 +21,29 @@ import {
 } from './utils/super-claude-config-loader.js';
 
 /**
+ * Check if directory is inside a git repository
+ *
+ * @param cwd Current working directory
+ * @returns true if in a git repo
+ */
+function isGitRepo(cwd: string): boolean {
+  try {
+    execSync('git rev-parse --is-inside-work-tree', {
+      cwd,
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Get current git branch
  *
  * @param cwd Current working directory
- * @returns Current branch name or null if not in git repo
+ * @returns Current branch name or null if not in git repo or detached HEAD
  */
 function getCurrentBranch(cwd: string): string | null {
   try {
@@ -34,7 +53,9 @@ function getCurrentBranch(cwd: string): string | null {
       stdio: ['pipe', 'pipe', 'pipe'],
     }).trim();
     return branch || null;
-  } catch {
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    console.error(`[WARNING] git-commit-guard: Failed to get branch: ${msg}`);
     return null;
   }
 }
@@ -167,8 +188,11 @@ async function main(): Promise<void> {
     }
 
     // Extract command from tool input
-    const toolInput = input.tool_input!;
-    const command = toolInput?.command as string | undefined;
+    const toolInput = input.tool_input;
+    if (!toolInput) {
+      process.exit(0);
+    }
+    const command = toolInput.command as string | undefined;
 
     if (!command) {
       process.exit(0);
@@ -188,8 +212,23 @@ async function main(): Promise<void> {
       process.exit(0);
     }
 
+    // Skip if not in a git repository
+    if (!isGitRepo(input.cwd)) {
+      console.error('[DEBUG] git-commit-guard: Not in a git repo, skipping');
+      process.exit(0);
+    }
+
     // Get current branch
     const currentBranch = getCurrentBranch(input.cwd);
+
+    // Warn if we can't determine branch (could be detached HEAD or git issue)
+    if (!currentBranch) {
+      console.error(
+        '[WARNING] git-commit-guard: Could not determine current branch. ' +
+          'This might be a detached HEAD state or git issue. ' +
+          'Branch protection check may be incomplete.',
+      );
+    }
 
     console.error('[DEBUG] git-commit-guard: Git operation detected');
     console.error(`[DEBUG] Current branch: ${currentBranch}`);
