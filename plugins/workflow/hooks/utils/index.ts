@@ -13,6 +13,7 @@ export {
   type HookInput,
   parseStdin,
 } from './hook-input.js';
+export { createLogger, logPerformance } from './logger.js';
 export {
   checkBunVersion,
   ensureBunInstalled,
