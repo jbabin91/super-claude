@@ -18,7 +18,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { parseStdin } from './utils/index.js';
+import { checkPerformance, parseStdin } from './utils/index.js';
 import { checkHookEnabled } from './utils/super-claude-config-loader.js';
 
 /**
@@ -277,10 +277,7 @@ async function main(): Promise<void> {
     console.log(context);
 
     // Performance monitoring
-    const duration = Date.now() - startTime;
-    if (duration > 100) {
-      console.warn('[WARNING] Slow SessionStart hook: ' + duration + 'ms');
-    }
+    checkPerformance(startTime, 100, 'session-start');
 
     process.exit(0);
   } catch (error) {
